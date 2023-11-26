@@ -7,7 +7,7 @@
     tools:context=".MediaLibraryActivity">
 
     <TextView
-        android:text="MediaLibrary Activity"
+        android:text="@string/media_library_activity_text"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
