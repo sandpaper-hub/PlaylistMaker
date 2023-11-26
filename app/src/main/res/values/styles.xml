@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    <style name="main_activity_button_style">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/button_icon_text</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="iconTint">@color/text_color</item>
+        <item name="cornerRadius">@dimen/button_radius</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">@dimen/button_icon_padding</item>
+    </style>
+
+    <style name="settings_activity_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">start|center</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingTop">19dp</item>
+        <item name="android:paddingBottom">18dp</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/setting_text</item>
+    </style>
+
+    <style name="setting_activity_icon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center|end</item>
+        <item name="android:layout_marginEnd">12dp</item>
+    </style>
+</resources>
