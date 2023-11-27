@@ -4,4 +4,8 @@
     <dimen name="button_radius">16dp</dimen>
     <dimen name="button_icon_padding">8dp</dimen>
     <dimen name="setting_text">16sp</dimen>
+    <dimen name="button_margin">16dp</dimen>
+    <dimen name="text_margin">12dp</dimen>
+    <dimen name="layout_margin">4dp</dimen>
+    <dimen name="button_back_size">48dp</dimen>
 </resources>

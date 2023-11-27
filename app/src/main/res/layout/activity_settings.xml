@@ -12,22 +12,22 @@
 
         <ImageButton
             android:id="@+id/back_image_view"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:backgroundTint="@color/white"
+            android:layout_width="@dimen/button_back_size"
+            android:layout_height="@dimen/button_back_size"
+            android:backgroundTint="@color/transparent"
             android:src="@drawable/back_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingStart="12dp"
+            android:paddingStart="@dimen/text_margin"
             android:paddingTop="10dp"
             android:paddingEnd="86dp"
-            android:paddingBottom="12dp"
+            android:paddingBottom="@dimen/text_margin"
             android:text="@string/settings_button"
             android:textColor="@color/text_color"
-            android:textSize="22sp" />
+            android:textSize="@dimen/button_icon_text" />
 
     </LinearLayout>
 
@@ -88,8 +88,8 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:text="@string/privacy"
-                style="@style/settings_activity_text_style"/>
+                style="@style/settings_activity_text_style"
+                android:text="@string/privacy" />
 
             <ImageView
                 style="@style/setting_activity_icon"
