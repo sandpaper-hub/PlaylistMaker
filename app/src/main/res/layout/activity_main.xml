@@ -4,15 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/layout_background_color"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginStart="@dimen/layout_margin_small"
+        android:layout_marginTop="@dimen/layout_margin_small"
+        android:layout_marginEnd="52dp"
+        android:layout_marginBottom="@dimen/layout_margin_small"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="62dp"
+            android:layout_marginBottom="@dimen/text_margin"
+            android:text="@string/app_name"
+            android:textAppearance="@style/title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/button_margin"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="@dimen/button_margin"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/search_button"
+            style="@style/main_activity_button_style"
+            android:text="@string/search_button"
+            app:icon="@drawable/search" />
+
+        <Button
+            android:id="@+id/media_library_button"
+            style="@style/main_activity_button_style"
+            android:text="@string/media_library_button"
+            app:icon="@drawable/media_library" />
+
+        <Button
+            android:id="@+id/settings_button"
+            style="@style/main_activity_button_style"
+            android:text="@string/settings_button"
+            app:icon="@drawable/settings" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

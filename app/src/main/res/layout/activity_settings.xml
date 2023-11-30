@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/header_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/back_image_view"
+            android:layout_width="@dimen/button_back_size"
+            android:layout_height="@dimen/button_back_size"
+            android:backgroundTint="@color/transparent"
+            android:src="@drawable/back_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingStart="@dimen/text_margin"
+            android:paddingTop="@dimen/margin_medium"
+            android:paddingEnd="86dp"
+            android:paddingBottom="@dimen/text_margin"
+            android:text="@string/settings_button"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/button_icon_text_sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/header_panel">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/settings_activity_text_style"
+                android:text="@string/dark_theme_title" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="11dp" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/settings_activity_text_style"
+                android:text="@string/share_app_title" />
+
+            <ImageView
+                style="@style/setting_activity_icon"
+                android:src="@drawable/share" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/settings_activity_text_style"
+                android:text="@string/write_to_support_title" />
+
+            <ImageView
+                style="@style/setting_activity_icon"
+                android:src="@drawable/support" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/settings_activity_text_style"
+                android:text="@string/privacy" />
+
+            <ImageView
+                style="@style/setting_activity_icon"
+                android:src="@drawable/arrow" />
+
+        </FrameLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
