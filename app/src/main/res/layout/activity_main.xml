@@ -11,10 +11,10 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/text_margin"
-            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginStart="@dimen/mediumIndent_dp"
+            android:layout_marginTop="@dimen/extraMediumIndent_dp"
             android:layout_marginEnd="62dp"
-            android:layout_marginBottom="@dimen/text_margin"
+            android:layout_marginBottom="@dimen/mediumIndent_dp"
             android:text="@string/app_name"
             android:textAppearance="@style/title"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,9 +23,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/button_margin"
+        android:layout_marginStart="@dimen/largeIndent_dp"
         android:layout_marginTop="80dp"
-        android:layout_marginEnd="@dimen/button_margin"
+        android:layout_marginEnd="@dimen/largeIndent_dp"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent">
 
