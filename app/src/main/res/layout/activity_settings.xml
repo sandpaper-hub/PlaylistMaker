@@ -4,98 +4,87 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/header_panel"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/back_image_view"
+        android:layout_width="@dimen/button_back_size"
+        android:layout_height="@dimen/button_back_size"
+        android:backgroundTint="@color/transparent"
+        android:src="@drawable/back_icon"
+        app:layout_constraintBaseline_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
+        android:paddingStart="@dimen/mediumIndent_dp"
+        android:paddingTop="@dimen/extraMediumIndent_dp"
+        android:paddingEnd="86dp"
+        android:paddingBottom="@dimen/mediumIndent_dp"
+        android:text="@string/settings_button"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/largeTextSize_sp"
+        app:layout_constraintStart_toEndOf="@+id/back_image_view"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/back_image_view"
-            android:layout_width="@dimen/button_back_size"
-            android:layout_height="@dimen/button_back_size"
-            android:backgroundTint="@color/transparent"
-            android:src="@drawable/back_icon" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingStart="@dimen/mediumIndent_dp"
-            android:paddingTop="@dimen/extraMediumIndent_dp"
-            android:paddingEnd="86dp"
-            android:paddingBottom="@dimen/mediumIndent_dp"
-            android:text="@string/settings_button"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/largeTextSize_sp" />
+    <TextView
+        android:id="@+id/darkThemeTextView"
+        style="@style/settings_activity_text_style"
+        android:layout_marginTop="24dp"
+        android:paddingTop="21dp"
+        android:paddingBottom="21dp"
+        android:text="@string/dark_theme_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back_image_view" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.SwitchCompat
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/header_panel">
+        android:layout_marginEnd="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/darkThemeTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/darkThemeTextView" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/shareTextView"
+        style="@style/settings_activity_text_style"
+        android:text="@string/share_app_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/darkThemeTextView" />
 
-            <TextView
-                style="@style/settings_activity_text_style"
-                android:text="@string/dark_theme_title" />
+    <ImageView
+        style="@style/setting_activity_icon"
+        android:src="@drawable/share"
+        app:layout_constraintBottom_toBottomOf="@+id/shareTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/shareTextView" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center"
-                android:layout_marginTop="@dimen/extraMediumIndent_dp"
-                android:layout_marginEnd="6dp"
-                android:layout_marginBottom="11dp" />
+    <TextView
+        android:id="@+id/supportTextView"
+        style="@style/settings_activity_text_style"
+        android:text="@string/write_to_support_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shareTextView" />
 
-        </FrameLayout>
+    <ImageView
+        style="@style/setting_activity_icon"
+        android:src="@drawable/support"
+        app:layout_constraintBottom_toBottomOf="@+id/supportTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/supportTextView" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/privacyTextView"
+        style="@style/settings_activity_text_style"
+        android:text="@string/privacy"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/supportTextView" />
 
-            <TextView
-                style="@style/settings_activity_text_style"
-                android:text="@string/share_app_title" />
-
-            <ImageView
-                style="@style/setting_activity_icon"
-                android:src="@drawable/share" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                style="@style/settings_activity_text_style"
-                android:text="@string/write_to_support_title" />
-
-            <ImageView
-                style="@style/setting_activity_icon"
-                android:src="@drawable/support" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                style="@style/settings_activity_text_style"
-                android:text="@string/privacy" />
-
-            <ImageView
-                style="@style/setting_activity_icon"
-                android:src="@drawable/arrow" />
-
-        </FrameLayout>
-    </LinearLayout>
+    <ImageView
+        style="@style/setting_activity_icon"
+        android:src="@drawable/arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/privacyTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/privacyTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
