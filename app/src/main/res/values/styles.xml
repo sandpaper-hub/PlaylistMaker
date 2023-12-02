@@ -19,10 +19,10 @@
     <style name="settings_activity_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">start|center</item>
         <item name="android:paddingStart">@dimen/largeIndent_dp</item>
-        <item name="android:paddingTop">19dp</item>
-        <item name="android:paddingBottom">18dp</item>
+        <item name="android:paddingTop">@dimen/textIndentTop</item>
+        <item name="android:paddingEnd">@dimen/extraLargeIndent_dp</item>
+        <item name="android:paddingBottom">@dimen/textIndentBottom</item>
         <item name="android:textColor">@color/text_color</item>
         <item name="android:textSize">@dimen/mediumTextSize_sp</item>
     </style>
@@ -30,7 +30,6 @@
     <style name="setting_activity_icon">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center|end</item>
         <item name="android:layout_marginEnd">@dimen/mediumIndent_dp</item>
     </style>
 
