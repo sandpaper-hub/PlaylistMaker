@@ -7,20 +7,10 @@
     android:background="@color/layout_background_color"
     tools:context=".MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/titleLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/layout_margin_small"
-        android:layout_marginTop="@dimen/layout_margin_small"
-        android:layout_marginEnd="52dp"
-        android:layout_marginBottom="@dimen/layout_margin_small"
-        app:layout_constraintTop_toTopOf="parent">
-
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/text_margin"
             android:layout_marginTop="@dimen/margin_medium"
             android:layout_marginEnd="62dp"
@@ -29,7 +19,6 @@
             android:textAppearance="@style/title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
