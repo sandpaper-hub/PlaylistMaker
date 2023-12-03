@@ -9,5 +9,6 @@
     <string name="privacy">Пользовательское соглашение</string>
     <string name="search_activity_text">Search activity</string>
     <string name="media_library_activity_text">MediaLibrary Activity</string>
+    <string name="back_button">Back button</string>
 
 </resources>
