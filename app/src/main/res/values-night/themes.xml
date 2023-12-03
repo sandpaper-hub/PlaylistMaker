@@ -2,8 +2,4 @@
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:background">#1A1B22</item>
     </style>
-
-    <style name="Base.Theme.PlaylistMaker.MainActivity">
-        <item name="android:background">#1A1B22</item>
-    </style>
 </resources>
