@@ -4,21 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/layout_background_color"
     tools:context=".MainActivity">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/mediumIndent_dp"
-            android:layout_marginTop="@dimen/extraMediumIndent_dp"
-            android:layout_marginEnd="62dp"
-            android:layout_marginBottom="@dimen/mediumIndent_dp"
-            android:text="@string/app_name"
-            android:textAppearance="@style/title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ys_display_medium"
+        android:paddingStart="@dimen/mediumIndent_dp"
+        android:paddingTop="@dimen/extraMediumIndent_dp"
+        android:paddingEnd="62dp"
+        android:paddingBottom="@dimen/mediumIndent_dp"
+        android:text="@string/app_name"
+        android:textAppearance="@style/title"
+        android:textFontWeight="500"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
