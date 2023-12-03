@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,10 +9,10 @@
         android:layout_width="@dimen/button_back_size"
         android:layout_height="@dimen/button_back_size"
         android:backgroundTint="@color/transparent"
+        android:contentDescription="@string/back_button"
         android:src="@drawable/back_icon"
         app:layout_constraintBaseline_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/back_button" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         style="@style/panelHeader"
@@ -37,7 +36,11 @@
         android:layout_marginEnd="6dp"
         app:layout_constraintBottom_toBottomOf="@+id/darkThemeTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/darkThemeTextView" />
+        app:layout_constraintTop_toTopOf="@+id/darkThemeTextView"
+        app:thumbTint="#3772E7"
+        app:thumbTintMode="src_in"
+        app:trackTint="#9FBBF3"
+        app:trackTintMode="multiply"/>
 
     <TextView
         android:id="@+id/shareTextView"
