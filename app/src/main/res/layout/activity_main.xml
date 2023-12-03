@@ -9,15 +9,9 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/ys_display_medium"
-        android:paddingStart="@dimen/mediumIndent_dp"
-        android:paddingTop="@dimen/extraMediumIndent_dp"
-        android:paddingEnd="62dp"
-        android:paddingBottom="@dimen/mediumIndent_dp"
+        style="@style/panelHeader"
+        android:textColor="@color/white"
         android:text="@string/app_name"
-        android:textAppearance="@style/title"
         android:textFontWeight="500"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
