@@ -2,4 +2,6 @@
 <resources>
     <color name="backgroundColorActivityMain">#1A1B22</color>
     <color name="sampleTextColor">#FFFFFF</color>
+    <color name="switchThumb">#3772E7</color>
+    <color name="switchTrack">#9FBBF3</color>
 </resources>
