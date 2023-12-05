@@ -11,11 +11,11 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        val message = "https://practicum.yandex.ru/android-developer/"
-        val url = "https://yandex.ru/legal/practicum_offer/"
-        val email = "electro.passion92@gmail.com"
-        val subject = "Сообщение разработчикам и разработчицам приложения Playlist Maker"
-        val body = "Спасибо разработчикам и разработчицам за_крутое_приложение!"
+        val message = getString(R.string.sampleMessageForShare)
+        val url = getString(R.string.privacyUrl)
+        val email = getString(R.string.sampleEmail)
+        val subject = getString(R.string.sampleSubject)
+        val body = getString(R.string.sampleBodyMessage)
 
         val backButtonListener =
             findViewById<ImageButton>(R.id.back_image_view).setOnClickListener {
