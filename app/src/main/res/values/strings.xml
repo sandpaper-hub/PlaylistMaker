@@ -10,5 +10,11 @@
     <string name="search_activity_text">Search activity</string>
     <string name="media_library_activity_text">MediaLibrary Activity</string>
     <string name="back_button">Back button</string>
+    <string name="privacyUrl">https://yandex.ru/legal/practicum_offer/</string>
+    
+    <string name="sampleEmail">electro.passion92@gmail.com</string>
+    <string name="sampleSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="sampleBodyMessage">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="sampleMessageForShare">https://practicum.yandex.ru/android-developer/</string>
 
 </resources>
