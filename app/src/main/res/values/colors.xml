@@ -7,6 +7,8 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="switchThumb">#AEAFB4</color>
     <color name="switchTrack">#E6E8EB</color>
+    <color name="editTextBackground">#E6E8EB</color>
+    <color name="editTextHint">#AEAFB4</color>
 
     <color name="activityTextColor">#1A1B22</color>//delete
 </resources>
