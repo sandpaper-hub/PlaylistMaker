@@ -18,7 +18,7 @@ class SettingsActivity : AppCompatActivity() {
         val body = getString(R.string.sampleBodyMessage)
 
         val backButtonListener =
-            findViewById<ImageButton>(R.id.back_image_view).setOnClickListener {
+            findViewById<ImageButton>(R.id.back_button_settingsActivity).setOnClickListener {
                 val backIntent = Intent(this, MainActivity::class.java)
                 backIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 backIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)

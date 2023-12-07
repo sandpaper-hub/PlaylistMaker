@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <ImageButton
-        android:id="@+id/back_image_view"
+        android:id="@+id/back_button_settingsActivity"
         android:layout_width="@dimen/button_back_size"
         android:layout_height="@dimen/button_back_size"
         android:backgroundTint="@color/transparent"
@@ -17,7 +17,7 @@
     <TextView
         style="@style/panelHeader"
         android:text="@string/settings_button"
-        app:layout_constraintStart_toEndOf="@+id/back_image_view"
+        app:layout_constraintStart_toEndOf="@+id/back_button_settingsActivity"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -28,7 +28,7 @@
         android:paddingBottom="21dp"
         android:text="@string/dark_theme_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/back_image_view" />
+        app:layout_constraintTop_toBottomOf="@+id/back_button_settingsActivity" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:layout_width="wrap_content"
