@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="backgroundColorActivityMain">#1A1B22</color>
-    <color name="switchThumb">#3772E7</color>
-    <color name="switchTrack">#9FBBF3</color>
-    <color name="editTextBackground">#FFFFFF</color>
-    <color name="editTextHint">#1A1B22</color>
-
     <color name="activityTextColor">#FFFFFF</color>//delete
 </resources>
