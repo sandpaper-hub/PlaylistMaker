@@ -6,8 +6,7 @@
 
     <ImageButton
         android:id="@+id/back_button_settingsActivity"
-        android:layout_width="@dimen/button_back_size"
-        android:layout_height="@dimen/button_back_size"
+        style="@style/back_button_style"
         android:backgroundTint="@color/transparent"
         android:contentDescription="@string/back_button"
         android:src="@drawable/back_icon"
@@ -31,16 +30,13 @@
         app:layout_constraintTop_toBottomOf="@+id/back_button_settingsActivity" />
 
     <androidx.appcompat.widget.SwitchCompat
+        style="@style/switch_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="6dp"
         app:layout_constraintBottom_toBottomOf="@+id/darkThemeTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/darkThemeTextView"
-        app:thumbTint="@color/switchThumb"
-        app:thumbTintMode="src_in"
-        app:trackTint="@color/switchTrack"
-        app:trackTintMode="multiply"/>
+        app:layout_constraintTop_toTopOf="@+id/darkThemeTextView" />
 
     <TextView
         android:id="@+id/shareTextView"
