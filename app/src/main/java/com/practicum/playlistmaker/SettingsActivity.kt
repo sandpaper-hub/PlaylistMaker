@@ -4,7 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
 class SettingsActivity : AppCompatActivity() {
@@ -25,7 +25,7 @@ class SettingsActivity : AppCompatActivity() {
                 startActivity(backIntent)
             }
 
-        val shareTextViewListener = findViewById<TextView>(R.id.shareTextView).setOnClickListener {
+        val shareButtonListener = findViewById<ImageView>(R.id.shareImageView).setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.putExtra(Intent.EXTRA_TEXT, message)
             shareIntent.setType("text/plain")
@@ -33,14 +33,14 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intentChooser)
         }
 
-        val supportTextViewListener =
-            findViewById<TextView>(R.id.supportTextView).setOnClickListener {
+        val supportButtonListener =
+            findViewById<ImageView>(R.id.supportImageView).setOnClickListener {
                 val supportIntent = Intent(Intent.ACTION_SENDTO)
                 supportIntent.setData(Uri.parse("mailto:$email?subject=$subject&body=$body"))
                 startActivity(supportIntent)
             }
 
-        val privacyTextViewListener = findViewById<TextView>(R.id.privacyTextView).setOnClickListener {
+        val privacyButtonListener = findViewById<ImageView>(R.id.privacyImageView).setOnClickListener {
             val privacyIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(privacyIntent)
         }
