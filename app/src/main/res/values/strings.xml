@@ -10,6 +10,7 @@
     <string name="search_activity_text">Search activity</string>
     <string name="media_library_activity_text">MediaLibrary Activity</string>
     <string name="back_button">Back button</string>
+    <string name="clear_button">Clear button</string>
     <string name="privacyUrl">https://yandex.ru/legal/practicum_offer/</string>
     
     <string name="sampleEmail">electro.passion92@gmail.com</string>
