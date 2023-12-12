@@ -30,7 +30,6 @@
         app:layout_constraintTop_toBottomOf="@+id/back_button_settingsActivity" />
 
     <androidx.appcompat.widget.SwitchCompat
-        style="@style/switch_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="6dp"
@@ -46,11 +45,13 @@
         app:layout_constraintTop_toBottomOf="@+id/darkThemeTextView" />
 
     <ImageView
-        style="@style/setting_activity_icon"
+        android:id="@+id/shareImageView"
+        style="@style/small_icon_style"
         android:src="@drawable/share"
         app:layout_constraintBottom_toBottomOf="@+id/shareTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/shareTextView" />
+        app:layout_constraintTop_toTopOf="@+id/shareTextView"
+        android:contentDescription="@string/share_app_title" />
 
     <TextView
         android:id="@+id/supportTextView"
@@ -60,11 +61,13 @@
         app:layout_constraintTop_toBottomOf="@+id/shareTextView" />
 
     <ImageView
-        style="@style/setting_activity_icon"
+        android:id="@+id/supportImageView"
+        style="@style/small_icon_style"
         android:src="@drawable/support"
         app:layout_constraintBottom_toBottomOf="@+id/supportTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/supportTextView" />
+        app:layout_constraintTop_toTopOf="@+id/supportTextView"
+        android:contentDescription="@string/write_to_support_title" />
 
     <TextView
         android:id="@+id/privacyTextView"
@@ -74,10 +77,12 @@
         app:layout_constraintTop_toBottomOf="@+id/supportTextView" />
 
     <ImageView
-        style="@style/setting_activity_icon"
+        android:id="@+id/privacyImageView"
+        style="@style/small_icon_style"
         android:src="@drawable/arrow"
         app:layout_constraintBottom_toBottomOf="@+id/privacyTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/privacyTextView" />
+        app:layout_constraintTop_toTopOf="@+id/privacyTextView"
+        android:contentDescription="@string/privacy" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
