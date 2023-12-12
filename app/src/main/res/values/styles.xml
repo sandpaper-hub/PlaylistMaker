@@ -32,11 +32,6 @@
         <item name="android:textSize">@dimen/mediumTextSize_sp</item>
         <item name="fontFamily">@font/ys_text_regular</item>
     </style>
-    
-    <style name="switch_style">
-        <item name="thumbTint">@color/YP_Text_Gray</item>
-        <item name="trackTint">@color/YP_Light_Gray</item>
-    </style>
 
     <style name="panelHeader">
         <item name="android:layout_width">wrap_content</item>
@@ -49,10 +44,10 @@
         <item name="android:textSize">@dimen/largeTextSize_sp</item>
     </style>
 
-    <style name="setting_activity_icon">
+    <style name="small_icon_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginEnd">@dimen/mediumIndent_dp</item>
+        <item name="android:layout_marginHorizontal">@dimen/mediumIndent_dp</item>
         <item name="tint">@color/YP_Text_Gray</item>
     </style>
 
@@ -72,11 +67,14 @@
         <item name="android:drawablePadding">@dimen/smallIndent_dp</item>
         <item name="drawableTint">@color/YP_Text_Gray</item>
         <item name="fontFamily">@font/ys_text_regular</item>
-        <item name="android:paddingHorizontal">@dimen/mediumIndent_dp</item>
         <item name="android:paddingVertical">@dimen/extraMediumIndent_dp</item>
         <item name="android:textColor">@color/YP_Black</item>
         <item name="android:textColorHint">@color/YP_Text_Gray</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/mediumTextSize_sp</item>
+    </style>
+
+    <style name="clear_icon_style" parent="small_icon_style">
+        <item name="tint">@color/YP_Text_Gray</item>
     </style>
 
 </resources>
