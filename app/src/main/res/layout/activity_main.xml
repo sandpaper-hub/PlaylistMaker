@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColorActivityMain"
+    style="@style/main_activity_style"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/title"
         style="@style/panelHeader"
-        android:textColor="@color/white"
+        android:textColor="@color/YP_White"
         android:text="@string/app_name"
         android:textFontWeight="500"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +28,7 @@
         <Button
             android:id="@+id/search_button"
             style="@style/main_activity_button_style"
-            android:text="@string/search_button"
+            android:text="@string/search_text"
             app:icon="@drawable/search" />
 
         <Button
