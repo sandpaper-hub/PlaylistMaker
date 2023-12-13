@@ -11,6 +11,7 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import androidx.core.widget.doOnTextChanged
 
 class SearchActivity : AppCompatActivity() {
 
@@ -40,17 +41,21 @@ class SearchActivity : AppCompatActivity() {
             inputMethodManager?.hideSoftInputFromWindow(it.windowToken, 0)
         }
 
+        searchEditText.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) {
+                clearSearchButton.visibility = GONE
+            } else {
+                clearSearchButton.visibility = VISIBLE
+            }
+        }
+
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
+                //not yet implemented
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.isNullOrEmpty()) {
-                    clearSearchButton.visibility = GONE
-                } else {
-                    clearSearchButton.visibility = VISIBLE
-                }
+                //not yet implemented
             }
 
             override fun afterTextChanged(s: Editable?) {
