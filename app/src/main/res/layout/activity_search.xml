@@ -10,10 +10,10 @@
         android:id="@+id/back_button_searchActivity"
         style="@style/back_button_style"
         android:backgroundTint="@color/transparent"
+        android:contentDescription="@string/back_button"
         android:src="@drawable/back_icon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/back_button" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         style="@style/panelHeader"
@@ -21,28 +21,36 @@
         app:layout_constraintStart_toEndOf="@+id/back_button_searchActivity"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/search_editText"
-        style="@style/edit_text_style"
-        android:background="@drawable/rounded_edit_text"
-        android:drawableStart="@drawable/search"
-        android:hint="@string/search_text"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingStart="@dimen/mediumIndent_dp"
-        android:paddingEnd="40dp"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/back_button_searchActivity" />
+        app:layout_constraintTop_toBottomOf="@+id/back_button_searchActivity">
 
-    <ImageButton
+        <EditText
+            android:id="@+id/search_editText"
+            style="@style/edit_text_style"
+            android:background="@drawable/rounded_edit_text"
+            android:drawableStart="@drawable/search"
+            android:hint="@string/search_text"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="@dimen/mediumIndent_dp"
+            android:paddingEnd="40dp" />
 
-        android:id="@+id/clear_search_ediText"
-        style="@style/clear_icon_style"
-        android:background="@color/transparent"
-        android:src="@drawable/clear_edit_text_button"
-        app:layout_constraintBottom_toBottomOf="@+id/search_editText"
-        app:layout_constraintEnd_toEndOf="@+id/search_editText"
-        app:layout_constraintTop_toTopOf="@+id/search_editText"
-        android:contentDescription="@string/clear_button" />
+        <ImageButton
+            android:id="@+id/clear_search_ediText"
+            style="@style/clear_icon_style"
+            android:layout_width="@dimen/button_back_size"
+            android:layout_height="match_parent"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginVertical="@dimen/smallIndent_dp"
+            android:layout_marginEnd="@dimen/largeIndent_dp"
+            android:background="@color/transparent"
+            android:contentDescription="@string/clear_button"
+            android:src="@drawable/clear_edit_text_button" />
+    </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
