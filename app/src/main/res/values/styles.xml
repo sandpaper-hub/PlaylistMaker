@@ -42,6 +42,7 @@
         <item name="android:paddingBottom">@dimen/mediumIndent_dp</item>
         <item name="android:textColor">@color/YP_Black</item>
         <item name="android:textSize">@dimen/largeTextSize_sp</item>
+        <item name="android:textFontWeight">500</item>
     </style>
 
     <style name="small_icon_style">
@@ -63,10 +64,10 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginHorizontal">@dimen/largeIndent_dp</item>
         <item name="android:layout_marginVertical">@dimen/smallIndent_dp</item>
-        <item name="background">@drawable/rounded_edit_text</item>
+        <item name="android:background">@drawable/rounded_edit_text</item>
         <item name="android:drawablePadding">@dimen/smallIndent_dp</item>
-        <item name="drawableTint">@color/YP_Text_Gray</item>
-        <item name="fontFamily">@font/ys_text_regular</item>
+        <item name="android:drawableTint">@color/YP_Text_Gray</item>
+        <item name="android:fontFamily">@font/ys_text_regular</item>
         <item name="android:paddingVertical">@dimen/extraMediumIndent_dp</item>
         <item name="android:textColor">@color/YP_Black</item>
         <item name="android:textColorHint">@color/YP_Text_Gray</item>
