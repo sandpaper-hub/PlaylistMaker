@@ -10,7 +10,7 @@
         <item name="android:textColor">@color/YP_Black</item>
         <item name="android:textSize">@dimen/largeTextSize_sp</item>
         <item name="backgroundTint">@color/YP_White</item>
-        <item name="android:layout_marginBottom">@dimen/largeIndent_dp</item>
+        <item name="android:layout_marginBottom">@dimen/largeIndent16</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">match_parent</item>
@@ -24,10 +24,10 @@
     <style name="settings_activity_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingStart">@dimen/largeIndent_dp</item>
-        <item name="android:paddingTop">@dimen/textIndentTop</item>
+        <item name="android:paddingStart">@dimen/largeIndent16</item>
+        <item name="android:paddingTop">@dimen/largeIndent19</item>
         <item name="android:paddingEnd">@dimen/extraLargeIndent_dp</item>
-        <item name="android:paddingBottom">@dimen/textIndentBottom</item>
+        <item name="android:paddingBottom">@dimen/largeIndent18</item>
         <item name="android:textColor">@color/YP_Black</item>
         <item name="android:textSize">@dimen/mediumTextSize_sp</item>
         <item name="fontFamily">@font/ys_text_regular</item>
@@ -45,7 +45,7 @@
         <item name="android:textFontWeight">500</item>
     </style>
 
-    <style name="small_icon_style">
+    <style name="settings_activity_small_icon_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginHorizontal">@dimen/mediumIndent_dp</item>
@@ -62,7 +62,7 @@
     <style name="edit_text_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginHorizontal">@dimen/largeIndent_dp</item>
+        <item name="android:layout_marginHorizontal">@dimen/largeIndent16</item>
         <item name="android:layout_marginVertical">@dimen/smallIndent_dp</item>
         <item name="android:background">@drawable/rounded_edit_text</item>
         <item name="android:drawablePadding">@dimen/smallIndent_dp</item>
@@ -74,8 +74,26 @@
         <item name="android:textSize">@dimen/mediumTextSize_sp</item>
     </style>
 
-    <style name="clear_icon_style" parent="small_icon_style">
+    <style name="clear_icon_style" parent="settings_activity_small_icon_style">
         <item name="tint">@color/YP_Text_Gray</item>
+    </style>
+    
+    <style name="track_text_style_songName">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/smallIndent_dp</item>
+        <item name="android:layout_marginEnd">@dimen/smallIndent_dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textColor">@color/YP_Black</item>
+        <item name="android:lines">1</item>
+        <item name="android:textSize">@dimen/mediumTextSize_sp</item>
+        <item name="layout_constrainedWidth">true</item>
+        <item name="layout_constraintHorizontal_bias">0</item>
+    </style>
+
+    <style name="track_text_style_artist" parent="track_text_style_songName">
+        <item name="android:textColor">@color/YP_Text_Gray</item>
     </style>
 
 </resources>
