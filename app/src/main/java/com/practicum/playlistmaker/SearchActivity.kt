@@ -12,13 +12,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.core.widget.doOnTextChanged
-import androidx.recyclerview.widget.RecyclerView
 
 class SearchActivity : AppCompatActivity() {
 
     var savedText = ""
     private var restoredText = ""
-    private val trackList: ArrayList<Track> = TrackListMockObject.listOfTrack
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,10 +50,6 @@ class SearchActivity : AppCompatActivity() {
                 clearSearchButton.visibility = VISIBLE
             }
         }
-
-        val trackListRecyclerView = findViewById<RecyclerView>(R.id.trackListRecyclerView)
-        val trackListAdapter = TrackListAdapter(trackList)
-        trackListRecyclerView.adapter = trackListAdapter
 
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

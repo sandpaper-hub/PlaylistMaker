@@ -77,23 +77,5 @@
     <style name="clear_icon_style" parent="settings_activity_small_icon_style">
         <item name="tint">@color/YP_Text_Gray</item>
     </style>
-    
-    <style name="track_text_style_songName">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">@dimen/smallIndent_dp</item>
-        <item name="android:layout_marginEnd">@dimen/smallIndent_dp</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:fontFamily">@font/ys_text_regular</item>
-        <item name="android:textColor">@color/YP_Black</item>
-        <item name="android:lines">1</item>
-        <item name="android:textSize">@dimen/mediumTextSize_sp</item>
-        <item name="layout_constrainedWidth">true</item>
-        <item name="layout_constraintHorizontal_bias">0</item>
-    </style>
-
-    <style name="track_text_style_artist" parent="track_text_style_songName">
-        <item name="android:textColor">@color/YP_Text_Gray</item>
-    </style>
 
 </resources>

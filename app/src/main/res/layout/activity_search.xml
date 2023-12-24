@@ -52,13 +52,5 @@
             android:src="@drawable/clear_edit_text_button" />
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/trackListRecyclerView"
-        android:layout_marginTop="@dimen/largeIndent16"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@+id/search_editText_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
