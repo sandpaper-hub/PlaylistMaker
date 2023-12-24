@@ -46,7 +46,7 @@
 
     <ImageView
         android:id="@+id/shareImageView"
-        style="@style/small_icon_style"
+        style="@style/settings_activity_small_icon_style"
         android:src="@drawable/share"
         app:layout_constraintBottom_toBottomOf="@+id/shareTextView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +62,7 @@
 
     <ImageView
         android:id="@+id/supportImageView"
-        style="@style/small_icon_style"
+        style="@style/settings_activity_small_icon_style"
         android:src="@drawable/support"
         app:layout_constraintBottom_toBottomOf="@+id/supportTextView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +78,7 @@
 
     <ImageView
         android:id="@+id/privacyImageView"
-        style="@style/small_icon_style"
+        style="@style/settings_activity_small_icon_style"
         android:src="@drawable/arrow"
         app:layout_constraintBottom_toBottomOf="@+id/privacyTextView"
         app:layout_constraintEnd_toEndOf="parent"

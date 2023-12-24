@@ -6,21 +6,26 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.core.widget.doOnTextChanged
+import androidx.recyclerview.widget.RecyclerView
 
 class SearchActivity : AppCompatActivity() {
 
     var savedText = ""
     private var restoredText = ""
+    private val trackList: ArrayList<Track> = TrackListMockObject.listOfTrack
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        Log.d("SEARCH", "THis")
 
         val backButton = findViewById<ImageButton>(R.id.back_button_searchActivity)
         backButton.setOnClickListener {
@@ -35,9 +40,10 @@ class SearchActivity : AppCompatActivity() {
         val clearSearchButton = findViewById<ImageButton>(R.id.clear_search_ediText)
         clearSearchButton.visibility = GONE
 
-        clearSearchButton.setOnClickListener{
+        clearSearchButton.setOnClickListener {
             searchEditText.setText("")
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(it.windowToken, 0)
         }
 
@@ -49,13 +55,17 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
+        val trackListRecyclerView = findViewById<RecyclerView>(R.id.trackListRecyclerView)
+        val trackListAdapter = TrackListAdapter(trackList)
+        trackListRecyclerView.adapter = trackListAdapter
+
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //not yet implemented
+            //not yet implemented
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                //not yet implemented
+            //not yet implemented
             }
 
             override fun afterTextChanged(s: Editable?) {

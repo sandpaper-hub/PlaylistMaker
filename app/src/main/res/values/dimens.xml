@@ -6,10 +6,11 @@
     <dimen name="smallIndent_dp">8dp</dimen>
     <dimen name="extraMediumIndent_dp">10dp</dimen>
     <dimen name="mediumIndent_dp">12dp</dimen>
-    <dimen name="largeIndent_dp">16dp</dimen>
-    <dimen name="textIndentBottom">18dp</dimen>
-    <dimen name="textIndentTop">19dp</dimen>
+    <dimen name="largeIndent16">16dp</dimen>
+    <dimen name="largeIndent18">18dp</dimen>
+    <dimen name="largeIndent19">19dp</dimen>
     <dimen name="extraLargeIndent_dp">44dp</dimen>
     <dimen name="smallRadius_dp">16dp</dimen>
+    <dimen name="coverSize_dp">45</dimen>
     <dimen name="button_back_size">48dp</dimen>
 </resources>
