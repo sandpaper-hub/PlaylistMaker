@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Playlist Maker</string>
-    <string name="search_button">Поиск</string>
+    <string name="search_text">Поиск</string>
     <string name="media_library_button">Медиатека</string>
     <string name="settings_button">Настройки</string>
     <string name="dark_theme_title">Тёмная тема</string>
@@ -9,5 +9,17 @@
     <string name="privacy">Пользовательское соглашение</string>
     <string name="search_activity_text">Search activity</string>
     <string name="media_library_activity_text">MediaLibrary Activity</string>
+    <string name="back_button">Back button</string>
+    <string name="clear_button">Clear button</string>
+    <string name="privacyUrl">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="cover_image">Cover image</string>
+    <string name="dot_separator">Dot separator</string>
+    <string name="arrow">Arrow</string>
+
+    <string name="sampleEmail">electro.passion92@gmail.com</string>
+    <string name="sampleSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="sampleBodyMessage">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="sampleMessageForShare">https://practicum.yandex.ru/android-developer/</string>
+    <string name="sampleLongText">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ut lorem sit amet nisl tempor commodo. Suspendisse sed vehicula tortor. Maecenas lobortis est at dolor condimentum, nec venenatis metus condimentum. Cras aliquet tellus vel nisl auctor ornare. Ut ultricies facilisis mi, sed maximus ex vestibulum non. In a ex vel enim pellentesque ultricies at id turpis. Integer sollicitudin euismod varius. Praesent elementum non velit efficitur cursus. Fusce fringilla risus nisi, ut hendrerit tortor rutrum ut. Pellentesque facilisis mattis rhoncus.</string>
 
 </resources>
