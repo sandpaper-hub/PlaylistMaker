@@ -6,13 +6,59 @@
     android:layout_height="match_parent"
     tools:context=".SearchActivity">
 
+    <ImageButton
+        android:id="@+id/back_button_searchActivity"
+        style="@style/back_button_style"
+        android:backgroundTint="@color/transparent"
+        android:contentDescription="@string/back_button"
+        android:src="@drawable/back_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:gravity="center"
-        android:text="@string/search_activity_text"
-        android:textColor="@color/text_color"
+        style="@style/panelHeader"
+        android:text="@string/search_text"
+        app:layout_constraintStart_toEndOf="@+id/back_button_searchActivity"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/search_editText_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back_button_searchActivity">
+
+        <EditText
+            android:id="@+id/search_editText"
+            style="@style/edit_text_style"
+            android:drawableStart="@drawable/search"
+            android:hint="@string/search_text"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="@dimen/mediumIndent_dp"
+            android:paddingEnd="40dp" />
+
+        <ImageButton
+            android:id="@+id/clear_search_ediText"
+            style="@style/clear_icon_style"
+            android:layout_width="@dimen/button_back_size"
+            android:layout_height="match_parent"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginVertical="@dimen/smallIndent_dp"
+            android:layout_marginEnd="@dimen/largeIndent16"
+            android:background="@color/transparent"
+            android:contentDescription="@string/clear_button"
+            android:src="@drawable/clear_edit_text_button" />
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/trackListRecyclerView"
+        android:layout_marginTop="@dimen/largeIndent16"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/search_editText_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
