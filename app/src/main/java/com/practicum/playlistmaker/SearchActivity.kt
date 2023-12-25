@@ -20,6 +20,7 @@ class SearchActivity : AppCompatActivity() {
     private var restoredText = ""
     private val trackList: ArrayList<Track> = TrackListMockObject.listOfTrack
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
