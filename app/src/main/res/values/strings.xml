@@ -20,6 +20,5 @@
     <string name="sampleSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="sampleBodyMessage">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="sampleMessageForShare">https://practicum.yandex.ru/android-developer/</string>
-    <string name="sampleLongText">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ut lorem sit amet nisl tempor commodo. Suspendisse sed vehicula tortor. Maecenas lobortis est at dolor condimentum, nec venenatis metus condimentum. Cras aliquet tellus vel nisl auctor ornare. Ut ultricies facilisis mi, sed maximus ex vestibulum non. In a ex vel enim pellentesque ultricies at id turpis. Integer sollicitudin euismod varius. Praesent elementum non velit efficitur cursus. Fusce fringilla risus nisi, ut hendrerit tortor rutrum ut. Pellentesque facilisis mattis rhoncus.</string>
 
 </resources>
