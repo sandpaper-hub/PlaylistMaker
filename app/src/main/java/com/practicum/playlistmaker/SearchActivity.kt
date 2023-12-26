@@ -18,7 +18,7 @@ class SearchActivity : AppCompatActivity() {
 
     var savedText = ""
     private var restoredText = ""
-    private val trackList: ArrayList<Track> = TrackListMockObject.listOfTrack
+    private val trackList: ArrayList<Track> = TrackListMockObject().listOfTrack
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
