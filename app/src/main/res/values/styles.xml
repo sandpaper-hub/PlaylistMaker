@@ -94,6 +94,7 @@
 
     <style name="track_text_style_artist" parent="track_text_style_songName">
         <item name="android:textColor">@color/YP_Text_Gray</item>
+        <item name="android:textSize">@dimen/smallTextSize_sp</item>
     </style>
 
 </resources>
