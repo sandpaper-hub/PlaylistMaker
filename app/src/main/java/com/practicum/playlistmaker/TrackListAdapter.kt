@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +17,6 @@ class TrackListAdapter(private val trackList: List<Track>) :
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        Log.d("ADAPTER", "HERE")
         holder.bind(trackList[position])
     }
 }
