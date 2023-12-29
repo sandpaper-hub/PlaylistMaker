@@ -59,7 +59,7 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/artistName"
         app:layout_constraintEnd_toStartOf="@id/trackArrow"
         app:layout_constraintStart_toEndOf="@+id/dot_point"
-        tools:text="2:55" />
+        tools:text="2:56" />
 
     <ImageView
         android:id="@+id/trackArrow"
