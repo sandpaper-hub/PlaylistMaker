@@ -36,6 +36,8 @@
             android:importantForAutofill="no"
             android:inputType="text"
             android:maxLines="1"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             android:paddingStart="@dimen/mediumIndent_dp"
             android:paddingEnd="40dp" />
 
