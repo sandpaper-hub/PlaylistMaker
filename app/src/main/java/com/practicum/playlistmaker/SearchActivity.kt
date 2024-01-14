@@ -58,11 +58,11 @@ class SearchActivity : AppCompatActivity() {
 
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            //not yet implemented
+            //TODO not yet implemented
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            //not yet implemented
+            //TODO not yet implemented
             }
 
             override fun afterTextChanged(s: Editable?) {
