@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="textSize_sp11">11sp</dimen>
+    <dimen name="textSize_sp14">14sp</dimen>
     <dimen name="textSize_sp16">16sp</dimen>
     <dimen name="textSize_sp19">19sp</dimen>
     <dimen name="textSize_22sp">22sp</dimen>
@@ -13,7 +14,8 @@
     <dimen name="indent_dp19">19dp</dimen>
     <dimen name="indent_dp24">24dp</dimen>
     <dimen name="indent_dp44">44dp</dimen>
-    <dimen name="smallRadius_dp">16dp</dimen>
+    <dimen name="radius_16dp">16dp</dimen>
+    <dimen name="radius_54dp">54dp</dimen>
     <dimen name="coverSize_dp">45dp</dimen>
     <dimen name="button_back_size">48dp</dimen>
 </resources>
