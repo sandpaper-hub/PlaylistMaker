@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="smallTextSize_sp">11sp</dimen>
-    <dimen name="mediumTextSize_sp">16sp</dimen>
-    <dimen name="largeTextSize_sp">22sp</dimen>
-    <dimen name="extraSmallIndent_dp">4dp</dimen>
-    <dimen name="smallIndent_dp">8dp</dimen>
-    <dimen name="extraMediumIndent_dp">10dp</dimen>
-    <dimen name="mediumIndent_dp">12dp</dimen>
-    <dimen name="largeIndent16">16dp</dimen>
-    <dimen name="largeIndent18">18dp</dimen>
-    <dimen name="largeIndent19">19dp</dimen>
-    <dimen name="extraLargeIndent_dp">44dp</dimen>
-    <dimen name="smallRadius_dp">16dp</dimen>
+    <dimen name="textSize_sp11">11sp</dimen>
+    <dimen name="textSize_sp14">14sp</dimen>
+    <dimen name="textSize_sp16">16sp</dimen>
+    <dimen name="textSize_sp19">19sp</dimen>
+    <dimen name="textSize_22sp">22sp</dimen>
+    <dimen name="indent_4dp">4dp</dimen>
+    <dimen name="indent_8dp">8dp</dimen>
+    <dimen name="indent_dp10">10dp</dimen>
+    <dimen name="indent_dp12">12dp</dimen>
+    <dimen name="indent_dp16">16dp</dimen>
+    <dimen name="indent_dp18">18dp</dimen>
+    <dimen name="indent_dp19">19dp</dimen>
+    <dimen name="indent_dp24">24dp</dimen>
+    <dimen name="indent_dp44">44dp</dimen>
+    <dimen name="radius_16dp">16dp</dimen>
+    <dimen name="radius_54dp">54dp</dimen>
     <dimen name="coverSize_dp">45dp</dimen>
     <dimen name="button_back_size">48dp</dimen>
 </resources>
