@@ -16,6 +16,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
@@ -113,16 +114,14 @@ class SearchActivity : AppCompatActivity() {
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(it.windowToken, 0)
-            showBadResult("", 0)
-            trackList.clear()
-            trackListAdapter.notifyDataSetChanged()
+            showResult(ResponseStatus.SUCCESS)
+            setDataChanged()
         }
 
         refreshSearchButton.setOnClickListener {
             doRequest()
         }
     }
-
 
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -152,48 +151,55 @@ class SearchActivity : AppCompatActivity() {
                         trackListAdapter.notifyDataSetChanged()
                     }
                     if (trackList.isEmpty()) {
-                        showBadResult(
-                            applicationContext.resources.getString(R.string.nothing_found),
-                            R.drawable.nothing_found_image
-                        )
+                        showResult(ResponseStatus.NOTHING_FOUND)
                     } else {
-                        showBadResult("", 0)
+                        showResult(ResponseStatus.SUCCESS)
                     }
                 } else {
-                    showBadResult(
-                        applicationContext.resources.getString(R.string.connection_error),
-                        R.drawable.bad_connection_image
-                    )
+                    showResult(ResponseStatus.BAD_CONNECTION)
                 }
             }
 
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                showBadResult(
-                    applicationContext.resources.getString(R.string.connection_error),
-                    R.drawable.bad_connection_image
-                )
+                showResult(ResponseStatus.BAD_CONNECTION)
             }
         })
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun showBadResult(message: String, image: Int) {
-        if (message.isNotEmpty()) {
-            badSearchResultImage.visibility = VISIBLE
-            badSearchResultTextView.visibility = VISIBLE
-            badSearchResultTextView.text = message
-            badSearchResultImage.setImageResource(image)
-            if (message == applicationContext.resources.getString(R.string.connection_error)) {
-                refreshSearchButton.visibility = VISIBLE
-            } else {
-                refreshSearchButton.visibility = GONE
+    private fun showResult(responseStatus: Enum<ResponseStatus>) {
+        when (responseStatus) {
+            ResponseStatus.BAD_CONNECTION -> {
+                badSearchResultImage.isVisible = true
+                badSearchResultTextView.isVisible = true
+                refreshSearchButton.isVisible = true
+                badSearchResultTextView.text =
+                    applicationContext.resources.getText(R.string.connection_error)
+                badSearchResultImage.setImageResource(R.drawable.bad_connection_image)
+                setDataChanged()
             }
-            trackList.clear()
-            trackListAdapter.notifyDataSetChanged()
-        } else {
-            badSearchResultImage.visibility = GONE
-            badSearchResultTextView.visibility = GONE
-            refreshSearchButton.visibility = GONE
+
+            ResponseStatus.NOTHING_FOUND -> {
+                badSearchResultImage.isVisible = true
+                badSearchResultTextView.isVisible = true
+                refreshSearchButton.isVisible = false
+                badSearchResultTextView.text =
+                    applicationContext.resources.getText(R.string.nothing_found)
+                badSearchResultImage.setImageResource(R.drawable.nothing_found_image)
+                setDataChanged()
+            }
+
+            ResponseStatus.SUCCESS -> {
+                badSearchResultImage.isVisible = false
+                badSearchResultTextView.isVisible = false
+                refreshSearchButton.isVisible = false
+            }
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun setDataChanged() {
+        trackList.clear()
+        trackListAdapter.notifyDataSetChanged()
     }
 }
