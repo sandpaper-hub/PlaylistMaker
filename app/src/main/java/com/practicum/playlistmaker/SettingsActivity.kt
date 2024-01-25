@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,6 +17,15 @@ class SettingsActivity : AppCompatActivity() {
         val email = getString(R.string.sampleEmail)
         val subject = getString(R.string.sampleSubject)
         val body = getString(R.string.sampleBodyMessage)
+        val switcher = findViewById<SwitchCompat>(R.id.darkThemeSwitcherCompat)
+        val sharedPreferences =
+            getSharedPreferences(SharedPreferencesData.sharedPreferencesFileName, MODE_PRIVATE)
+
+        switcher.isChecked = sharedPreferences.getBoolean(SharedPreferencesData.darkThemeKey, false)
+
+        switcher.setOnCheckedChangeListener { _, isChecked ->
+            (applicationContext as App).switchTheme(isChecked)
+        }
 
         val backButtonListener =
             findViewById<ImageButton>(R.id.back_button_settingsActivity).setOnClickListener {
