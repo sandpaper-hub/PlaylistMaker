@@ -15,6 +15,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -59,7 +60,12 @@ class SearchActivity : AppCompatActivity() {
         val clearSearchButton = findViewById<ImageButton>(R.id.clear_search_ediText)
         val trackListRecyclerView = findViewById<RecyclerView>(R.id.trackListRecyclerView)
 
-        trackListAdapter = TrackListAdapter(trackList)
+        trackListAdapter = TrackListAdapter(trackList, object : TrackListAdapter.OnTrackClickListener{
+            override fun onItemClick(track: Track) {
+                Toast.makeText(applicationContext, track.trackName, Toast.LENGTH_SHORT).show()
+            }
+
+        })
         badSearchResultImage = findViewById(R.id.badSearchResultImage)
         badSearchResultTextView = findViewById(R.id.badSearchResultText)
         refreshSearchButton = findViewById(R.id.refresh_search_button)
