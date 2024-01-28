@@ -66,11 +66,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="102dp"
+        android:contentDescription="@string/nothing_found"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_editText_container"
-        tools:src="@drawable/nothing_found_image"
-        android:contentDescription="@string/nothing_found" />
+        tools:src="@drawable/nothing_found_image" />
 
     <TextView
         android:id="@+id/badSearchResultText"
@@ -93,13 +93,47 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:backgroundTint="@color/element_color"
+        android:fontFamily="@font/ys_display_medium"
         android:text="@string/refresh"
         android:textColor="@color/text_color"
-        android:fontFamily="@font/ys_display_medium"
         android:textSize="@dimen/textSize_sp14"
         app:cornerRadius="@dimen/radius_54dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/badSearchResultText" />
+
+    <LinearLayout
+        android:id="@+id/historySearchContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_editText_container">
+
+        <TextView
+            android:id="@+id/historySearchText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/indent_dp16"
+            android:paddingTop="18dp"
+            android:paddingBottom="12dp"
+            android:text="Вы искали" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/historyRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/indent_8dp" />
+
+        <Button
+            android:id="@+id/clear_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Очистить историю"
+            app:cornerRadius="@dimen/radius_54dp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
