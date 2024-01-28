@@ -11,7 +11,7 @@ class App() : Application() {
     override fun onCreate() {
         super.onCreate()
         sharedPreferences =
-            getSharedPreferences(SharedPreferencesData.sharedPreferencesFileName, MODE_PRIVATE)
+            getSharedPreferences(SharedPreferencesData.sharedPreferencesThemeFile, MODE_PRIVATE)
         darkTheme = sharedPreferences.getBoolean(SharedPreferencesData.darkThemeKey, false)
         AppCompatDelegate.setDefaultNightMode(
             if (darkTheme) {
