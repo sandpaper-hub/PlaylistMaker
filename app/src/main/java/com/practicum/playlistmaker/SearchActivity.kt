@@ -3,6 +3,7 @@ package com.practicum.playlistmaker
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,7 +16,6 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -49,6 +49,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var refreshSearchButton: Button
     lateinit var searchEditText: EditText
     lateinit var trackListAdapter: TrackListAdapter
+    private lateinit var sharedPreferences: SharedPreferences
+    private var historyArray: ArrayList<Track> = ArrayList()
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,13 +61,23 @@ class SearchActivity : AppCompatActivity() {
         searchEditText = findViewById(R.id.search_editText)
         val clearSearchButton = findViewById<ImageButton>(R.id.clear_search_ediText)
         val trackListRecyclerView = findViewById<RecyclerView>(R.id.trackListRecyclerView)
+        val clearHistoryButton = findViewById<Button>(R.id.clear_history)
 
-        trackListAdapter = TrackListAdapter(trackList, object : TrackListAdapter.OnTrackClickListener{
-            override fun onItemClick(track: Track) {
-                Toast.makeText(applicationContext, track.trackName, Toast.LENGTH_SHORT).show()
-            }
+        sharedPreferences =
+            getSharedPreferences(SharedPreferencesData.sharedPreferencesHistoryFile, MODE_PRIVATE)
+        val historyPreferences = HistoryPreferences(sharedPreferences)
 
-        })
+        clearHistoryButton.setOnClickListener {
+            historyPreferences.clearData()
+        }
+
+        trackListAdapter =
+            TrackListAdapter(trackList, object : TrackListAdapter.OnTrackClickListener {
+                override fun onItemClick(track: Track) {
+                    historyPreferences.addTrack(historyArray, track, applicationContext)
+                }
+            })
+
         badSearchResultImage = findViewById(R.id.badSearchResultImage)
         badSearchResultTextView = findViewById(R.id.badSearchResultText)
         refreshSearchButton = findViewById(R.id.refresh_search_button)
