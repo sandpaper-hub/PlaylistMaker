@@ -19,7 +19,7 @@ class SettingsActivity : AppCompatActivity() {
         val body = getString(R.string.sampleBodyMessage)
         val switcher = findViewById<SwitchCompat>(R.id.darkThemeSwitcherCompat)
         val sharedPreferences =
-            getSharedPreferences(SharedPreferencesData.sharedPreferencesFileName, MODE_PRIVATE)
+            getSharedPreferences(SharedPreferencesData.sharedPreferencesThemeFile, MODE_PRIVATE)
 
         switcher.isChecked = sharedPreferences.getBoolean(SharedPreferencesData.darkThemeKey, false)
 
