@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
@@ -15,7 +17,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -50,6 +54,7 @@ class SearchActivity : AppCompatActivity() {
     lateinit var searchEditText: EditText
     lateinit var trackListAdapter: TrackListAdapter
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var onSharedPreferenceChangeListener: OnSharedPreferenceChangeListener
     private var historyArray: ArrayList<Track> = ArrayList()
 
     @SuppressLint("NotifyDataSetChanged")
@@ -60,23 +65,57 @@ class SearchActivity : AppCompatActivity() {
         val backButton = findViewById<ImageButton>(R.id.back_button_searchActivity)
         searchEditText = findViewById(R.id.search_editText)
         val clearSearchButton = findViewById<ImageButton>(R.id.clear_search_ediText)
-        val trackListRecyclerView = findViewById<RecyclerView>(R.id.trackListRecyclerView)
         val clearHistoryButton = findViewById<Button>(R.id.clear_history)
+        val trackListRecyclerView = findViewById<RecyclerView>(R.id.trackListRecyclerView)
+        val historyRecyclerView = findViewById<RecyclerView>(R.id.historyRecycler)
+        val historySearchContainer = findViewById<LinearLayout>(R.id.historySearchContainer)
 
         sharedPreferences =
             getSharedPreferences(SharedPreferencesData.sharedPreferencesHistoryFile, MODE_PRIVATE)
         val historyPreferences = HistoryPreferences(sharedPreferences)
 
+        val json = sharedPreferences.getString(SharedPreferencesData.newHistoryItemKey, null)
+        historyArray = if (json == null) {
+            ArrayList()
+        } else {
+            historyPreferences.createArrayListFromJson(json)
+        }
+
+        val historyAdapter =
+            TrackListAdapter(historyArray, object : TrackListAdapter.OnTrackClickListener {
+                override fun onItemClick(track: Track) {
+                    Toast.makeText(applicationContext, track.trackName, Toast.LENGTH_SHORT).show()
+                }
+            })
+
+        historyRecyclerView.adapter = historyAdapter
+
+        onSharedPreferenceChangeListener = OnSharedPreferenceChangeListener { _, key ->
+            if (key == SharedPreferencesData.newHistoryItemKey) {
+                val jsonArray =
+                    sharedPreferences.getString(SharedPreferencesData.newHistoryItemKey, null)
+                if (jsonArray != null) {
+                    historyAdapter.trackList = historyPreferences.createArrayListFromJson(jsonArray)
+                }
+                historyAdapter.notifyDataSetChanged()
+            }
+        }
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
+
         clearHistoryButton.setOnClickListener {
             historyPreferences.clearData()
+            historySearchContainer.isVisible = false
         }
 
         trackListAdapter =
             TrackListAdapter(trackList, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
-                    historyPreferences.addTrack(historyArray, track, applicationContext)
+                    historyPreferences.addTrack(historyArray, track)
                 }
             })
+
+        trackListRecyclerView.adapter = trackListAdapter
 
         badSearchResultImage = findViewById(R.id.badSearchResultImage)
         badSearchResultTextView = findViewById(R.id.badSearchResultText)
@@ -85,8 +124,6 @@ class SearchActivity : AppCompatActivity() {
         badSearchResultImage.visibility = GONE
         badSearchResultTextView.visibility = GONE
         refreshSearchButton.visibility = GONE
-
-        trackListRecyclerView.adapter = trackListAdapter
 
         backButton.setOnClickListener {
             val backIntent = Intent(this, MainActivity::class.java)
@@ -99,24 +136,34 @@ class SearchActivity : AppCompatActivity() {
         searchEditText.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) {
                 clearSearchButton.visibility = GONE
+                trackListRecyclerView.isVisible = false
             } else {
                 clearSearchButton.visibility = VISIBLE
+                trackListRecyclerView.isVisible = true
             }
+        }
+
+        searchEditText.setOnFocusChangeListener { _, hasFocus ->
+            historySearchContainer.isVisible =
+                hasFocus && searchEditText.text.isEmpty() && historyArray.isNotEmpty()
+
         }
 
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //TODO  not yet implemented
+                Log.d("EDITE_TEXT)", "beforeTextChanged")
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                //TODO not yet implemented
+                historySearchContainer.isVisible =
+                    (searchEditText.hasFocus() && s?.isEmpty() == true) && historyAdapter.trackList.isNotEmpty() == true//TODO пустой ArrayList, данные не считываются
+                Log.d("EDITE_TEXT", "$historyArray")
             }
 
             override fun afterTextChanged(s: Editable?) {
                 savedText = searchEditText.text.toString()
+                Log.d("EDITE_TEXT)", "afterTextChanged")
             }
-
         })
 
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
