@@ -103,13 +103,15 @@
         app:layout_constraintTop_toBottomOf="@+id/badSearchResultText" />
 
     <LinearLayout
+        app:layout_constraintTop_toBottomOf="@+id/search_editText_container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0"
         android:id="@+id/historySearchContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constrainedHeight="true"
         android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_editText_container">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/historySearchText"
@@ -124,14 +126,17 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/historyRecycler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/indent_8dp" />
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/indent_8dp"
+            android:layout_weight="1"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <Button
             android:id="@+id/clear_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="0"
             android:text="Очистить историю"
             app:cornerRadius="@dimen/radius_54dp" />
     </LinearLayout>
