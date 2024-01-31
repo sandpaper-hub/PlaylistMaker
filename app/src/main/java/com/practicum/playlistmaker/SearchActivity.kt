@@ -8,9 +8,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -47,15 +44,16 @@ class SearchActivity : AppCompatActivity() {
     private val iTunesSearchService = retrofit.create(ITunesSearchApi::class.java)
 
     private val trackList: ArrayList<Track> = ArrayList()
+    private lateinit var historyArray: ArrayList<Track>
 
     private lateinit var badSearchResultImage: ImageView
     private lateinit var badSearchResultTextView: TextView
     private lateinit var refreshSearchButton: Button
     lateinit var searchEditText: EditText
     lateinit var trackListAdapter: TrackListAdapter
+    lateinit var historySearchContainer: LinearLayout
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var onSharedPreferenceChangeListener: OnSharedPreferenceChangeListener
-    private var historyArray: ArrayList<Track> = ArrayList()
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +66,7 @@ class SearchActivity : AppCompatActivity() {
         val clearHistoryButton = findViewById<Button>(R.id.clear_history)
         val trackListRecyclerView = findViewById<RecyclerView>(R.id.trackListRecyclerView)
         val historyRecyclerView = findViewById<RecyclerView>(R.id.historyRecycler)
-        val historySearchContainer = findViewById<LinearLayout>(R.id.historySearchContainer)
+        historySearchContainer = findViewById(R.id.historySearchContainer)
 
         sharedPreferences =
             getSharedPreferences(SharedPreferencesData.sharedPreferencesHistoryFile, MODE_PRIVATE)
@@ -121,9 +119,9 @@ class SearchActivity : AppCompatActivity() {
         badSearchResultTextView = findViewById(R.id.badSearchResultText)
         refreshSearchButton = findViewById(R.id.refresh_search_button)
 
-        badSearchResultImage.visibility = GONE
-        badSearchResultTextView.visibility = GONE
-        refreshSearchButton.visibility = GONE
+        badSearchResultImage.isVisible = false
+        badSearchResultTextView.isVisible = false
+        refreshSearchButton.isVisible = false
 
         backButton.setOnClickListener {
             val backIntent = Intent(this, MainActivity::class.java)
@@ -135,10 +133,10 @@ class SearchActivity : AppCompatActivity() {
         searchEditText.isSaveEnabled = false
         searchEditText.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) {
-                clearSearchButton.visibility = GONE
+                clearSearchButton.isVisible = false
                 trackListRecyclerView.isVisible = false
             } else {
-                clearSearchButton.visibility = VISIBLE
+                clearSearchButton.isVisible = true
                 trackListRecyclerView.isVisible = true
             }
         }
@@ -151,18 +149,19 @@ class SearchActivity : AppCompatActivity() {
 
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                Log.d("EDITE_TEXT)", "beforeTextChanged")
+                //not yet implemented
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 historySearchContainer.isVisible =
-                    (searchEditText.hasFocus() && s?.isEmpty() == true) && historyAdapter.trackList.isNotEmpty() == true//TODO пустой ArrayList, данные не считываются
-                Log.d("EDITE_TEXT", "$historyArray")
+                    (searchEditText.hasFocus() && s?.isEmpty() == true) && historyAdapter.trackList.isNotEmpty() == true
+                badSearchResultTextView.isVisible = false
+                badSearchResultImage.isVisible = false
+                refreshSearchButton.isVisible = false
             }
 
             override fun afterTextChanged(s: Editable?) {
                 savedText = searchEditText.text.toString()
-                Log.d("EDITE_TEXT)", "afterTextChanged")
             }
         })
 
@@ -173,7 +172,7 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
-        clearSearchButton.visibility = GONE
+        clearSearchButton.isVisible = false
         clearSearchButton.setOnClickListener {
             searchEditText.setText("")
             val inputMethodManager =
@@ -187,7 +186,6 @@ class SearchActivity : AppCompatActivity() {
             doRequest()
         }
     }
-
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
@@ -240,6 +238,7 @@ class SearchActivity : AppCompatActivity() {
                 refreshSearchButton.isVisible = true
                 badSearchResultTextView.text =
                     applicationContext.resources.getText(R.string.connection_error)
+                historySearchContainer.isVisible = false
                 badSearchResultImage.setImageResource(R.drawable.bad_connection_image)
                 setDataChanged()
             }
@@ -250,6 +249,7 @@ class SearchActivity : AppCompatActivity() {
                 refreshSearchButton.isVisible = false
                 badSearchResultTextView.text =
                     applicationContext.resources.getText(R.string.nothing_found)
+                historySearchContainer.isVisible = false
                 badSearchResultImage.setImageResource(R.drawable.nothing_found_image)
                 setDataChanged()
             }
