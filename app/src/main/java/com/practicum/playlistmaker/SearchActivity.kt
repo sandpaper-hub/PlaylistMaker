@@ -110,6 +110,8 @@ class SearchActivity : AppCompatActivity() {
             TrackListAdapter(trackList, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
                     historyPreferences.addTrack(historyArray, track)
+                    val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
+                    startActivity(playerIntent)
                 }
             })
 
