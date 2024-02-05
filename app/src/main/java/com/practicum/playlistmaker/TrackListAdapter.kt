@@ -11,7 +11,7 @@ class TrackListAdapter(var trackList: List<Track>, private val onTrackClickListe
         }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         return TrackViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.track_list, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.track_view, parent, false)
         )
     }
 
