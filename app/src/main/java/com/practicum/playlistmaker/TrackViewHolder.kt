@@ -1,7 +1,5 @@
 package com.practicum.playlistmaker
 
-import android.content.Context
-import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,20 +18,12 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(track: Track) {
         Glide.with(itemView.context)
             .load(track.artworkUrl100)
-            .transform(RoundedCorners(dpToPx(2f, itemView.context)))
+            .transform(RoundedCorners(Transformer.dpToPx(2f, itemView.context)))
             .fitCenter()
             .placeholder(R.drawable.placeholder)
             .into(coverImageView)
         trackNameTextView.text = track.trackName
         artistNameTextView.text = track.artistName
         trackDurationTextView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackDuration)
-    }
-
-    private fun dpToPx(dp: Float, context: Context): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp,
-            context.resources.displayMetrics
-        ).toInt()
     }
 }
