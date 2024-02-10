@@ -29,10 +29,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val backButtonListener =
             findViewById<ImageButton>(R.id.back_button_settingsActivity).setOnClickListener {
-                val backIntent = Intent(this, MainActivity::class.java)
-                backIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                backIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                startActivity(backIntent)
+                onBackPressedDispatcher.onBackPressed()
             }
 
         val shareButtonListener = findViewById<ImageView>(R.id.shareImageView).setOnClickListener {
