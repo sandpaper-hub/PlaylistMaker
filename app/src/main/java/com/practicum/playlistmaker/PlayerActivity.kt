@@ -16,7 +16,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var track: Track
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_player_from_down)
+        setContentView(R.layout.activity_player)
 
         val backButtonImageButton = findViewById<ImageButton>(R.id.back_button_playerActivity)
         val durationTextView = findViewById<TextView>(R.id.durationValue)
