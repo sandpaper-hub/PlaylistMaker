@@ -16,7 +16,6 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -76,13 +75,15 @@ class SearchActivity : AppCompatActivity() {
         historyArray = if (json == null) {
             ArrayList()
         } else {
-            historyPreferences.createArrayListFromJson(json)
+            Transformer.createArrayListFromJson(json)
         }
 
         val historyAdapter =
             TrackListAdapter(historyArray, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
-                    Toast.makeText(applicationContext, track.trackName, Toast.LENGTH_SHORT).show()
+                    val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
+                    playerIntent.putExtra("selectedTrack", Transformer.createJsonFromTrack(track))
+                    startActivity(playerIntent)
                 }
             })
 
@@ -93,7 +94,7 @@ class SearchActivity : AppCompatActivity() {
                 val jsonArray =
                     sharedPreferences.getString(SharedPreferencesData.newHistoryItemKey, null)
                 if (jsonArray != null) {
-                    historyAdapter.trackList = historyPreferences.createArrayListFromJson(jsonArray)
+                    historyAdapter.trackList = Transformer.createArrayListFromJson(jsonArray)
                 }
                 historyAdapter.notifyDataSetChanged()
             }
@@ -111,6 +112,10 @@ class SearchActivity : AppCompatActivity() {
                 override fun onItemClick(track: Track) {
                     historyPreferences.addTrack(historyArray, track)
                     val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
+                    playerIntent.putExtra(
+                        "selectedTrack",
+                        Transformer.createJsonFromTrack(track)
+                    )
                     startActivity(playerIntent)
                 }
             })
@@ -126,10 +131,7 @@ class SearchActivity : AppCompatActivity() {
         refreshSearchButton.isVisible = false
 
         backButton.setOnClickListener {
-            val backIntent = Intent(this, MainActivity::class.java)
-            backIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            backIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            startActivity(backIntent)
+            onBackPressedDispatcher.onBackPressed()
         }
 
         searchEditText.isSaveEnabled = false
