@@ -118,7 +118,7 @@ class SearchActivity : AppCompatActivity() {
                     historyPreferences.addTrack(historyArray, track)
                     val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
                     playerIntent.putExtra(
-                        "selectedTrack",
+                        INTENT_EXTRA_KEY,
                         track
                     )
                     startActivity(playerIntent)
