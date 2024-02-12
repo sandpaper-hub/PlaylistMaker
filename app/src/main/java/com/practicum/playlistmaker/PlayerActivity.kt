@@ -1,10 +1,12 @@
 package com.practicum.playlistmaker
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -13,7 +15,8 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
-    private lateinit var track: Track
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
@@ -30,12 +33,19 @@ class PlayerActivity : AppCompatActivity() {
         val collectionGroup = findViewById<Group>(R.id.collectionGroup)
 
         val playerIntent = intent
-        val trackJson = playerIntent.getStringExtra("selectedTrack") ?: ""
-        if (trackJson.isNotEmpty()) {
-            track = Transformer.createTrackFromJson(trackJson)
-        }
-
-        durationTextView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackDuration)
+        val track = playerIntent.getParcelableExtra("selectedTrack", Track::class.java) ?: Track(
+            "",
+            "",
+            "",
+            0,
+            "",
+            "",
+            "",
+            "",
+            ""
+        )
+        durationTextView.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackDuration)
         if (track.collectionName.isEmpty()) {
             collectionGroup.isVisible = false
         } else {
@@ -53,7 +63,7 @@ class PlayerActivity : AppCompatActivity() {
             .transform(RoundedCorners(Transformer.dpToPx(2f, applicationContext)))
             .into(albumCoverImageView)
 
-        backButtonImageButton.setOnClickListener{
+        backButtonImageButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
     }
