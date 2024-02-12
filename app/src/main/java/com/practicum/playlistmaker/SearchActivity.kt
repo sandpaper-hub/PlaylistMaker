@@ -85,7 +85,7 @@ class SearchActivity : AppCompatActivity() {
             TrackListAdapter(historyArray, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
                     val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
-                    playerIntent.putExtra("selectedTrack", Transformer.createJsonFromTrack(track))
+                    playerIntent.putExtra("selectedTrack", track)
                     startActivity(playerIntent)
                 }
             })
@@ -117,7 +117,7 @@ class SearchActivity : AppCompatActivity() {
                     val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
                     playerIntent.putExtra(
                         "selectedTrack",
-                        Transformer.createJsonFromTrack(track)
+                        track
                     )
                     startActivity(playerIntent)
                 }
