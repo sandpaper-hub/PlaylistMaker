@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +46,8 @@ class SearchActivity : AppCompatActivity() {
     private val trackList: ArrayList<Track> = ArrayList()
     private lateinit var historyArray: ArrayList<Track>
 
+    private lateinit var badSearchResultViewGroup: Group
+    private lateinit var connectionErrorGroupView: Group
     private lateinit var badSearchResultImage: ImageView
     private lateinit var badSearchResultTextView: TextView
     private lateinit var refreshSearchButton: Button
@@ -122,13 +125,13 @@ class SearchActivity : AppCompatActivity() {
 
         trackListRecyclerView.adapter = trackListAdapter
 
+        badSearchResultViewGroup = findViewById<Group>(R.id.badSearchResultGroup)
+        connectionErrorGroupView = findViewById<Group>(R.id.connectionErrorGroup)
         badSearchResultImage = findViewById(R.id.badSearchResultImage)
         badSearchResultTextView = findViewById(R.id.badSearchResultText)
         refreshSearchButton = findViewById(R.id.refresh_search_button)
 
-        badSearchResultImage.isVisible = false
-        badSearchResultTextView.isVisible = false
-        refreshSearchButton.isVisible = false
+        connectionErrorGroupView.isVisible = false
 
         backButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -159,9 +162,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 historySearchContainer.isVisible =
                     (searchEditText.hasFocus() && s?.isEmpty() == true) && historyAdapter.trackList.isNotEmpty() == true
-                badSearchResultTextView.isVisible = false
-                badSearchResultImage.isVisible = false
-                refreshSearchButton.isVisible = false
+                connectionErrorGroupView.isVisible = false
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -237,9 +238,7 @@ class SearchActivity : AppCompatActivity() {
     private fun showResult(responseStatus: Enum<ResponseStatus>) {
         when (responseStatus) {
             ResponseStatus.BAD_CONNECTION -> {
-                badSearchResultImage.isVisible = true
-                badSearchResultTextView.isVisible = true
-                refreshSearchButton.isVisible = true
+                connectionErrorGroupView.isVisible = true
                 badSearchResultTextView.text =
                     applicationContext.resources.getText(R.string.connection_error)
                 historySearchContainer.isVisible = false
@@ -248,9 +247,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             ResponseStatus.NOTHING_FOUND -> {
-                badSearchResultImage.isVisible = true
-                badSearchResultTextView.isVisible = true
-                refreshSearchButton.isVisible = false
+                badSearchResultViewGroup.isVisible = true
                 badSearchResultTextView.text =
                     applicationContext.resources.getText(R.string.nothing_found)
                 historySearchContainer.isVisible = false
@@ -259,9 +256,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             ResponseStatus.SUCCESS -> {
-                badSearchResultImage.isVisible = false
-                badSearchResultTextView.isVisible = false
-                refreshSearchButton.isVisible = false
+                connectionErrorGroupView.isVisible = false
             }
         }
     }
