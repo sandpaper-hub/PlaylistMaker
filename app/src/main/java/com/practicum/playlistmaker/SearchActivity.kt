@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -31,6 +30,7 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val INSTANCE_STATE_KEY = "SAVED_RESULT"
+        const val INTENT_EXTRA_KEY = "selectedTrack"
     }
 
     var savedText = ""
@@ -55,7 +55,6 @@ class SearchActivity : AppCompatActivity() {
     lateinit var trackListAdapter: TrackListAdapter
     lateinit var historySearchContainer: LinearLayout
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var onSharedPreferenceChangeListener: OnSharedPreferenceChangeListener
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +68,11 @@ class SearchActivity : AppCompatActivity() {
         val trackListRecyclerView = findViewById<RecyclerView>(R.id.trackListRecyclerView)
         val historyRecyclerView = findViewById<RecyclerView>(R.id.historyRecycler)
         historySearchContainer = findViewById(R.id.historySearchContainer)
+        badSearchResultViewGroup = findViewById(R.id.badSearchResultGroup)
+        connectionErrorGroupView = findViewById(R.id.connectionErrorGroup)
+        badSearchResultImage = findViewById(R.id.badSearchResultImage)
+        badSearchResultTextView = findViewById(R.id.badSearchResultText)
+        refreshSearchButton = findViewById(R.id.refresh_search_button)
 
         sharedPreferences =
             getSharedPreferences(SharedPreferencesData.sharedPreferencesHistoryFile, MODE_PRIVATE)
@@ -85,14 +89,14 @@ class SearchActivity : AppCompatActivity() {
             TrackListAdapter(historyArray, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
                     val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
-                    playerIntent.putExtra("selectedTrack", track)
+                    playerIntent.putExtra(INTENT_EXTRA_KEY, track)
                     startActivity(playerIntent)
                 }
             })
 
         historyRecyclerView.adapter = historyAdapter
 
-        onSharedPreferenceChangeListener = OnSharedPreferenceChangeListener { _, key ->
+        sharedPreferences.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
             if (key == SharedPreferencesData.newHistoryItemKey) {
                 val jsonArray =
                     sharedPreferences.getString(SharedPreferencesData.newHistoryItemKey, null)
@@ -102,8 +106,6 @@ class SearchActivity : AppCompatActivity() {
                 historyAdapter.notifyDataSetChanged()
             }
         }
-
-        sharedPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
 
         clearHistoryButton.setOnClickListener {
             historyPreferences.clearData()
@@ -124,14 +126,6 @@ class SearchActivity : AppCompatActivity() {
             })
 
         trackListRecyclerView.adapter = trackListAdapter
-
-        badSearchResultViewGroup = findViewById(R.id.badSearchResultGroup)
-        connectionErrorGroupView = findViewById(R.id.connectionErrorGroup)
-        badSearchResultImage = findViewById(R.id.badSearchResultImage)
-        badSearchResultTextView = findViewById(R.id.badSearchResultText)
-        refreshSearchButton = findViewById(R.id.refresh_search_button)
-
-        connectionErrorGroupView.isVisible = false
 
         backButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -177,7 +171,6 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
-        clearSearchButton.isVisible = false
         clearSearchButton.setOnClickListener {
             searchEditText.setText("")
             val inputMethodManager =
