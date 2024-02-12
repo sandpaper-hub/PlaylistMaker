@@ -7,7 +7,6 @@
     <string name="share_app_title">Поделиться приложением</string>
     <string name="write_to_support_title">Написать в поддержку</string>
     <string name="privacy">Пользовательское соглашение</string>
-    <string name="search_activity_text">Search activity</string>
     <string name="media_library_activity_text">MediaLibrary Activity</string>
     <string name="back_button">Back button</string>
     <string name="clear_button">Clear button</string>
@@ -20,10 +19,19 @@
     <string name="refresh">Обновить</string>
     <string name="searched_text">Вы искали</string>
     <string name="clear_history_text">Очистить историю</string>
+    <string name="country">Страна</string>
+    <string name="genre">Жанр</string>
+    <string name="year">Год</string>
+    <string name="album">Альбом</string>
+    <string name="duration">Длительность</string>
+    <string name="addButtonText">Добавить в коллекцию</string>
+    <string name="playButtonText">Воспроизвести</string>
+    <string name="likeButtonText">Нравится</string>
 
     <string name="sampleEmail">electro.passion92@gmail.com</string>
     <string name="sampleSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="sampleBodyMessage">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="sampleMessageForShare">https://practicum.yandex.ru/android-developer/</string>
+    <string name="durationSample">0:30</string>
 
 </resources>
