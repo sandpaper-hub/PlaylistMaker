@@ -125,8 +125,8 @@ class SearchActivity : AppCompatActivity() {
 
         trackListRecyclerView.adapter = trackListAdapter
 
-        badSearchResultViewGroup = findViewById<Group>(R.id.badSearchResultGroup)
-        connectionErrorGroupView = findViewById<Group>(R.id.connectionErrorGroup)
+        badSearchResultViewGroup = findViewById(R.id.badSearchResultGroup)
+        connectionErrorGroupView = findViewById(R.id.connectionErrorGroup)
         badSearchResultImage = findViewById(R.id.badSearchResultImage)
         badSearchResultTextView = findViewById(R.id.badSearchResultText)
         refreshSearchButton = findViewById(R.id.refresh_search_button)
