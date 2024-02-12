@@ -6,6 +6,9 @@ plugins {
 android {
     namespace = "com.practicum.playlistmaker"
     compileSdk = 34
+    viewBinding {
+        enable = true
+    }
 
     defaultConfig {
         applicationId = "com.practicum.playlistmaker"
