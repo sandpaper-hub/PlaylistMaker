@@ -33,7 +33,7 @@ class PlayerActivity : AppCompatActivity() {
         val collectionGroup = findViewById<Group>(R.id.collectionGroup)
 
         val playerIntent = intent
-        val track = playerIntent.getParcelableExtra("selectedTrack", Track::class.java) ?: Track(
+        val track = playerIntent.getParcelableExtra(SearchActivity.INTENT_EXTRA_KEY, Track::class.java) ?: Track(
             "",
             "",
             "",
