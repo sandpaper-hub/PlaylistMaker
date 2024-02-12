@@ -10,6 +10,6 @@
     <color name="YP_Background">#1A1B2280</color>
     <color name="transparent">#00FFFFFF</color>
 
-    <color name="element_color">#1A1B22</color>//delete
+    <color name="element_color">#1A1B22</color>
     <color name="text_color">#ffffff</color>
 </resources>
