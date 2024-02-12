@@ -40,6 +40,7 @@
         android:id="@+id/clear_search_ediText"
         style="@style/clear_icon_style"
         android:layout_width="@dimen/button_back_size"
+        android:visibility="gone"
         android:layout_height="@dimen/button_back_size"
         android:layout_marginHorizontal="0dp"
         android:background="@color/transparent"
@@ -61,11 +62,13 @@
         android:id="@+id/connectionErrorGroup"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="gone"
         app:constraint_referenced_ids="badSearchResultImage, badSearchResultText, refresh_search_button" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/badSearchResultGroup"
         android:layout_width="0dp"
+        android:visibility="gone"
         android:layout_height="0dp"
         app:constraint_referenced_ids="badSearchResultText, badSearchResultImage" />
 
@@ -124,13 +127,13 @@
             android:id="@+id/historySearchText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:fontFamily="@font/ys_display_medium"
-            android:textSize="@dimen/textSize_19sp"
+            android:gravity="center"
             android:paddingHorizontal="@dimen/indent_16dp"
             android:paddingTop="@dimen/indent_18dp"
             android:paddingBottom="@dimen/indent_12dp"
-            android:text="@string/searched_text" />
+            android:text="@string/searched_text"
+            android:textSize="@dimen/textSize_19sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/historyRecycler"
