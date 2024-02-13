@@ -19,22 +19,11 @@ class PlayerActivity : AppCompatActivity() {
         val binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val playerIntent = intent
-        val track = playerIntent.getParcelableExtra(SearchActivity.INTENT_EXTRA_KEY, Track::class.java) ?: Track(
-            "",
-            "",
-            "",
-            0,
-            "",
-            "",
-            "",
-            "",
-            ""
-        )
+        val track = intent.getParcelableTrack<Track>(SearchActivity.INTENT_EXTRA_KEY) ?: Track("","", "", 0, "", "", "", "", "")
         binding.durationValue.text =
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackDuration)
         if (track.collectionName.isEmpty()) {
-            binding.collectionGroup.isVisible = false
+            binding.collectionGroup.isVisible = track.collectionName.isNotEmpty()
         } else {
             binding.albumValue.text = track.collectionName
         }
