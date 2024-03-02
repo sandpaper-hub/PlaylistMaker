@@ -4,23 +4,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
-import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,7 +24,10 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val INSTANCE_STATE_KEY = "SAVED_RESULT"
+        const val INTENT_EXTRA_KEY = "selectedTrack"
     }
+
+    private lateinit var binding: ActivitySearchBinding
 
     var savedText = ""
     private var restoredText = ""
@@ -46,27 +42,14 @@ class SearchActivity : AppCompatActivity() {
     private val trackList: ArrayList<Track> = ArrayList()
     private lateinit var historyArray: ArrayList<Track>
 
-    private lateinit var badSearchResultImage: ImageView
-    private lateinit var badSearchResultTextView: TextView
-    private lateinit var refreshSearchButton: Button
-    lateinit var searchEditText: EditText
     lateinit var trackListAdapter: TrackListAdapter
-    lateinit var historySearchContainer: LinearLayout
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var onSharedPreferenceChangeListener: OnSharedPreferenceChangeListener
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
-
-        val backButton = findViewById<ImageButton>(R.id.back_button_searchActivity)
-        searchEditText = findViewById(R.id.search_editText)
-        val clearSearchButton = findViewById<ImageButton>(R.id.clear_search_ediText)
-        val clearHistoryButton = findViewById<Button>(R.id.clear_history)
-        val trackListRecyclerView = findViewById<RecyclerView>(R.id.trackListRecyclerView)
-        val historyRecyclerView = findViewById<RecyclerView>(R.id.historyRecycler)
-        historySearchContainer = findViewById(R.id.historySearchContainer)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         sharedPreferences =
             getSharedPreferences(SharedPreferencesData.sharedPreferencesHistoryFile, MODE_PRIVATE)
@@ -76,105 +59,97 @@ class SearchActivity : AppCompatActivity() {
         historyArray = if (json == null) {
             ArrayList()
         } else {
-            historyPreferences.createArrayListFromJson(json)
+            Transformer.createArrayListFromJson(json)
         }
 
         val historyAdapter =
             TrackListAdapter(historyArray, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
-                    Toast.makeText(applicationContext, track.trackName, Toast.LENGTH_SHORT).show()
+                    val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
+                    playerIntent.putExtra(INTENT_EXTRA_KEY, track)
+                    startActivity(playerIntent)
                 }
             })
 
-        historyRecyclerView.adapter = historyAdapter
+        binding.historyRecycler.adapter = historyAdapter
 
-        onSharedPreferenceChangeListener = OnSharedPreferenceChangeListener { _, key ->
+        sharedPreferences.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
             if (key == SharedPreferencesData.newHistoryItemKey) {
                 val jsonArray =
                     sharedPreferences.getString(SharedPreferencesData.newHistoryItemKey, null)
                 if (jsonArray != null) {
-                    historyAdapter.trackList = historyPreferences.createArrayListFromJson(jsonArray)
+                    historyAdapter.trackList = Transformer.createArrayListFromJson(jsonArray)
                 }
                 historyAdapter.notifyDataSetChanged()
             }
         }
 
-        sharedPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
-
-        clearHistoryButton.setOnClickListener {
+        binding.clearHistory.setOnClickListener {
             historyPreferences.clearData()
-            historySearchContainer.isVisible = false
+            binding.historySearchContainer.isVisible = false
         }
 
         trackListAdapter =
             TrackListAdapter(trackList, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
                     historyPreferences.addTrack(historyArray, track)
+                    val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
+                    playerIntent.putExtra(
+                        INTENT_EXTRA_KEY,
+                        track
+                    )
+                    startActivity(playerIntent)
                 }
             })
 
-        trackListRecyclerView.adapter = trackListAdapter
+        binding.trackListRecyclerView.adapter = trackListAdapter
 
-        badSearchResultImage = findViewById(R.id.badSearchResultImage)
-        badSearchResultTextView = findViewById(R.id.badSearchResultText)
-        refreshSearchButton = findViewById(R.id.refresh_search_button)
-
-        badSearchResultImage.isVisible = false
-        badSearchResultTextView.isVisible = false
-        refreshSearchButton.isVisible = false
-
-        backButton.setOnClickListener {
-            val backIntent = Intent(this, MainActivity::class.java)
-            backIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            backIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            startActivity(backIntent)
+        binding.backButtonSearchActivity.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
 
-        searchEditText.isSaveEnabled = false
-        searchEditText.doOnTextChanged { text, _, _, _ ->
+        binding.searchEditText.isSaveEnabled = false
+        binding.searchEditText.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) {
-                clearSearchButton.isVisible = false
-                trackListRecyclerView.isVisible = false
+                binding.clearSearchEdiText.isVisible = false
+                binding.trackListRecyclerView.isVisible = false
             } else {
-                clearSearchButton.isVisible = true
-                trackListRecyclerView.isVisible = true
+                binding.clearSearchEdiText.isVisible = true
+                binding.trackListRecyclerView.isVisible = true
             }
         }
 
-        searchEditText.setOnFocusChangeListener { _, hasFocus ->
-            historySearchContainer.isVisible =
-                hasFocus && searchEditText.text.isEmpty() && historyArray.isNotEmpty()
+        binding.searchEditText.setOnFocusChangeListener { _, hasFocus ->
+            binding.historySearchContainer.isVisible =
+                hasFocus && binding.searchEditText.text.isEmpty() && historyArray.isNotEmpty()
 
         }
 
-        searchEditText.addTextChangedListener(object : TextWatcher {
+        binding.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //not yet implemented
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                historySearchContainer.isVisible =
-                    (searchEditText.hasFocus() && s?.isEmpty() == true) && historyAdapter.trackList.isNotEmpty() == true
-                badSearchResultTextView.isVisible = false
-                badSearchResultImage.isVisible = false
-                refreshSearchButton.isVisible = false
+                binding.historySearchContainer.isVisible =
+                    (binding.searchEditText.hasFocus() && s?.isEmpty() == true) && historyAdapter.trackList.isNotEmpty() == true
+                binding.connectionErrorGroup.isVisible = false
             }
 
             override fun afterTextChanged(s: Editable?) {
-                savedText = searchEditText.text.toString()
+                savedText = binding.searchEditText.text.toString()
             }
         })
 
-        searchEditText.setOnEditorActionListener { _, actionId, _ ->
+        binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 doRequest()
             }
             false
         }
 
-        clearSearchButton.isVisible = false
-        clearSearchButton.setOnClickListener {
-            searchEditText.setText("")
+        binding.clearSearchEdiText.setOnClickListener {
+            binding.searchEditText.setText("")
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(it.windowToken, 0)
@@ -182,7 +157,7 @@ class SearchActivity : AppCompatActivity() {
             setDataChanged()
         }
 
-        refreshSearchButton.setOnClickListener {
+        binding.refreshSearchButton.setOnClickListener {
             doRequest()
         }
     }
@@ -200,7 +175,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun doRequest() {
-        iTunesSearchService.search(searchEditText.text.toString()).enqueue(object :
+        iTunesSearchService.search(binding.searchEditText.text.toString()).enqueue(object :
             Callback<TrackResponse> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
@@ -233,31 +208,25 @@ class SearchActivity : AppCompatActivity() {
     private fun showResult(responseStatus: Enum<ResponseStatus>) {
         when (responseStatus) {
             ResponseStatus.BAD_CONNECTION -> {
-                badSearchResultImage.isVisible = true
-                badSearchResultTextView.isVisible = true
-                refreshSearchButton.isVisible = true
-                badSearchResultTextView.text =
+                binding.connectionErrorGroup.isVisible = true
+                binding.badSearchResultText.text =
                     applicationContext.resources.getText(R.string.connection_error)
-                historySearchContainer.isVisible = false
-                badSearchResultImage.setImageResource(R.drawable.bad_connection_image)
+                binding.historySearchContainer.isVisible = false
+                binding.badSearchResultImage.setImageResource(R.drawable.bad_connection_image)
                 setDataChanged()
             }
 
             ResponseStatus.NOTHING_FOUND -> {
-                badSearchResultImage.isVisible = true
-                badSearchResultTextView.isVisible = true
-                refreshSearchButton.isVisible = false
-                badSearchResultTextView.text =
+                binding.badSearchResultGroup.isVisible = true
+                binding.badSearchResultText.text =
                     applicationContext.resources.getText(R.string.nothing_found)
-                historySearchContainer.isVisible = false
-                badSearchResultImage.setImageResource(R.drawable.nothing_found_image)
+                binding.historySearchContainer.isVisible = false
+                binding.badSearchResultImage.setImageResource(R.drawable.nothing_found_image)
                 setDataChanged()
             }
 
             ResponseStatus.SUCCESS -> {
-                badSearchResultImage.isVisible = false
-                badSearchResultTextView.isVisible = false
-                refreshSearchButton.isVisible = false
+                binding.connectionErrorGroup.isVisible = false
             }
         }
     }

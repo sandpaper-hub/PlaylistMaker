@@ -19,6 +19,7 @@
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">@dimen/indent_8dp</item>
         <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="layout_constrainedWidth">true</item>
     </style>
 
     <style name="settings_activity_text_style">
@@ -61,7 +62,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginHorizontal">@dimen/indent_16dp</item>
-        <item name="android:layout_marginVertical">@dimen/indent_8dp</item>
+        <item name="android:layout_marginTop">@dimen/indent_8dp</item>
         <item name="android:background">@drawable/rounded_edit_text</item>
         <item name="android:drawablePadding">@dimen/indent_8dp</item>
         <item name="android:drawableTint">@color/YP_Black</item>
