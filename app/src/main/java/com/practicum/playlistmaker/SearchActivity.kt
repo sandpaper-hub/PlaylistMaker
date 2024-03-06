@@ -5,8 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -25,6 +28,7 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val INSTANCE_STATE_KEY = "SAVED_RESULT"
         const val INTENT_EXTRA_KEY = "selectedTrack"
+        const val SEARCH_DEBOUNCE_DELAY = 1000L
     }
 
     private lateinit var binding: ActivitySearchBinding
@@ -45,11 +49,16 @@ class SearchActivity : AppCompatActivity() {
     lateinit var trackListAdapter: TrackListAdapter
     private lateinit var sharedPreferences: SharedPreferences
 
+    private val searchRunnable = Runnable { doRequest() }
+    private lateinit var mainHandler: Handler
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        mainHandler = Handler(Looper.getMainLooper())
 
         sharedPreferences =
             getSharedPreferences(SharedPreferencesData.sharedPreferencesHistoryFile, MODE_PRIVATE)
@@ -86,7 +95,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.clearHistory.setOnClickListener {
             historyPreferences.clearData()
-            binding.historySearchContainer.isVisible = false
+            binding.historySearchContainer.visibility = View.GONE
         }
 
         trackListAdapter =
@@ -111,11 +120,11 @@ class SearchActivity : AppCompatActivity() {
         binding.searchEditText.isSaveEnabled = false
         binding.searchEditText.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) {
-                binding.clearSearchEdiText.isVisible = false
-                binding.trackListRecyclerView.isVisible = false
+                binding.clearSearchEdiText.visibility = View.GONE
+                binding.trackListRecyclerView.visibility = View.GONE
             } else {
-                binding.clearSearchEdiText.isVisible = true
-                binding.trackListRecyclerView.isVisible = true
+                binding.clearSearchEdiText.visibility = View.VISIBLE
+                binding.trackListRecyclerView.visibility = View.VISIBLE
             }
         }
 
@@ -126,14 +135,14 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //not yet implemented
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.historySearchContainer.isVisible =
                     (binding.searchEditText.hasFocus() && s?.isEmpty() == true) && historyAdapter.trackList.isNotEmpty() == true
-                binding.connectionErrorGroup.isVisible = false
+                binding.connectionErrorGroup.visibility = View.GONE
+                binding.trackListRecyclerView.visibility = View.GONE
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -175,6 +184,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun doRequest() {
+        binding.searchProgressBar.visibility = View.VISIBLE
         iTunesSearchService.search(binding.searchEditText.text.toString()).enqueue(object :
             Callback<TrackResponse> {
             @SuppressLint("NotifyDataSetChanged")
@@ -182,11 +192,13 @@ class SearchActivity : AppCompatActivity() {
                 call: Call<TrackResponse>,
                 response: Response<TrackResponse>
             ) {
+                binding.searchProgressBar.visibility = View.GONE
                 if (response.code() == 200) {
                     trackList.clear()
                     if (response.body()?.results?.isNotEmpty() == true) {
                         trackList.addAll(response.body()?.results!!)
                         trackListAdapter.notifyDataSetChanged()
+                        binding.trackListRecyclerView.visibility = View.VISIBLE
                     }
                     if (trackList.isEmpty()) {
                         showResult(ResponseStatus.NOTHING_FOUND)
@@ -199,6 +211,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                binding.searchProgressBar.visibility = View.GONE
                 showResult(ResponseStatus.BAD_CONNECTION)
             }
         })
@@ -208,27 +221,32 @@ class SearchActivity : AppCompatActivity() {
     private fun showResult(responseStatus: Enum<ResponseStatus>) {
         when (responseStatus) {
             ResponseStatus.BAD_CONNECTION -> {
-                binding.connectionErrorGroup.isVisible = true
+                binding.connectionErrorGroup.visibility = View.VISIBLE
                 binding.badSearchResultText.text =
                     applicationContext.resources.getText(R.string.connection_error)
-                binding.historySearchContainer.isVisible = false
+                binding.historySearchContainer.visibility = View.GONE
                 binding.badSearchResultImage.setImageResource(R.drawable.bad_connection_image)
                 setDataChanged()
             }
 
             ResponseStatus.NOTHING_FOUND -> {
-                binding.badSearchResultGroup.isVisible = true
+                binding.badSearchResultGroup.visibility = View.VISIBLE
                 binding.badSearchResultText.text =
                     applicationContext.resources.getText(R.string.nothing_found)
-                binding.historySearchContainer.isVisible = false
+                binding.historySearchContainer.visibility = View.GONE
                 binding.badSearchResultImage.setImageResource(R.drawable.nothing_found_image)
                 setDataChanged()
             }
 
             ResponseStatus.SUCCESS -> {
-                binding.connectionErrorGroup.isVisible = false
+                binding.connectionErrorGroup.visibility = View.GONE
             }
         }
+    }
+
+    private fun searchDebounce() {
+        mainHandler.removeCallbacks(searchRunnable)
+        mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
     @SuppressLint("NotifyDataSetChanged")
