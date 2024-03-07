@@ -29,6 +29,7 @@ class SearchActivity : AppCompatActivity() {
         const val INSTANCE_STATE_KEY = "SAVED_RESULT"
         const val INTENT_EXTRA_KEY = "selectedTrack"
         const val SEARCH_DEBOUNCE_DELAY = 2000L
+        const val CLICK_DEBOUNCE_DELAY = 1000L
         const val RESPONSE_STATUS_SUCCESS = 0
         const val RESPONSE_STATUS_NOTHING_FOUND = 1
         const val RESPONSE_STATUS_BAD_CONNECTION = 2
@@ -48,6 +49,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val trackList: ArrayList<Track> = ArrayList()
     private lateinit var historyArray: ArrayList<Track>
+    private var isClickAllowed = true
 
     lateinit var trackListAdapter: TrackListAdapter
     private lateinit var sharedPreferences: SharedPreferences
@@ -73,9 +75,11 @@ class SearchActivity : AppCompatActivity() {
         val historyAdapter =
             TrackListAdapter(historyArray, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
-                    val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
-                    playerIntent.putExtra(INTENT_EXTRA_KEY, track)
-                    startActivity(playerIntent)
+                    if (clickDebounce()) {
+                        val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
+                        playerIntent.putExtra(INTENT_EXTRA_KEY, track)
+                        startActivity(playerIntent)
+                    }
                 }
             })
 
@@ -100,13 +104,15 @@ class SearchActivity : AppCompatActivity() {
         trackListAdapter =
             TrackListAdapter(trackList, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
-                    historyPreferences.addTrack(historyArray, track)
-                    val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
-                    playerIntent.putExtra(
-                        INTENT_EXTRA_KEY,
-                        track
-                    )
-                    startActivity(playerIntent)
+                    if (clickDebounce()) {
+                        historyPreferences.addTrack(historyArray, track)
+                        val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
+                        playerIntent.putExtra(
+                            INTENT_EXTRA_KEY,
+                            track
+                        )
+                        startActivity(playerIntent)
+                    }
                 }
             })
 
@@ -246,6 +252,15 @@ class SearchActivity : AppCompatActivity() {
     private fun searchDebounce() {
         mainHandler.removeCallbacks(searchRunnable)
         mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            mainHandler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
     }
 
     @SuppressLint("NotifyDataSetChanged")
