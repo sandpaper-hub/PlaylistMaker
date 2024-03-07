@@ -28,7 +28,10 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val INSTANCE_STATE_KEY = "SAVED_RESULT"
         const val INTENT_EXTRA_KEY = "selectedTrack"
-        const val SEARCH_DEBOUNCE_DELAY = 1000L
+        const val SEARCH_DEBOUNCE_DELAY = 2000L
+        const val RESPONSE_STATUS_SUCCESS = 0
+        const val RESPONSE_STATUS_NOTHING_FOUND = 1
+        const val RESPONSE_STATUS_BAD_CONNECTION = 2
     }
 
     private lateinit var binding: ActivitySearchBinding
@@ -61,15 +64,11 @@ class SearchActivity : AppCompatActivity() {
         mainHandler = Handler(Looper.getMainLooper())
 
         sharedPreferences =
-            getSharedPreferences(SharedPreferencesData.sharedPreferencesHistoryFile, MODE_PRIVATE)
+            getSharedPreferences(SharedPreferencesData.SHARED_PREFERENCES_HISTORY_FILE, MODE_PRIVATE)
         val historyPreferences = HistoryPreferences(sharedPreferences)
 
-        val json = sharedPreferences.getString(SharedPreferencesData.newHistoryItemKey, null)
-        historyArray = if (json == null) {
-            ArrayList()
-        } else {
-            Transformer.createArrayListFromJson(json)
-        }
+        val json = sharedPreferences.getString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, null)
+        historyArray = json?.createArrayListFromJson() ?: ArrayList()
 
         val historyAdapter =
             TrackListAdapter(historyArray, object : TrackListAdapter.OnTrackClickListener {
@@ -83,11 +82,11 @@ class SearchActivity : AppCompatActivity() {
         binding.historyRecycler.adapter = historyAdapter
 
         sharedPreferences.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
-            if (key == SharedPreferencesData.newHistoryItemKey) {
+            if (key == SharedPreferencesData.NEW_HISTORY_ITEM_KEY) {
                 val jsonArray =
-                    sharedPreferences.getString(SharedPreferencesData.newHistoryItemKey, null)
+                    sharedPreferences.getString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, null)
                 if (jsonArray != null) {
-                    historyAdapter.trackList = Transformer.createArrayListFromJson(jsonArray)
+                    historyAdapter.trackList = jsonArray.createArrayListFromJson()
                 }
                 historyAdapter.notifyDataSetChanged()
             }
@@ -162,7 +161,7 @@ class SearchActivity : AppCompatActivity() {
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(it.windowToken, 0)
-            showResult(ResponseStatus.SUCCESS)
+            showResult(RESPONSE_STATUS_SUCCESS)
             setDataChanged()
         }
 
@@ -201,26 +200,26 @@ class SearchActivity : AppCompatActivity() {
                         binding.trackListRecyclerView.visibility = View.VISIBLE
                     }
                     if (trackList.isEmpty()) {
-                        showResult(ResponseStatus.NOTHING_FOUND)
+                        showResult(RESPONSE_STATUS_NOTHING_FOUND)
                     } else {
-                        showResult(ResponseStatus.SUCCESS)
+                        showResult(RESPONSE_STATUS_SUCCESS)
                     }
                 } else {
-                    showResult(ResponseStatus.BAD_CONNECTION)
+                    showResult(RESPONSE_STATUS_BAD_CONNECTION)
                 }
             }
 
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
                 binding.searchProgressBar.visibility = View.GONE
-                showResult(ResponseStatus.BAD_CONNECTION)
+                showResult(RESPONSE_STATUS_BAD_CONNECTION)
             }
         })
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun showResult(responseStatus: Enum<ResponseStatus>) {
+    private fun showResult(responseStatus: Int) {
         when (responseStatus) {
-            ResponseStatus.BAD_CONNECTION -> {
+            RESPONSE_STATUS_BAD_CONNECTION -> {
                 binding.connectionErrorGroup.visibility = View.VISIBLE
                 binding.badSearchResultText.text =
                     applicationContext.resources.getText(R.string.connection_error)
@@ -229,7 +228,7 @@ class SearchActivity : AppCompatActivity() {
                 setDataChanged()
             }
 
-            ResponseStatus.NOTHING_FOUND -> {
+            RESPONSE_STATUS_NOTHING_FOUND -> {
                 binding.badSearchResultGroup.visibility = View.VISIBLE
                 binding.badSearchResultText.text =
                     applicationContext.resources.getText(R.string.nothing_found)
@@ -238,7 +237,7 @@ class SearchActivity : AppCompatActivity() {
                 setDataChanged()
             }
 
-            ResponseStatus.SUCCESS -> {
+            RESPONSE_STATUS_SUCCESS -> {
                 binding.connectionErrorGroup.visibility = View.GONE
             }
         }
