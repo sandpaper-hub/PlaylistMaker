@@ -2,46 +2,63 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/main_activity_style"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/main_activity_style"
     tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftBorder16dpMainActivity"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/indent_16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightBorder16dpMainActivity"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/indent_16dp" />
 
     <TextView
         android:id="@+id/title"
         style="@style/panelHeader"
-        android:textColor="@color/YP_White"
         android:text="@string/app_name"
+        android:textColor="@color/YP_White"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/indent_16dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="@dimen/indent_16dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/title">
+    <Button
+        android:id="@+id/search_button"
+        style="@style/main_activity_button_style"
+        android:layout_marginTop="@dimen/indent_24dp"
+        android:text="@string/search_text"
+        app:icon="@drawable/search"
+        app:layout_constraintBottom_toTopOf="@id/media_library_button"
+        app:layout_constraintEnd_toStartOf="@id/rightBorder16dpMainActivity"
+        app:layout_constraintStart_toEndOf="@id/leftBorder16dpMainActivity"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
-        <Button
-            android:id="@+id/search_button"
-            style="@style/main_activity_button_style"
-            android:text="@string/search_text"
-            app:icon="@drawable/search" />
+    <Button
+        android:id="@+id/media_library_button"
+        style="@style/main_activity_button_style"
+        android:text="@string/media_library_button"
+        app:icon="@drawable/media_library"
+        app:layout_constraintBottom_toTopOf="@id/settings_button"
+        app:layout_constraintEnd_toStartOf="@id/rightBorder16dpMainActivity"
+        app:layout_constraintStart_toEndOf="@id/leftBorder16dpMainActivity"
+        app:layout_constraintTop_toBottomOf="@+id/search_button" />
 
-        <Button
-            android:id="@+id/media_library_button"
-            style="@style/main_activity_button_style"
-            android:text="@string/media_library_button"
-            app:icon="@drawable/media_library" />
-
-        <Button
-            android:id="@+id/settings_button"
-            style="@style/main_activity_button_style"
-            android:text="@string/settings_button"
-            app:icon="@drawable/settings" />
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/settings_button"
+        style="@style/main_activity_button_style"
+        android:layout_marginBottom="28dp"
+        android:text="@string/settings_button"
+        app:icon="@drawable/settings"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/rightBorder16dpMainActivity"
+        app:layout_constraintStart_toEndOf="@id/leftBorder16dpMainActivity"
+        app:layout_constraintTop_toBottomOf="@+id/media_library_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

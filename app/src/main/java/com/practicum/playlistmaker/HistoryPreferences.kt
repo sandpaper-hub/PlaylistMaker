@@ -7,15 +7,15 @@ class HistoryPreferences(private val sharedPreferences: SharedPreferences) {
 
     fun addTrack(historyArrayList: ArrayList<Track>, track: Track) {
         val json =
-            sharedPreferences.getString(SharedPreferencesData.newHistoryItemKey, null)
+            sharedPreferences.getString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, null)
         if (json == null) {
             historyArrayList.add(track)
             sharedPreferences.edit().putString(
-                SharedPreferencesData.newHistoryItemKey,
-                createJsonFromArrayList(historyArrayList)
+                SharedPreferencesData.NEW_HISTORY_ITEM_KEY,
+                Gson().toJson(historyArrayList)
             ).apply()
         } else {
-            val fromJsonHistoryArrayList = createArrayListFromJson(json)
+            val fromJsonHistoryArrayList = json.createArrayListFromJson()
             if (fromJsonHistoryArrayList.size <= 10) {
                 if (fromJsonHistoryArrayList.contains(track)) {
                     fromJsonHistoryArrayList.remove(track)
@@ -26,29 +26,20 @@ class HistoryPreferences(private val sharedPreferences: SharedPreferences) {
                 fromJsonHistoryArrayList.add(0, track)
             }
             sharedPreferences.edit().putString(
-                SharedPreferencesData.newHistoryItemKey,
-                createJsonFromArrayList(fromJsonHistoryArrayList)
+                SharedPreferencesData.NEW_HISTORY_ITEM_KEY,
+                Gson().toJson(fromJsonHistoryArrayList)
             ).apply()
         }
     }
 
     fun clearData() {
-        val json = sharedPreferences.getString(SharedPreferencesData.newHistoryItemKey, null)
+        val json = sharedPreferences.getString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, null)
         if (json != null) {
-            val array = createArrayListFromJson(json)
+            val array = json.createArrayListFromJson()
             array.clear()
             sharedPreferences.edit()
-                .putString(SharedPreferencesData.newHistoryItemKey, createJsonFromArrayList(array))
+                .putString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, Gson().toJson(array))
                 .apply()
         }
-    }
-
-    private fun createJsonFromArrayList(arrayList: ArrayList<Track>): String {
-        return Gson().toJson(arrayList)
-    }
-
-    fun createArrayListFromJson(json: String): ArrayList<Track> {
-        val array = Gson().fromJson(json, Array<Track>::class.java)
-        return ArrayList(array.toList())
     }
 }
