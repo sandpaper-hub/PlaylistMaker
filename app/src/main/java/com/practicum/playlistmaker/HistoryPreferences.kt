@@ -1,18 +1,20 @@
 package com.practicum.playlistmaker
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.google.gson.Gson
+import java.lang.StringBuilder
 
 class HistoryPreferences(private val sharedPreferences: SharedPreferences) {
 
-    fun addTrack(historyArrayList: ArrayList<Track>, track: Track) {
+    fun addTrack(track: Track) {
         val json =
             sharedPreferences.getString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, null)
         if (json == null) {
-            historyArrayList.add(track)
+            val newHistoryArrayList = ArrayList<Track>().add(track)
             sharedPreferences.edit().putString(
                 SharedPreferencesData.NEW_HISTORY_ITEM_KEY,
-                Gson().toJson(historyArrayList)
+                Gson().toJson(newHistoryArrayList)
             ).apply()
         } else {
             val fromJsonHistoryArrayList = json.createArrayListFromJson()
@@ -29,6 +31,8 @@ class HistoryPreferences(private val sharedPreferences: SharedPreferences) {
                 SharedPreferencesData.NEW_HISTORY_ITEM_KEY,
                 Gson().toJson(fromJsonHistoryArrayList)
             ).apply()
+            Log.d("PREFERENCESDATA", fromJsonHistoryArrayList.print())
+            Log.d("PREFERENCESDATA", "Add")
         }
     }
 
@@ -41,5 +45,13 @@ class HistoryPreferences(private val sharedPreferences: SharedPreferences) {
                 .putString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, Gson().toJson(array))
                 .apply()
         }
+    }
+
+    fun ArrayList<Track>.print(): String {
+        var string = StringBuilder()
+        for ((number, value) in this.withIndex()) {
+            string.append("$number $value\n")
+        }
+        return string.toString()
     }
 }
