@@ -9,10 +9,12 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -72,6 +74,8 @@ class SearchActivity : AppCompatActivity() {
         val json = sharedPreferences.getString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, null)
         historyArray = json?.createArrayListFromJson() ?: ArrayList()
 
+        binding.historySearchContainer.isVisible = historyArray.isNotEmpty()
+
         val historyAdapter =
             TrackListAdapter(historyArray, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
@@ -86,6 +90,7 @@ class SearchActivity : AppCompatActivity() {
         binding.historyRecycler.adapter = historyAdapter
 
         sharedPreferences.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
+            Log.d("PREFERENCESDATA", "check")
             if (key == SharedPreferencesData.NEW_HISTORY_ITEM_KEY) {
                 val jsonArray =
                     sharedPreferences.getString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, null)
@@ -104,14 +109,19 @@ class SearchActivity : AppCompatActivity() {
         trackListAdapter =
             TrackListAdapter(trackList, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
-                    if (clickDebounce()) {
-                        historyPreferences.addTrack(historyArray, track)
-                        val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
-                        playerIntent.putExtra(
-                            INTENT_EXTRA_KEY,
-                            track
-                        )
-                        startActivity(playerIntent)
+                    if (track.hasntNullableData()) {
+                        if (clickDebounce()) {
+                            historyPreferences.addTrack(track)
+                            val playerIntent =
+                                Intent(applicationContext, PlayerActivity::class.java)
+                            playerIntent.putExtra(
+                                INTENT_EXTRA_KEY,
+                                track
+                            )
+                            startActivity(playerIntent)
+                        }
+                    } else {
+                        Toast.makeText(applicationContext, "Track has empty data", Toast.LENGTH_SHORT).show()
                     }
                 }
             })
@@ -136,7 +146,6 @@ class SearchActivity : AppCompatActivity() {
         binding.searchEditText.setOnFocusChangeListener { _, hasFocus ->
             binding.historySearchContainer.isVisible =
                 hasFocus && binding.searchEditText.text.isEmpty() && historyArray.isNotEmpty()
-
         }
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
@@ -145,9 +154,13 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.historySearchContainer.isVisible =
                     (binding.searchEditText.hasFocus() && s?.isEmpty() == true) && historyAdapter.trackList.isNotEmpty() == true
-                binding.connectionErrorGroup.visibility = View.GONE
-                binding.trackListRecyclerView.visibility = View.GONE
-                searchDebounce()
+                if (s.toString().isNotEmpty()) {
+                    binding.connectionErrorGroup.visibility = View.GONE
+                    binding.trackListRecyclerView.visibility = View.GONE
+                    searchDebounce()
+                } else {
+                    mainHandler.removeCallbacks(searchRunnable)
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -155,9 +168,11 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
-        binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
+        binding.searchEditText.setOnEditorActionListener { textView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                doRequest()
+                if (textView.text.isNotEmpty()) {
+                    doRequest()
+                }
             }
             false
         }
