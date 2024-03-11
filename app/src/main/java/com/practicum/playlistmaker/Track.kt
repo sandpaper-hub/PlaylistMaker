@@ -5,16 +5,16 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class Track(
-    val trackId: String,
-    val trackName: String,
-    val artistName: String,
-    @SerializedName("trackTimeMillis") val trackDuration: Long,
-    val artworkUrl100: String,
-    val collectionName: String,
-    val releaseDate: String,
-    val primaryGenreName: String,
-    val country: String,
-    val previewUrl: String
+    val trackId: String?,
+    val trackName: String?,
+    val artistName: String?,
+    @SerializedName("trackTimeMillis") val trackDuration: Long?,
+    val artworkUrl100: String?,
+    val collectionName: String?,
+    val releaseDate: String?,
+    val primaryGenreName: String?,
+    val country: String?,
+    val previewUrl: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
@@ -34,7 +34,11 @@ data class Track(
         parcel.writeString(trackId)
         parcel.writeString(trackName)
         parcel.writeString(artistName)
-        parcel.writeLong(trackDuration)
+        if (trackDuration != null) {
+            parcel.writeLong(trackDuration)
+        } else {
+            parcel.writeLong(0L)
+        }
         parcel.writeString(artworkUrl100)
         parcel.writeString(collectionName)
         parcel.writeString(releaseDate)
