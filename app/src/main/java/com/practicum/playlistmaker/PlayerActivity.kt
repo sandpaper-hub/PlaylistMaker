@@ -40,19 +40,19 @@ class PlayerActivity : AppCompatActivity() {
         )
         preparePlayer()
         binding.durationValue.text =
-            track.trackDuration.convertLongToTimeMillis()
-        if (track.collectionName.isEmpty()) {
-            binding.collectionGroup.isVisible = track.collectionName.isNotEmpty()
+            track.trackDuration!!.convertLongToTimeMillis()
+        if (track.collectionName!!.isEmpty()) {
+            binding.collectionGroup.isVisible = track.collectionName!!.isNotEmpty()
         } else {
             binding.albumValue.text = track.collectionName
         }
-        binding.yearValue.text = track.releaseDate.take(4)
+        binding.yearValue.text = track.releaseDate!!.take(4)
         binding.genreValue.text = track.primaryGenreName
         binding.countryValue.text = track.country
         binding.trackNamePlayerActivity.text = track.trackName
         binding.artistNamePlayerActivity.text = track.artistName
         Glide.with(applicationContext)
-            .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
+            .load(track.artworkUrl100!!.replaceAfterLast('/', "512x512bb.jpg"))
             .fitCenter()
             .placeholder(R.drawable.album)
             .transform(RoundedCorners(2f.dpToPx(applicationContext)))
