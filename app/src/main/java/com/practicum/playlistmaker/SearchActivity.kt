@@ -9,7 +9,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -58,6 +57,23 @@ class SearchActivity : AppCompatActivity() {
 
     private val searchRunnable = Runnable { doRequest() }
     private lateinit var mainHandler: Handler
+    private lateinit var historyAdapter: TrackListAdapter
+
+    @SuppressLint("NotifyDataSetChanged")
+    private val sharedPreferencesChangeListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+            if (key == SharedPreferencesData.NEW_HISTORY_ITEM_KEY) {
+                val jsonArray =
+                    sharedPreferences.getString(
+                        SharedPreferencesData.NEW_HISTORY_ITEM_KEY,
+                        null
+                    )
+                if (jsonArray != null) {
+                    historyAdapter.trackList = jsonArray.createArrayListFromJson()
+                }
+                historyAdapter.notifyDataSetChanged()
+            }
+        }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +92,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.historySearchContainer.isVisible = historyArray.isNotEmpty()
 
-        val historyAdapter =
+        historyAdapter =
             TrackListAdapter(historyArray, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
                     if (clickDebounce()) {
@@ -89,17 +105,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.historyRecycler.adapter = historyAdapter
 
-        sharedPreferences.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
-            Log.d("PREFERENCESDATA", "check")
-            if (key == SharedPreferencesData.NEW_HISTORY_ITEM_KEY) {
-                val jsonArray =
-                    sharedPreferences.getString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, null)
-                if (jsonArray != null) {
-                    historyAdapter.trackList = jsonArray.createArrayListFromJson()
-                }
-                historyAdapter.notifyDataSetChanged()
-            }
-        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
 
         binding.clearHistory.setOnClickListener {
             historyPreferences.clearData()
