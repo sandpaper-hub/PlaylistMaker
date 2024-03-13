@@ -9,7 +9,8 @@ class HistoryPreferences(private val sharedPreferences: SharedPreferences) {
         val json =
             sharedPreferences.getString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, null)
         if (json == null) {
-            val newHistoryArrayList = ArrayList<Track>().add(track)
+            val newHistoryArrayList = ArrayList<Track>()
+            newHistoryArrayList.add(track)
             sharedPreferences.edit().putString(
                 SharedPreferencesData.NEW_HISTORY_ITEM_KEY,
                 Gson().toJson(newHistoryArrayList)
