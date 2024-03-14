@@ -40,12 +40,12 @@
         android:id="@+id/clear_search_ediText"
         style="@style/clear_icon_style"
         android:layout_width="@dimen/button_back_size"
-        android:visibility="gone"
         android:layout_height="@dimen/button_back_size"
         android:layout_marginHorizontal="0dp"
         android:background="@color/transparent"
         android:contentDescription="@string/clear_button"
         android:src="@drawable/clear_edit_text_button"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/search_editText"
         app:layout_constraintEnd_toEndOf="@+id/search_editText"
         app:layout_constraintTop_toTopOf="@+id/search_editText" />
@@ -58,6 +58,17 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/search_editText" />
 
+    <ProgressBar
+        android:id="@+id/searchProgressBar"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.31" />
+
     <androidx.constraintlayout.widget.Group
         android:id="@+id/connectionErrorGroup"
         android:layout_width="0dp"
@@ -68,8 +79,8 @@
     <androidx.constraintlayout.widget.Group
         android:id="@+id/badSearchResultGroup"
         android:layout_width="0dp"
-        android:visibility="gone"
         android:layout_height="0dp"
+        android:visibility="gone"
         app:constraint_referenced_ids="badSearchResultText, badSearchResultImage" />
 
     <ImageView

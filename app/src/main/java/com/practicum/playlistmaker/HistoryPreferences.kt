@@ -1,43 +1,31 @@
 package com.practicum.playlistmaker
 
 import android.content.SharedPreferences
+import com.google.gson.Gson
 
 class HistoryPreferences(private val sharedPreferences: SharedPreferences) {
 
-    fun addTrack(historyArrayList: ArrayList<Track>, track: Track) {
+    fun addTrack(track: Track) {
         val json =
-            sharedPreferences.getString(SharedPreferencesData.newHistoryItemKey, null)
-        if (json == null) {
-            historyArrayList.add(track)
-            sharedPreferences.edit().putString(
-                SharedPreferencesData.newHistoryItemKey,
-                Transformer.createJsonFromArrayList(historyArrayList)
-            ).apply()
-        } else {
-            val fromJsonHistoryArrayList = Transformer.createArrayListFromJson(json)
-            if (fromJsonHistoryArrayList.size <= 10) {
-                if (fromJsonHistoryArrayList.contains(track)) {
-                    fromJsonHistoryArrayList.remove(track)
-                }
-                if (fromJsonHistoryArrayList.size == 10) {
-                    fromJsonHistoryArrayList.removeAt(9)
-                }
-                fromJsonHistoryArrayList.add(0, track)
-            }
-            sharedPreferences.edit().putString(
-                SharedPreferencesData.newHistoryItemKey,
-                Transformer.createJsonFromArrayList(fromJsonHistoryArrayList)
-            ).apply()
+            sharedPreferences.getString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, null)
+        val historyArray = json?.createArrayListFromJson() ?: ArrayList()
+        historyArray.removeIf { it == track }
+        historyArray.add(0, track)
+        if (historyArray.size > 10) {
+            historyArray.removeAt(10)
         }
+        sharedPreferences.edit()
+            .putString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, Gson().toJson(historyArray))
+            .apply()
     }
 
     fun clearData() {
-        val json = sharedPreferences.getString(SharedPreferencesData.newHistoryItemKey, null)
+        val json = sharedPreferences.getString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, null)
         if (json != null) {
-            val array = Transformer.createArrayListFromJson(json)
+            val array = json.createArrayListFromJson()
             array.clear()
             sharedPreferences.edit()
-                .putString(SharedPreferencesData.newHistoryItemKey, Transformer.createJsonFromArrayList(array))
+                .putString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, Gson().toJson(array))
                 .apply()
         }
     }

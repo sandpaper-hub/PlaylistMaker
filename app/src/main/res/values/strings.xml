@@ -32,6 +32,6 @@
     <string name="sampleSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="sampleBodyMessage">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="sampleMessageForShare">https://practicum.yandex.ru/android-developer/</string>
-    <string name="durationSample">0:30</string>
+    <string name="durationSample">0:00</string>
 
 </resources>

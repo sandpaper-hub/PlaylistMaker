@@ -2,9 +2,9 @@ package com.practicum.playlistmaker
 
 class SharedPreferencesData {
     companion object {
-        const val sharedPreferencesThemeFile = "PlaylistMakerThemePreferences"
-        const val sharedPreferencesHistoryFile = "PlaylistMakerHistorySearchPreferences"
-        const val darkThemeKey = "isDarkTheme"
-        const val newHistoryItemKey = "New item"
+        const val SHARED_PREFERENCES_THEME_KEY = "PlaylistMakerThemePreferences"
+        const val SHARED_PREFERENCES_HISTORY_FILE = "PlaylistMakerHistorySearchPreferences"
+        const val DARK_THEME_KEY = "isDarkTheme"
+        const val NEW_HISTORY_ITEM_KEY = "New item"
     }
 }

@@ -5,11 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -25,6 +29,11 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val INSTANCE_STATE_KEY = "SAVED_RESULT"
         const val INTENT_EXTRA_KEY = "selectedTrack"
+        const val SEARCH_DEBOUNCE_DELAY = 2000L
+        const val CLICK_DEBOUNCE_DELAY = 1000L
+        const val RESPONSE_STATUS_SUCCESS = 0
+        const val RESPONSE_STATUS_NOTHING_FOUND = 1
+        const val RESPONSE_STATUS_BAD_CONNECTION = 2
     }
 
     private lateinit var binding: ActivitySearchBinding
@@ -41,9 +50,30 @@ class SearchActivity : AppCompatActivity() {
 
     private val trackList: ArrayList<Track> = ArrayList()
     private lateinit var historyArray: ArrayList<Track>
+    private var isClickAllowed = true
 
     lateinit var trackListAdapter: TrackListAdapter
     private lateinit var sharedPreferences: SharedPreferences
+
+    private val searchRunnable = Runnable { doRequest() }
+    private lateinit var mainHandler: Handler
+    private lateinit var historyAdapter: TrackListAdapter
+
+    @SuppressLint("NotifyDataSetChanged")
+    private val sharedPreferencesChangeListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+            if (key == SharedPreferencesData.NEW_HISTORY_ITEM_KEY) {
+                val jsonArray =
+                    sharedPreferences.getString(
+                        SharedPreferencesData.NEW_HISTORY_ITEM_KEY,
+                        null
+                    )
+                if (jsonArray != null) {
+                    historyAdapter.trackList = jsonArray.createArrayListFromJson()
+                }
+                historyAdapter.notifyDataSetChanged()
+            }
+        }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,54 +81,54 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        mainHandler = Handler(Looper.getMainLooper())
+
         sharedPreferences =
-            getSharedPreferences(SharedPreferencesData.sharedPreferencesHistoryFile, MODE_PRIVATE)
+            getSharedPreferences(SharedPreferencesData.SHARED_PREFERENCES_HISTORY_FILE, MODE_PRIVATE)
         val historyPreferences = HistoryPreferences(sharedPreferences)
 
-        val json = sharedPreferences.getString(SharedPreferencesData.newHistoryItemKey, null)
-        historyArray = if (json == null) {
-            ArrayList()
-        } else {
-            Transformer.createArrayListFromJson(json)
-        }
+        val json = sharedPreferences.getString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, null)
+        historyArray = json?.createArrayListFromJson() ?: ArrayList()
 
-        val historyAdapter =
+        binding.historySearchContainer.isVisible = historyArray.isNotEmpty()
+
+        historyAdapter =
             TrackListAdapter(historyArray, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
-                    val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
-                    playerIntent.putExtra(INTENT_EXTRA_KEY, track)
-                    startActivity(playerIntent)
+                    if (clickDebounce()) {
+                        val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
+                        playerIntent.putExtra(INTENT_EXTRA_KEY, track)
+                        startActivity(playerIntent)
+                    }
                 }
             })
 
         binding.historyRecycler.adapter = historyAdapter
 
-        sharedPreferences.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
-            if (key == SharedPreferencesData.newHistoryItemKey) {
-                val jsonArray =
-                    sharedPreferences.getString(SharedPreferencesData.newHistoryItemKey, null)
-                if (jsonArray != null) {
-                    historyAdapter.trackList = Transformer.createArrayListFromJson(jsonArray)
-                }
-                historyAdapter.notifyDataSetChanged()
-            }
-        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
 
         binding.clearHistory.setOnClickListener {
             historyPreferences.clearData()
-            binding.historySearchContainer.isVisible = false
+            binding.historySearchContainer.visibility = View.GONE
         }
 
         trackListAdapter =
             TrackListAdapter(trackList, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
-                    historyPreferences.addTrack(historyArray, track)
-                    val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
-                    playerIntent.putExtra(
-                        INTENT_EXTRA_KEY,
-                        track
-                    )
-                    startActivity(playerIntent)
+                    if (!track.hasNullableData()) {
+                        if (clickDebounce()) {
+                            historyPreferences.addTrack(track)
+                            val playerIntent =
+                                Intent(applicationContext, PlayerActivity::class.java)
+                            playerIntent.putExtra(
+                                INTENT_EXTRA_KEY,
+                                track
+                            )
+                            startActivity(playerIntent)
+                        }
+                    } else {
+                        Toast.makeText(applicationContext, "Track has empty data", Toast.LENGTH_SHORT).show()
+                    }
                 }
             })
 
@@ -111,29 +141,32 @@ class SearchActivity : AppCompatActivity() {
         binding.searchEditText.isSaveEnabled = false
         binding.searchEditText.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) {
-                binding.clearSearchEdiText.isVisible = false
-                binding.trackListRecyclerView.isVisible = false
+                binding.clearSearchEdiText.visibility = View.GONE
+                binding.trackListRecyclerView.visibility = View.GONE
             } else {
-                binding.clearSearchEdiText.isVisible = true
-                binding.trackListRecyclerView.isVisible = true
+                binding.clearSearchEdiText.visibility = View.VISIBLE
+                binding.trackListRecyclerView.visibility = View.VISIBLE
             }
         }
 
         binding.searchEditText.setOnFocusChangeListener { _, hasFocus ->
             binding.historySearchContainer.isVisible =
                 hasFocus && binding.searchEditText.text.isEmpty() && historyArray.isNotEmpty()
-
         }
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //not yet implemented
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.historySearchContainer.isVisible =
                     (binding.searchEditText.hasFocus() && s?.isEmpty() == true) && historyAdapter.trackList.isNotEmpty() == true
-                binding.connectionErrorGroup.isVisible = false
+                if (s.toString().isNotEmpty()) {
+                    binding.connectionErrorGroup.visibility = View.GONE
+                    binding.trackListRecyclerView.visibility = View.GONE
+                    searchDebounce()
+                } else {
+                    mainHandler.removeCallbacks(searchRunnable)
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -141,9 +174,11 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
-        binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
+        binding.searchEditText.setOnEditorActionListener { textView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                doRequest()
+                if (textView.text.isNotEmpty()) {
+                    doRequest()
+                }
             }
             false
         }
@@ -153,7 +188,7 @@ class SearchActivity : AppCompatActivity() {
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(it.windowToken, 0)
-            showResult(ResponseStatus.SUCCESS)
+            showResult(RESPONSE_STATUS_SUCCESS)
             setDataChanged()
         }
 
@@ -175,6 +210,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun doRequest() {
+        binding.searchProgressBar.visibility = View.VISIBLE
         iTunesSearchService.search(binding.searchEditText.text.toString()).enqueue(object :
             Callback<TrackResponse> {
             @SuppressLint("NotifyDataSetChanged")
@@ -182,53 +218,70 @@ class SearchActivity : AppCompatActivity() {
                 call: Call<TrackResponse>,
                 response: Response<TrackResponse>
             ) {
+                binding.searchProgressBar.visibility = View.GONE
                 if (response.code() == 200) {
                     trackList.clear()
                     if (response.body()?.results?.isNotEmpty() == true) {
                         trackList.addAll(response.body()?.results!!)
                         trackListAdapter.notifyDataSetChanged()
+                        binding.trackListRecyclerView.visibility = View.VISIBLE
                     }
                     if (trackList.isEmpty()) {
-                        showResult(ResponseStatus.NOTHING_FOUND)
+                        showResult(RESPONSE_STATUS_NOTHING_FOUND)
                     } else {
-                        showResult(ResponseStatus.SUCCESS)
+                        showResult(RESPONSE_STATUS_SUCCESS)
                     }
                 } else {
-                    showResult(ResponseStatus.BAD_CONNECTION)
+                    showResult(RESPONSE_STATUS_BAD_CONNECTION)
                 }
             }
 
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                showResult(ResponseStatus.BAD_CONNECTION)
+                binding.searchProgressBar.visibility = View.GONE
+                showResult(RESPONSE_STATUS_BAD_CONNECTION)
             }
         })
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun showResult(responseStatus: Enum<ResponseStatus>) {
+    private fun showResult(responseStatus: Int) {
         when (responseStatus) {
-            ResponseStatus.BAD_CONNECTION -> {
-                binding.connectionErrorGroup.isVisible = true
+            RESPONSE_STATUS_BAD_CONNECTION -> {
+                binding.connectionErrorGroup.visibility = View.VISIBLE
                 binding.badSearchResultText.text =
                     applicationContext.resources.getText(R.string.connection_error)
-                binding.historySearchContainer.isVisible = false
+                binding.historySearchContainer.visibility = View.GONE
                 binding.badSearchResultImage.setImageResource(R.drawable.bad_connection_image)
                 setDataChanged()
             }
 
-            ResponseStatus.NOTHING_FOUND -> {
-                binding.badSearchResultGroup.isVisible = true
+            RESPONSE_STATUS_NOTHING_FOUND -> {
+                binding.badSearchResultGroup.visibility = View.VISIBLE
                 binding.badSearchResultText.text =
                     applicationContext.resources.getText(R.string.nothing_found)
-                binding.historySearchContainer.isVisible = false
+                binding.historySearchContainer.visibility = View.GONE
                 binding.badSearchResultImage.setImageResource(R.drawable.nothing_found_image)
                 setDataChanged()
             }
 
-            ResponseStatus.SUCCESS -> {
-                binding.connectionErrorGroup.isVisible = false
+            RESPONSE_STATUS_SUCCESS -> {
+                binding.connectionErrorGroup.visibility = View.GONE
             }
         }
+    }
+
+    private fun searchDebounce() {
+        mainHandler.removeCallbacks(searchRunnable)
+        mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            mainHandler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
     }
 
     @SuppressLint("NotifyDataSetChanged")

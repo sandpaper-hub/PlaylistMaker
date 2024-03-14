@@ -17,9 +17,9 @@ class SettingsActivity : AppCompatActivity() {
         val subject = getString(R.string.sampleSubject)
         val body = getString(R.string.sampleBodyMessage)
         val sharedPreferences =
-            getSharedPreferences(SharedPreferencesData.sharedPreferencesThemeFile, MODE_PRIVATE)
+            getSharedPreferences(SharedPreferencesData.SHARED_PREFERENCES_THEME_KEY, MODE_PRIVATE)
 
-        binding.darkThemeSwitcherCompat.isChecked = sharedPreferences.getBoolean(SharedPreferencesData.darkThemeKey, false)
+        binding.darkThemeSwitcherCompat.isChecked = sharedPreferences.getBoolean(SharedPreferencesData.DARK_THEME_KEY, false)
 
         binding.darkThemeSwitcherCompat.setOnCheckedChangeListener { _, isChecked ->
             (applicationContext as App).switchTheme(isChecked)
