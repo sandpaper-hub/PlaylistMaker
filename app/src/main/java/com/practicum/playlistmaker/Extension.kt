@@ -29,37 +29,6 @@ fun String.createArrayListFromJson(): ArrayList<Track> {
     return ArrayList(array.toList())
 }
 
-fun Track.hasntNullableData(): Boolean {
-    var hasntNullable = true
-    if (this.trackId == null) {
-        hasntNullable = false
-    }
-    if (this.trackName == null) {
-        hasntNullable = false
-    }
-    if (this.artistName == null) {
-        hasntNullable = false
-    }
-    if (this.trackDuration == null) {
-        hasntNullable = false
-    }
-    if (this.artworkUrl100 == null) {
-        hasntNullable = false
-    }
-    if (this.collectionName == null) {
-        hasntNullable = false
-    }
-    if (this.releaseDate == null) {
-        hasntNullable = false
-    }
-    if (this.primaryGenreName == null) {
-        hasntNullable = false
-    }
-    if (this.country == null) {
-        hasntNullable = false
-    }
-    if (this.previewUrl == null) {
-        hasntNullable = false
-    }
-    return hasntNullable
+fun Track.hasNullableData(): Boolean {
+    return this.trackDuration == null || this.previewUrl == null
 }

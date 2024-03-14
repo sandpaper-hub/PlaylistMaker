@@ -115,7 +115,7 @@ class SearchActivity : AppCompatActivity() {
         trackListAdapter =
             TrackListAdapter(trackList, object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
-                    if (track.hasntNullableData()) {
+                    if (!track.hasNullableData()) {
                         if (clickDebounce()) {
                             historyPreferences.addTrack(track)
                             val playerIntent =
