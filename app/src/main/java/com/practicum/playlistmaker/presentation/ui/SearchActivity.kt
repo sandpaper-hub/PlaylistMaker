@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,7 +17,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import com.practicum.playlistmaker.HistoryPreferences
+import com.practicum.playlistmaker.data.network.ITunesSearchApi
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.SharedPreferencesData
+import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.data.dto.TrackResponse
+import com.practicum.playlistmaker.createArrayListFromJson
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.hasNullableData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
