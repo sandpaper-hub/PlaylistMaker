@@ -1,9 +1,12 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.ui
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.practicum.playlistmaker.App
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.SharedPreferencesData
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
@@ -19,7 +22,8 @@ class SettingsActivity : AppCompatActivity() {
         val sharedPreferences =
             getSharedPreferences(SharedPreferencesData.SHARED_PREFERENCES_THEME_KEY, MODE_PRIVATE)
 
-        binding.darkThemeSwitcherCompat.isChecked = sharedPreferences.getBoolean(SharedPreferencesData.DARK_THEME_KEY, false)
+        binding.darkThemeSwitcherCompat.isChecked = sharedPreferences.getBoolean(
+            SharedPreferencesData.DARK_THEME_KEY, false)
 
         binding.darkThemeSwitcherCompat.setOnCheckedChangeListener { _, isChecked ->
             (applicationContext as App).switchTheme(isChecked)

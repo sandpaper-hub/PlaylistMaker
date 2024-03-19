@@ -6,6 +6,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Parcelable
 import android.util.TypedValue
 import com.google.gson.Gson
+import com.practicum.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -14,7 +15,7 @@ inline fun <reified T : Parcelable> Intent.getParcelableTrack(key: String): T? =
     else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
 }
 
-fun Any.convertLongToTimeMillis(): String {
+fun Any.convertIntToTimeMillis(): String {
     return SimpleDateFormat("mm:ss", Locale.getDefault()).format(this)
 }
 
