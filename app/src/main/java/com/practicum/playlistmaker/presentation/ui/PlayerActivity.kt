@@ -17,10 +17,14 @@ import com.practicum.playlistmaker.data.repository.TrackInfoRepositoryImpl
 import com.practicum.playlistmaker.data.repository.UpdateTrackTimerRepositoryImpl
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.domain.TrackPositionListener
-import com.practicum.playlistmaker.domain.usecases.GetTrackInfoUseCase
-import com.practicum.playlistmaker.domain.usecases.PlaybackControlUseCase
-import com.practicum.playlistmaker.domain.usecases.PreparePlayerUseCase
-import com.practicum.playlistmaker.domain.usecases.UpdateTrackTimerUseCase
+import com.practicum.playlistmaker.domain.usecase.GetTrackInfoUseCase
+import com.practicum.playlistmaker.domain.usecase.PlaybackControlUseCase
+import com.practicum.playlistmaker.domain.usecase.PreparePlayerUseCase
+import com.practicum.playlistmaker.domain.usecase.UpdateTrackTimerUseCase
+import com.practicum.playlistmaker.presentation.usecase.GetTrackInfoUseCaseImpl
+import com.practicum.playlistmaker.presentation.usecase.PlaybackControlUseCaseImpl
+import com.practicum.playlistmaker.presentation.usecase.PreparePlayerUseCaseImpl
+import com.practicum.playlistmaker.presentation.usecase.UpdateTrackTimerUseCaseImpl
 import com.practicum.playlistmaker.dpToPx
 
 class PlayerActivity : AppCompatActivity(), TrackPositionListener {
@@ -39,16 +43,16 @@ class PlayerActivity : AppCompatActivity(), TrackPositionListener {
         setContentView(binding.root)
 
         val trackInfoRepositoryImpl = TrackInfoRepositoryImpl(intent)
-        val getTrackInfoUseCase = GetTrackInfoUseCase(trackInfoRepositoryImpl)
+        val getTrackInfoUseCase: GetTrackInfoUseCase = GetTrackInfoUseCaseImpl(trackInfoRepositoryImpl)
         track = getTrackInfoUseCase.execute()
         val playerRepositoryImpl = PlayerRepositoryImpl(mediaPlayer, track.previewUrl)
-        val preparePlayerUseCase = PreparePlayerUseCase(playerRepositoryImpl)
-        playbackControlUseCase = PlaybackControlUseCase(playerRepositoryImpl)
+        val preparePlayerUseCase: PreparePlayerUseCase = PreparePlayerUseCaseImpl(playerRepositoryImpl)
+        playbackControlUseCase = PlaybackControlUseCaseImpl(playerRepositoryImpl)
         playerState = preparePlayerUseCase.execute()
         mainHandler = Handler(Looper.getMainLooper())
         val updateTrackTimerRepositoryImpl =
             UpdateTrackTimerRepositoryImpl(this, mainHandler, mediaPlayer)
-        updateTrackTimerUseCase = UpdateTrackTimerUseCase(updateTrackTimerRepositoryImpl)
+        updateTrackTimerUseCase = UpdateTrackTimerUseCaseImpl(updateTrackTimerRepositoryImpl)
 
         mediaPlayer.setOnPreparedListener {
             binding.playButton.isEnabled = true

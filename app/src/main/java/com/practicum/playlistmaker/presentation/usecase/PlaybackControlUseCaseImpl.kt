@@ -1,10 +1,12 @@
-package com.practicum.playlistmaker.domain.usecases
+package com.practicum.playlistmaker.presentation.usecase
 
 import com.practicum.playlistmaker.MediaPlayerState
 import com.practicum.playlistmaker.domain.repository.PlayerRepository
+import com.practicum.playlistmaker.domain.usecase.PlaybackControlUseCase
 
-class PlaybackControlUseCase(private val playerRepository: PlayerRepository) {
-    fun execute(playerState: MediaPlayerState): MediaPlayerState {
+class PlaybackControlUseCaseImpl(private val playerRepository: PlayerRepository) :
+    PlaybackControlUseCase {
+    override fun execute(playerState: MediaPlayerState): MediaPlayerState {
         return when (playerState) {
             MediaPlayerState.STATE_PLAYING -> {
                 playerRepository.pausePlayer()
