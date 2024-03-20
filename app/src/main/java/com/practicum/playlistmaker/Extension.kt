@@ -15,7 +15,7 @@ inline fun <reified T : Parcelable> Intent.getParcelableTrack(key: String): T? =
     else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
 }
 
-fun Any.convertIntToTimeMillis(): String {
+fun Long.convertLongToTimeMillis(): String {
     return SimpleDateFormat("mm:ss", Locale.getDefault()).format(this)
 }
 

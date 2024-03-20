@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.models.Track
-import com.practicum.playlistmaker.convertIntToTimeMillis
+import com.practicum.playlistmaker.convertLongToTimeMillis
 import com.practicum.playlistmaker.data.repository.PlayerRepositoryImpl
 import com.practicum.playlistmaker.data.repository.TrackInfoRepositoryImpl
 import com.practicum.playlistmaker.data.repository.UpdateTrackTimerRepositoryImpl
@@ -68,7 +68,7 @@ class PlayerActivity : AppCompatActivity(), TrackPositionListener {
         }
 
         binding.durationValue.text =
-            track.trackDuration!!.convertIntToTimeMillis()
+            track.trackDuration!!.convertLongToTimeMillis()
         if (track.collectionName!!.isEmpty()) {
             binding.collectionGroup.isVisible = track.collectionName!!.isNotEmpty()
         } else {
@@ -119,6 +119,7 @@ class PlayerActivity : AppCompatActivity(), TrackPositionListener {
     }
 
     override fun onTrackPositionChanged(position: Int) {
-        binding.durationCurrentValue.text = position.convertIntToTimeMillis()
+        val positionInLong = position.toLong()
+        binding.durationCurrentValue.text = positionInLong.convertLongToTimeMillis()
     }
 }

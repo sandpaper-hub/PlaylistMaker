@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.convertIntToTimeMillis
+import com.practicum.playlistmaker.convertLongToTimeMillis
 import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.dpToPx
 
@@ -26,6 +26,6 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .into(coverImageView)
         trackNameTextView.text = track.trackName
         artistNameTextView.text = track.artistName
-        trackDurationTextView.text = track.trackDuration!!.convertIntToTimeMillis()
+        trackDurationTextView.text = track.trackDuration!!.convertLongToTimeMillis()
     }
 }
