@@ -8,6 +8,7 @@ import android.os.Looper
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.practicum.playlistmaker.MediaPlayerState
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.convertLongToTimeMillis
@@ -24,14 +25,7 @@ import com.practicum.playlistmaker.dpToPx
 
 class PlayerActivity : AppCompatActivity(), TrackPositionListener {
 
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-    }
-
-    private var playerState = STATE_DEFAULT
+    private var playerState = MediaPlayerState.STATE_DEFAULT
     private lateinit var playbackControlUseCase: PlaybackControlUseCase
     private lateinit var updateTrackTimerUseCase: UpdateTrackTimerUseCase
     private val mediaPlayer = MediaPlayer()
@@ -61,7 +55,7 @@ class PlayerActivity : AppCompatActivity(), TrackPositionListener {
         }
 
         mediaPlayer.setOnCompletionListener {
-            playerState = STATE_PREPARED
+            playerState = MediaPlayerState.STATE_PREPARED
             updateTrackTimerUseCase.execute(playerState)
             binding.playButton.setImageResource(R.drawable.play_button)
             binding.durationCurrentValue.setText(R.string.durationSample)
@@ -94,11 +88,11 @@ class PlayerActivity : AppCompatActivity(), TrackPositionListener {
             playerState = playbackControlUseCase.execute(playerState)
             updateTrackTimerUseCase.execute(playerState)
             when (playerState) {
-                STATE_PLAYING -> {
+                MediaPlayerState.STATE_PLAYING -> {
                     binding.playButton.setImageResource(R.drawable.pause_button)
                 }
 
-                STATE_PAUSED -> {
+                else -> {
                     binding.playButton.setImageResource(R.drawable.play_button)
                 }
             }
@@ -107,13 +101,13 @@ class PlayerActivity : AppCompatActivity(), TrackPositionListener {
 
     override fun onPause() {
         super.onPause()
-        playerState = playbackControlUseCase.execute(STATE_PLAYING)
+        playerState = playbackControlUseCase.execute(MediaPlayerState.STATE_PLAYING)
         binding.playButton.setImageResource(R.drawable.play_button)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        playerState = STATE_PREPARED
+        playerState = MediaPlayerState.STATE_PREPARED
         mediaPlayer.release()
         updateTrackTimerUseCase.execute(playerState)
     }
