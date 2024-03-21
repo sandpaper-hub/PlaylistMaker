@@ -8,23 +8,15 @@ import android.os.Looper
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.practicum.playlistmaker.Creator
 import com.practicum.playlistmaker.MediaPlayerState
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.convertLongToTimeMillis
-import com.practicum.playlistmaker.data.repository.PlayerRepositoryImpl
-import com.practicum.playlistmaker.data.repository.TrackInfoRepositoryImpl
-import com.practicum.playlistmaker.data.repository.UpdateTrackTimerRepositoryImpl
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.domain.TrackPositionListener
-import com.practicum.playlistmaker.domain.usecase.GetTrackInfoUseCase
-import com.practicum.playlistmaker.domain.usecase.PlaybackControlUseCase
-import com.practicum.playlistmaker.domain.usecase.PreparePlayerUseCase
-import com.practicum.playlistmaker.domain.usecase.UpdateTrackTimerUseCase
-import com.practicum.playlistmaker.presentation.usecase.GetTrackInfoUseCaseImpl
-import com.practicum.playlistmaker.presentation.usecase.PlaybackControlUseCaseImpl
-import com.practicum.playlistmaker.presentation.usecase.PreparePlayerUseCaseImpl
-import com.practicum.playlistmaker.presentation.usecase.UpdateTrackTimerUseCaseImpl
+import com.practicum.playlistmaker.presentation.usecase.PlaybackControlUseCase
+import com.practicum.playlistmaker.presentation.usecase.UpdateTrackTimerUseCase
 import com.practicum.playlistmaker.dpToPx
 
 class PlayerActivity : AppCompatActivity(), TrackPositionListener {
@@ -42,17 +34,14 @@ class PlayerActivity : AppCompatActivity(), TrackPositionListener {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val trackInfoRepositoryImpl = TrackInfoRepositoryImpl(intent)
-        val getTrackInfoUseCase: GetTrackInfoUseCase = GetTrackInfoUseCaseImpl(trackInfoRepositoryImpl)
+        val creator = Creator()
+        val getTrackInfoUseCase = creator.getTrackInfoUseCase(intent)
         track = getTrackInfoUseCase.execute()
-        val playerRepositoryImpl = PlayerRepositoryImpl(mediaPlayer, track.previewUrl)
-        val preparePlayerUseCase: PreparePlayerUseCase = PreparePlayerUseCaseImpl(playerRepositoryImpl)
-        playbackControlUseCase = PlaybackControlUseCaseImpl(playerRepositoryImpl)
+        val preparePlayerUseCase = creator.getPreparePlayerUseCase(mediaPlayer, track.previewUrl)
+        playbackControlUseCase = creator.getPlaybackControlUseCase()
         playerState = preparePlayerUseCase.execute()
         mainHandler = Handler(Looper.getMainLooper())
-        val updateTrackTimerRepositoryImpl =
-            UpdateTrackTimerRepositoryImpl(this, mainHandler, mediaPlayer)
-        updateTrackTimerUseCase = UpdateTrackTimerUseCaseImpl(updateTrackTimerRepositoryImpl)
+        updateTrackTimerUseCase = creator.getUpdateTrackTimerUseCase(this, mainHandler, mediaPlayer)
 
         mediaPlayer.setOnPreparedListener {
             binding.playButton.isEnabled = true
@@ -116,8 +105,7 @@ class PlayerActivity : AppCompatActivity(), TrackPositionListener {
         updateTrackTimerUseCase.execute(playerState)
     }
 
-    override fun onTrackPositionChanged(position: Int) {
-        val positionInLong = position.toLong()
-        binding.durationCurrentValue.text = positionInLong.convertLongToTimeMillis()
+    override fun onTrackPositionChanged(position: String) {
+        binding.durationCurrentValue.text = position
     }
 }
