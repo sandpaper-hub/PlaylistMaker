@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.domain.usecase
+package com.practicum.playlistmaker.presentation.usecase
 
 import com.practicum.playlistmaker.MediaPlayerState
 

@@ -1,8 +1,8 @@
-package com.practicum.playlistmaker.presentation.usecase
+package com.practicum.playlistmaker.domain.usecase
 
 import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.domain.repository.TrackInfoRepository
-import com.practicum.playlistmaker.domain.usecase.GetTrackInfoUseCase
+import com.practicum.playlistmaker.presentation.usecase.GetTrackInfoUseCase
 
 class GetTrackInfoUseCaseImpl(private val trackInfoRepository: TrackInfoRepository) :
     GetTrackInfoUseCase {
