@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.data.repository
 
 import android.media.MediaPlayer
 import android.os.Handler
+import com.practicum.playlistmaker.convertLongToTimeMillis
 import com.practicum.playlistmaker.domain.TrackPositionListener
 import com.practicum.playlistmaker.domain.repository.UpdateTrackTimerRepository
 
@@ -17,7 +18,7 @@ class UpdateTrackTimerRepositoryImpl(
     private val runnable: Runnable = object : Runnable {
         override fun run() {
             val position = mediaPlayer.currentPosition
-            trackPositionListener.onTrackPositionChanged(position)
+            trackPositionListener.onTrackPositionChanged(position.toLong().convertLongToTimeMillis())
             handler.postDelayed(this, UPDATE_POSITION_DELAY)
         }
 
