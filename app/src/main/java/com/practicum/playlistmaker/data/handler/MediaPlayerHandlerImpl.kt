@@ -1,12 +1,12 @@
-package com.practicum.playlistmaker.data.repository
+package com.practicum.playlistmaker.data.handler
 
 import android.media.MediaPlayer
-import com.practicum.playlistmaker.domain.repository.PlayerRepository
+import com.practicum.playlistmaker.domain.handler.MediaPlayerHandler
 
-class PlayerRepositoryImpl(
+class MediaPlayerHandlerImpl(
     private val mediaPlayer: MediaPlayer,
     private val trackPreviewUrl: String?
-) : PlayerRepository {
+) : MediaPlayerHandler {
     override fun preparePlayer() {
         mediaPlayer.setDataSource(trackPreviewUrl)
         mediaPlayer.prepareAsync()
