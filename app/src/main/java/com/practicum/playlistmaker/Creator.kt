@@ -22,7 +22,7 @@ import com.practicum.playlistmaker.presentation.usecase.UpdateTrackTimerUseCase
 
 object Creator {
     private lateinit var mediaPlayerHandler: MediaPlayerHandlerImpl
-    private lateinit var mediaPlayer: MediaPlayer
+
     private fun getTrackInfoRepository(intent: Intent): TrackInfoRepository {
         return TrackInfoRepositoryImpl(intent)
     }
@@ -36,7 +36,6 @@ object Creator {
         trackPreviewUrl: String?
     ): MediaPlayerHandler {
         mediaPlayerHandler = MediaPlayerHandlerImpl(playerListener, trackPreviewUrl)
-        mediaPlayer = mediaPlayerHandler.getMediaPlayer()
         return mediaPlayerHandler
     }
 
@@ -68,7 +67,7 @@ object Creator {
         return UpdateTrackTimerUseCaseImpl(
             getUpdateTrackTimerRepositoryImpl(
                 mediaPlayerListener,
-                mediaPlayer
+                mediaPlayerHandler.mediaPlayer
             )
         )
     }
