@@ -6,4 +6,6 @@ interface MediaPlayerHandler {
     fun startPlayer()
 
     fun pausePlayer()
+
+    fun releasePlayer()
 }

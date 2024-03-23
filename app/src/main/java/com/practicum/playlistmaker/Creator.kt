@@ -2,11 +2,10 @@ package com.practicum.playlistmaker
 
 import android.content.Intent
 import android.media.MediaPlayer
-import android.os.Handler
 import com.practicum.playlistmaker.data.handler.MediaPlayerHandlerImpl
 import com.practicum.playlistmaker.data.repository.TrackInfoRepositoryImpl
 import com.practicum.playlistmaker.data.repository.UpdateTrackTimerRepositoryImpl
-import com.practicum.playlistmaker.domain.TrackPositionListener
+import com.practicum.playlistmaker.domain.MediaPlayerListener
 import com.practicum.playlistmaker.domain.handler.MediaPlayerHandler
 import com.practicum.playlistmaker.domain.repository.TrackInfoRepository
 import com.practicum.playlistmaker.domain.repository.UpdateTrackTimerRepository
@@ -15,12 +14,15 @@ import com.practicum.playlistmaker.presentation.usecase.PreparePlayerUseCase
 import com.practicum.playlistmaker.domain.usecase.GetTrackInfoUseCaseImpl
 import com.practicum.playlistmaker.domain.usecase.PlaybackControlUseCaseImpl
 import com.practicum.playlistmaker.domain.usecase.PreparePlayerUseCaseImpl
+import com.practicum.playlistmaker.domain.usecase.ReleasePlayerUseCaseImpl
 import com.practicum.playlistmaker.domain.usecase.UpdateTrackTimerUseCaseImpl
 import com.practicum.playlistmaker.presentation.usecase.PlaybackControlUseCase
+import com.practicum.playlistmaker.presentation.usecase.ReleasePlayerUseCase
 import com.practicum.playlistmaker.presentation.usecase.UpdateTrackTimerUseCase
 
-class Creator {
-    private lateinit var mediaPlayerHandler: MediaPlayerHandler
+object Creator {
+    private lateinit var mediaPlayerHandler: MediaPlayerHandlerImpl
+    private lateinit var mediaPlayer: MediaPlayer
     private fun getTrackInfoRepository(intent: Intent): TrackInfoRepository {
         return TrackInfoRepositoryImpl(intent)
     }
@@ -30,41 +32,42 @@ class Creator {
     }
 
     private fun getMediaPlayerHandler(
-        mediaPlayer: MediaPlayer,
+        playerListener: MediaPlayerListener,
         trackPreviewUrl: String?
     ): MediaPlayerHandler {
-        mediaPlayerHandler = MediaPlayerHandlerImpl(mediaPlayer, trackPreviewUrl)
+        mediaPlayerHandler = MediaPlayerHandlerImpl(playerListener, trackPreviewUrl)
+        mediaPlayer = mediaPlayerHandler.getMediaPlayer()
         return mediaPlayerHandler
     }
 
     fun getPreparePlayerUseCase(
-        mediaPlayer: MediaPlayer,
+        playerListener: MediaPlayerListener,
         trackPreviewUrl: String?
     ): PreparePlayerUseCase {
-        return PreparePlayerUseCaseImpl(getMediaPlayerHandler(mediaPlayer, trackPreviewUrl))
+        return PreparePlayerUseCaseImpl(getMediaPlayerHandler(playerListener, trackPreviewUrl))
     }
 
     fun getPlaybackControlUseCase(): PlaybackControlUseCase {
         return PlaybackControlUseCaseImpl(mediaPlayerHandler)
     }
 
+    fun getReleasePlayerUseCase(): ReleasePlayerUseCase {
+        return ReleasePlayerUseCaseImpl(mediaPlayerHandler)
+    }
+
     private fun getUpdateTrackTimerRepositoryImpl(
-        trackPositionListener: TrackPositionListener,
-        handler: Handler,
+        mediaPlayerListener: MediaPlayerListener,
         mediaPlayer: MediaPlayer
     ): UpdateTrackTimerRepository {
-        return UpdateTrackTimerRepositoryImpl(trackPositionListener, handler, mediaPlayer)
+        return UpdateTrackTimerRepositoryImpl(mediaPlayerListener, mediaPlayer)
     }
 
     fun getUpdateTrackTimerUseCase(
-        trackPositionListener: TrackPositionListener,
-        handler: Handler,
-        mediaPlayer: MediaPlayer
+        mediaPlayerListener: MediaPlayerListener,
     ): UpdateTrackTimerUseCase {
         return UpdateTrackTimerUseCaseImpl(
             getUpdateTrackTimerRepositoryImpl(
-                trackPositionListener,
-                handler,
+                mediaPlayerListener,
                 mediaPlayer
             )
         )
