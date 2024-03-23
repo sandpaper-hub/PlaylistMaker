@@ -9,11 +9,8 @@ class MediaPlayerHandlerImpl(
     private val trackPreviewUrl: String?
 ) : MediaPlayerHandler {
 
-    private val mediaPlayer = MediaPlayer()
+    val mediaPlayer = MediaPlayer()
 
-    fun getMediaPlayer(): MediaPlayer {
-        return mediaPlayer
-    }
     override fun preparePlayer() {
         mediaPlayer.setDataSource(trackPreviewUrl)
         mediaPlayer.prepareAsync()
