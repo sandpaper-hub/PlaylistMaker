@@ -10,6 +10,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Creator.setData(this)
         sharedPreferences =
             getSharedPreferences(SharedPreferencesData.SHARED_PREFERENCES_THEME_KEY, MODE_PRIVATE)
         darkTheme = sharedPreferences.getBoolean(SharedPreferencesData.DARK_THEME_KEY, false)

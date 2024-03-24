@@ -1,34 +1,44 @@
 package com.practicum.playlistmaker
 
-import android.content.Intent
+import android.app.Application
+import android.content.Context
 import android.media.MediaPlayer
 import com.practicum.playlistmaker.data.handler.MediaPlayerHandlerImpl
-import com.practicum.playlistmaker.data.repository.TrackInfoRepositoryImpl
-import com.practicum.playlistmaker.data.repository.UpdateTrackTimerRepositoryImpl
+import com.practicum.playlistmaker.data.repository.player.UpdateTrackTimerRepositoryImpl
+import com.practicum.playlistmaker.data.repository.search.SharedPreferencesRepositoryImpl
 import com.practicum.playlistmaker.domain.MediaPlayerListener
 import com.practicum.playlistmaker.domain.handler.MediaPlayerHandler
-import com.practicum.playlistmaker.domain.repository.TrackInfoRepository
-import com.practicum.playlistmaker.domain.repository.UpdateTrackTimerRepository
-import com.practicum.playlistmaker.presentation.usecase.GetTrackInfoUseCase
-import com.practicum.playlistmaker.presentation.usecase.PreparePlayerUseCase
-import com.practicum.playlistmaker.domain.usecase.GetTrackInfoUseCaseImpl
-import com.practicum.playlistmaker.domain.usecase.PlaybackControlUseCaseImpl
-import com.practicum.playlistmaker.domain.usecase.PreparePlayerUseCaseImpl
-import com.practicum.playlistmaker.domain.usecase.ReleasePlayerUseCaseImpl
-import com.practicum.playlistmaker.domain.usecase.UpdateTrackTimerUseCaseImpl
-import com.practicum.playlistmaker.presentation.usecase.PlaybackControlUseCase
-import com.practicum.playlistmaker.presentation.usecase.ReleasePlayerUseCase
-import com.practicum.playlistmaker.presentation.usecase.UpdateTrackTimerUseCase
+import com.practicum.playlistmaker.domain.repository.player.UpdateTrackTimerRepository
+import com.practicum.playlistmaker.domain.repository.search.SharedPreferencesRepository
+import com.practicum.playlistmaker.presentation.usecase.player.PreparePlayerUseCase
+import com.practicum.playlistmaker.domain.usecase.player.PlaybackControlUseCaseImpl
+import com.practicum.playlistmaker.domain.usecase.player.PreparePlayerUseCaseImpl
+import com.practicum.playlistmaker.domain.usecase.player.ReleasePlayerUseCaseImpl
+import com.practicum.playlistmaker.domain.usecase.player.UpdateTrackTimerUseCaseImpl
+import com.practicum.playlistmaker.domain.usecase.search.AddTrackToHistoryUseCaseImpl
+import com.practicum.playlistmaker.domain.usecase.search.ClearHistoryUseCaseImpl
+import com.practicum.playlistmaker.presentation.usecase.player.PlaybackControlUseCase
+import com.practicum.playlistmaker.presentation.usecase.player.ReleasePlayerUseCase
+import com.practicum.playlistmaker.presentation.usecase.player.UpdateTrackTimerUseCase
 
 object Creator {
+    private lateinit var application: Application
     private lateinit var mediaPlayerHandler: MediaPlayerHandlerImpl
-
-    private fun getTrackInfoRepository(intent: Intent): TrackInfoRepository {
-        return TrackInfoRepositoryImpl(intent)
+    private lateinit var sharedPreferencesRepository: SharedPreferencesRepository
+    fun setData(application: Application) {
+        this.application = application
+        sharedPreferencesRepository = getSharedPreferencesRepository(application)
     }
 
-    fun getTrackInfoUseCase(intent: Intent): GetTrackInfoUseCase {
-        return GetTrackInfoUseCaseImpl(getTrackInfoRepository(intent))
+    private fun getSharedPreferencesRepository(context: Context): SharedPreferencesRepository {
+        return SharedPreferencesRepositoryImpl(context)
+    }
+
+    fun getAddTrackToHistoryUseCase(): AddTrackToHistoryUseCaseImpl {
+        return AddTrackToHistoryUseCaseImpl(sharedPreferencesRepository)
+    }
+    fun getClearHistoryUseCase(): ClearHistoryUseCaseImpl {
+        return ClearHistoryUseCaseImpl(sharedPreferencesRepository)
     }
 
     private fun getMediaPlayerHandler(

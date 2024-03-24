@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.presentation.ui
+package com.practicum.playlistmaker.presentation.ui.search
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,7 +17,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
-import com.practicum.playlistmaker.HistoryPreferences
+import com.practicum.playlistmaker.Creator
 import com.practicum.playlistmaker.data.network.ITunesSearchApi
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.SharedPreferencesData
@@ -26,6 +26,8 @@ import com.practicum.playlistmaker.data.dto.TrackResponse
 import com.practicum.playlistmaker.createArrayListFromJson
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.hasNullableData
+import com.practicum.playlistmaker.presentation.ui.TrackListAdapter
+import com.practicum.playlistmaker.presentation.ui.player.PlayerActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -90,10 +92,11 @@ class SearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         mainHandler = Handler(Looper.getMainLooper())
+        val addTrackToHistoryUseCaseImpl = Creator.getAddTrackToHistoryUseCase()
+        val clearHistoryUseCaseImpl = Creator.getClearHistoryUseCase()
 
         sharedPreferences =
             getSharedPreferences(SharedPreferencesData.SHARED_PREFERENCES_HISTORY_FILE, MODE_PRIVATE)
-        val historyPreferences = HistoryPreferences(sharedPreferences)
 
         val json = sharedPreferences.getString(SharedPreferencesData.NEW_HISTORY_ITEM_KEY, null)
         historyArray = json?.createArrayListFromJson() ?: ArrayList()
@@ -116,7 +119,7 @@ class SearchActivity : AppCompatActivity() {
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
 
         binding.clearHistory.setOnClickListener {
-            historyPreferences.clearData()
+            clearHistoryUseCaseImpl.execute()
             binding.historySearchContainer.visibility = View.GONE
         }
 
@@ -125,7 +128,7 @@ class SearchActivity : AppCompatActivity() {
                 override fun onItemClick(track: Track) {
                     if (!track.hasNullableData()) {
                         if (clickDebounce()) {
-                            historyPreferences.addTrack(track)
+                            addTrackToHistoryUseCaseImpl.execute(track)
                             val playerIntent =
                                 Intent(applicationContext, PlayerActivity::class.java)
                             playerIntent.putExtra(
