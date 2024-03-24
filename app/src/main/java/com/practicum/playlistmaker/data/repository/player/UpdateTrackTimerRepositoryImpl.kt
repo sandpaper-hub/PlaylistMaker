@@ -1,11 +1,11 @@
-package com.practicum.playlistmaker.data.repository
+package com.practicum.playlistmaker.data.repository.player
 
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import com.practicum.playlistmaker.convertLongToTimeMillis
 import com.practicum.playlistmaker.domain.MediaPlayerListener
-import com.practicum.playlistmaker.domain.repository.UpdateTrackTimerRepository
+import com.practicum.playlistmaker.domain.repository.player.UpdateTrackTimerRepository
 
 class UpdateTrackTimerRepositoryImpl(
     private val mediaPlayerListener: MediaPlayerListener,

@@ -1,8 +1,8 @@
-package com.practicum.playlistmaker.domain.usecase
+package com.practicum.playlistmaker.domain.usecase.player
 
 import com.practicum.playlistmaker.MediaPlayerState
-import com.practicum.playlistmaker.domain.repository.UpdateTrackTimerRepository
-import com.practicum.playlistmaker.presentation.usecase.UpdateTrackTimerUseCase
+import com.practicum.playlistmaker.domain.repository.player.UpdateTrackTimerRepository
+import com.practicum.playlistmaker.presentation.usecase.player.UpdateTrackTimerUseCase
 
 class UpdateTrackTimerUseCaseImpl(private val updateTrackTimerRepository: UpdateTrackTimerRepository):
     UpdateTrackTimerUseCase {

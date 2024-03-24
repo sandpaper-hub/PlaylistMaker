@@ -1,8 +1,8 @@
-package com.practicum.playlistmaker.domain.usecase
+package com.practicum.playlistmaker.domain.usecase.player
 
 import com.practicum.playlistmaker.MediaPlayerState
 import com.practicum.playlistmaker.domain.handler.MediaPlayerHandler
-import com.practicum.playlistmaker.presentation.usecase.PlaybackControlUseCase
+import com.practicum.playlistmaker.presentation.usecase.player.PlaybackControlUseCase
 
 class PlaybackControlUseCaseImpl(private val mediaPlayerHandler: MediaPlayerHandler) :
     PlaybackControlUseCase {
