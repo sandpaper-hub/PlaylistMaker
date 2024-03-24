@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.presentation.ui
+package com.practicum.playlistmaker.presentation.ui.player
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,10 +12,12 @@ import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.convertLongToTimeMillis
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.domain.MediaPlayerListener
-import com.practicum.playlistmaker.presentation.usecase.PlaybackControlUseCase
-import com.practicum.playlistmaker.presentation.usecase.UpdateTrackTimerUseCase
+import com.practicum.playlistmaker.presentation.usecase.player.PlaybackControlUseCase
+import com.practicum.playlistmaker.presentation.usecase.player.UpdateTrackTimerUseCase
 import com.practicum.playlistmaker.dpToPx
-import com.practicum.playlistmaker.presentation.usecase.ReleasePlayerUseCase
+import com.practicum.playlistmaker.getParcelableTrack
+import com.practicum.playlistmaker.presentation.ui.search.SearchActivity
+import com.practicum.playlistmaker.presentation.usecase.player.ReleasePlayerUseCase
 
 class PlayerActivity : AppCompatActivity(), MediaPlayerListener {
 
@@ -31,8 +33,11 @@ class PlayerActivity : AppCompatActivity(), MediaPlayerListener {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val getTrackInfoUseCase = Creator.getTrackInfoUseCase(intent)
-        track = getTrackInfoUseCase.execute()
+        track = intent.getParcelableTrack<Track>(SearchActivity.INTENT_EXTRA_KEY) ?:
+                Track("","","",
+                    0,"","","",
+                    "","","")
+
         val preparePlayerUseCase = Creator.getPreparePlayerUseCase(this, track.previewUrl)
         playerState = preparePlayerUseCase.execute()
         playbackControlUseCase = Creator.getPlaybackControlUseCase()
