@@ -53,13 +53,12 @@ class SearchActivity : AppCompatActivity(), TracksView {
     private lateinit var mainHandler: Handler
     private var textWatcher: TextWatcher? = null
     private val tracksSearchPresenter: TracksSearchPresenter = Creator.provideTracksSearchPresenter(this, this)
-    private val getHistoryUseCase = Creator.getGetHistoryUseCase()
 
     @SuppressLint("NotifyDataSetChanged")
     private val sharedPreferencesChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (key == SharedPreferencesData.NEW_HISTORY_ITEM_KEY) {
-                historyAdapter.trackList = getHistoryUseCase.execute()
+                historyAdapter.trackList = tracksSearchPresenter.getHistory()
                 historyAdapter.notifyDataSetChanged()
             }
         }
@@ -71,8 +70,6 @@ class SearchActivity : AppCompatActivity(), TracksView {
         setContentView(binding.root)
 
         mainHandler = Handler(Looper.getMainLooper())
-        val addTrackToHistoryUseCaseImpl = Creator.getAddTrackToHistoryUseCase()
-        val clearHistoryUseCaseImpl = Creator.getClearHistoryUseCase()
 
         textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -98,7 +95,7 @@ class SearchActivity : AppCompatActivity(), TracksView {
                 MODE_PRIVATE
             )
 
-        historyArray = getHistoryUseCase.execute()
+        historyArray = tracksSearchPresenter.getHistory()
 
         binding.historySearchContainer.isVisible = historyArray.isNotEmpty()
 
@@ -119,8 +116,7 @@ class SearchActivity : AppCompatActivity(), TracksView {
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
 
         binding.clearHistory.setOnClickListener {
-            clearHistoryUseCaseImpl.execute()
-            binding.historySearchContainer.visibility = View.GONE
+            tracksSearchPresenter.clearHistory()
         }
 
         trackListAdapter =
@@ -128,7 +124,7 @@ class SearchActivity : AppCompatActivity(), TracksView {
                 override fun onItemClick(track: Track) {
                     if (!track.hasNullableData()) {
                         if (clickDebounce()) {
-                            addTrackToHistoryUseCaseImpl.execute(track)
+                            tracksSearchPresenter.addTrackToHistory(track)
                             val playerIntent =
                                 Intent(applicationContext, PlayerActivity::class.java)
                             playerIntent.putExtra(
@@ -217,7 +213,8 @@ class SearchActivity : AppCompatActivity(), TracksView {
 
             is TracksState.NothingFound -> showEmpty(state.message, state.drawable)
             is TracksState.ClearedEditText -> showHideClearEditTextButton(state.text)
-//            is TracksState.HistoryContent ->
+            is TracksState.HistoryContent -> showHistory()
+            is TracksState.Empty -> showEmptyState()
         }
     }
 
@@ -271,5 +268,14 @@ class SearchActivity : AppCompatActivity(), TracksView {
         } else {
             binding.clearSearchEdiText.visibility = View.VISIBLE
         }
+    }
+
+    private fun showEmptyState() {
+        binding.historySearchContainer.visibility = View.GONE
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showHistory() {
+        binding.historySearchContainer.visibility = View.VISIBLE
     }
 }

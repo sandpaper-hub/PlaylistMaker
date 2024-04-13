@@ -83,6 +83,19 @@ class TracksSearchPresenter(private val view: TracksView, private val context: C
         view.render(TracksState.ClearedEditText(text))
     }
 
+    fun addTrackToHistory(track: Track) {
+        tracksInteractor.addTrackToHistory(track)
+    }
+
+    fun clearHistory() {
+        tracksInteractor.clearHistory()
+        view.render(TracksState.Empty)
+    }
+
+    fun getHistory(): ArrayList<Track> {
+        return tracksInteractor.getHistory()
+    }
+
     fun onDestroy() {
         handler.removeCallbacks(searchRunnable)
     }

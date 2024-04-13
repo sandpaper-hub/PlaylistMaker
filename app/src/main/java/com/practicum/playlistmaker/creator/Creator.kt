@@ -15,9 +15,6 @@ import com.practicum.playlistmaker.player.domain.useCases.PlaybackControlUseCase
 import com.practicum.playlistmaker.player.domain.useCases.PreparePlayerUseCaseImpl
 import com.practicum.playlistmaker.player.domain.useCases.ReleasePlayerUseCaseImpl
 import com.practicum.playlistmaker.player.domain.useCases.UpdateTrackTimerUseCaseImpl
-import com.practicum.playlistmaker.search.domain.useCases.AddTrackToHistoryUseCaseImpl
-import com.practicum.playlistmaker.search.domain.useCases.ClearHistoryUseCaseImpl
-import com.practicum.playlistmaker.search.domain.useCases.GetHistoryUseCaseImpl
 import com.practicum.playlistmaker.player.presentation.PlaybackControlUseCase
 import com.practicum.playlistmaker.player.presentation.ReleasePlayerUseCase
 import com.practicum.playlistmaker.player.presentation.UpdateTrackTimerUseCase
@@ -43,7 +40,7 @@ object Creator {
     }
 
     fun provideTracksInteractor(context: Context): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository(context))
+        return TracksInteractorImpl(getTracksRepository(context), sharedPreferencesRepository)
     }
 
     fun provideTracksSearchPresenter(tracksView: TracksView, context: Context): TracksSearchPresenter {
@@ -52,17 +49,6 @@ object Creator {
 
     private fun getSharedPreferencesRepository(context: Context): SharedPreferencesRepository {
         return SharedPreferencesRepositoryImpl(context)
-    }
-
-    fun getAddTrackToHistoryUseCase(): AddTrackToHistoryUseCaseImpl {
-        return AddTrackToHistoryUseCaseImpl(sharedPreferencesRepository)
-    }
-    fun getClearHistoryUseCase(): ClearHistoryUseCaseImpl {
-        return ClearHistoryUseCaseImpl(sharedPreferencesRepository)
-    }
-
-    fun getGetHistoryUseCase(): GetHistoryUseCaseImpl {
-        return GetHistoryUseCaseImpl(sharedPreferencesRepository)
     }
 
     private fun getMediaPlayerHandler(
