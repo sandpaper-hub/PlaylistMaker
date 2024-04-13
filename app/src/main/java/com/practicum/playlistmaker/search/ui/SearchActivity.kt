@@ -18,8 +18,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
-import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.SharedPreferencesData
+import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.hasNullableData
@@ -50,17 +51,32 @@ class SearchActivity : AppCompatActivity(), TracksView {
     private lateinit var mainHandler: Handler
     private var sharedPreferences: SharedPreferences? = null
     private var textWatcher: TextWatcher? = null
-    private val tracksSearchPresenter: TracksSearchPresenter =
-        Creator.provideTracksSearchPresenter(this, this)
+    private var tracksSearchPresenter: TracksSearchPresenter? = null
 
     @SuppressLint("NotifyDataSetChanged")
     private var onSharedPreferencesChangeListener: OnSharedPreferenceChangeListener? = null
+
+    override fun onStart() {
+        super.onStart()
+        tracksSearchPresenter?.attachView(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        tracksSearchPresenter?.attachView(this)
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        tracksSearchPresenter = (this.applicationContext as? App)?.tracksSearchPresenter
+        if (tracksSearchPresenter == null) {
+            tracksSearchPresenter = Creator.provideTracksSearchPresenter(this.applicationContext)
+            (this.application as? App)?.tracksSearchPresenter = tracksSearchPresenter
+        }
 
         mainHandler = Handler(Looper.getMainLooper())
 
@@ -70,7 +86,7 @@ class SearchActivity : AppCompatActivity(), TracksView {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                lastSearchText = tracksSearchPresenter.searchDebounce(s?.toString() ?: "")
+                lastSearchText = tracksSearchPresenter?.searchDebounce(s?.toString() ?: "") ?: ""
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -89,7 +105,7 @@ class SearchActivity : AppCompatActivity(), TracksView {
         onSharedPreferencesChangeListener =
             OnSharedPreferenceChangeListener { _, key ->
                 if (key == SharedPreferencesData.NEW_HISTORY_ITEM_KEY) {
-                    historyAdapter.trackList = tracksSearchPresenter.getHistory()
+                    historyAdapter.trackList = tracksSearchPresenter!!.getHistory()
                     historyAdapter.notifyDataSetChanged()
                 }
             }
@@ -110,10 +126,10 @@ class SearchActivity : AppCompatActivity(), TracksView {
             })
 
         binding.historyRecycler.adapter = historyAdapter
-        tracksSearchPresenter.showHistory()
+        tracksSearchPresenter?.showHistory()
 
         binding.clearHistory.setOnClickListener {
-            tracksSearchPresenter.clearHistory()
+            tracksSearchPresenter?.clearHistory()
         }
 
         trackListAdapter =
@@ -121,7 +137,7 @@ class SearchActivity : AppCompatActivity(), TracksView {
                 override fun onItemClick(track: Track) {
                     if (!track.hasNullableData()) {
                         if (clickDebounce()) {
-                            tracksSearchPresenter.addTrackToHistory(track)
+                            tracksSearchPresenter?.addTrackToHistory(track)
                             val playerIntent =
                                 Intent(applicationContext, PlayerActivity::class.java)
                             playerIntent.putExtra(
@@ -148,14 +164,14 @@ class SearchActivity : AppCompatActivity(), TracksView {
 
         binding.searchEditText.isSaveEnabled = false
         binding.searchEditText.doOnTextChanged { text, _, _, _ ->  //ok
-            tracksSearchPresenter.showHideClearEditTextButton(text.toString())
+            tracksSearchPresenter?.showHideClearEditTextButton(text.toString())
         }
 
         binding.searchEditText.setOnEditorActionListener { editTextView, actionId, _ -> //ok
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (editTextView.text.isNotEmpty()) {
                     lastSearchText =
-                        tracksSearchPresenter.searchDebounce(editTextView.text.toString())
+                        tracksSearchPresenter?.searchDebounce(editTextView.text.toString()) ?: ""
                 }
             }
             false
@@ -169,7 +185,7 @@ class SearchActivity : AppCompatActivity(), TracksView {
         }
 
         binding.refreshSearchButton.setOnClickListener {//ok
-            lastSearchText = tracksSearchPresenter.searchDebounce(lastSearchText)
+            lastSearchText = tracksSearchPresenter?.searchDebounce(lastSearchText) ?: ""
         }
     }
 
@@ -181,6 +197,7 @@ class SearchActivity : AppCompatActivity(), TracksView {
 
     override fun onSaveInstanceState(outState: Bundle) { //остаётся
         super.onSaveInstanceState(outState)
+        tracksSearchPresenter?.detachView()
         outState.putString(INSTANCE_STATE_KEY, savedText)
     }
 
@@ -192,7 +209,20 @@ class SearchActivity : AppCompatActivity(), TracksView {
                 it
             )
         }
-        tracksSearchPresenter.onDestroy()
+        tracksSearchPresenter?.onDestroy()
+        if (isFinishing) {
+            tracksSearchPresenter = null
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        tracksSearchPresenter?.detachView()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        tracksSearchPresenter?.detachView()
     }
 
     private fun clickDebounce(): Boolean { //остаётся

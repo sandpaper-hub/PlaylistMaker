@@ -10,10 +10,13 @@ import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.models.TracksState
 
-class TracksSearchPresenter(private val view: TracksView, private val context: Context) {
+class TracksSearchPresenter(private val context: Context) {
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
+
+    private var state: TracksState? = null
+    private var view: TracksView? = null
 
     private val tracksInteractor = Creator.provideTracksInteractor(context)
 
@@ -30,12 +33,15 @@ class TracksSearchPresenter(private val view: TracksView, private val context: C
     }
 
     fun searchDebounce(changedText: String): String {
+        if (lastSearchText == changedText) {
+            return lastSearchText ?: ""
+        }
         lastSearchText = changedText
         if (changedText.isEmpty()) {
             historyTrackList = tracksInteractor.getHistory()
-            view.render(TracksState.HistoryContent(historyTrackList))
+            view?.render(TracksState.HistoryContent(historyTrackList))
         } else {
-            view.render(TracksState.Empty)
+            view?.render(TracksState.Empty)
         }
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
@@ -44,7 +50,7 @@ class TracksSearchPresenter(private val view: TracksView, private val context: C
 
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
-            view.render(TracksState.Loading)
+            renderState(TracksState.Loading)
 
             tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
                 override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
@@ -55,7 +61,7 @@ class TracksSearchPresenter(private val view: TracksView, private val context: C
                         }
                         when {
                             errorMessage != null -> {
-                                view.render(
+                                renderState(
                                     TracksState.ConnectionError(
                                         context.getString(R.string.connection_error),
                                         AppCompatResources.getDrawable(
@@ -67,7 +73,7 @@ class TracksSearchPresenter(private val view: TracksView, private val context: C
                             }
 
                             trackList.isEmpty() -> {
-                                view.render(
+                                renderState(
                                     TracksState.NothingFound(
                                         context.getString(R.string.nothing_found),
                                         AppCompatResources.getDrawable(
@@ -78,7 +84,7 @@ class TracksSearchPresenter(private val view: TracksView, private val context: C
                                 )
                             }
 
-                            else -> view.render(TracksState.Content(trackList))
+                            else -> renderState(TracksState.Content(trackList))
                         }
                     }
                 }
@@ -88,7 +94,7 @@ class TracksSearchPresenter(private val view: TracksView, private val context: C
     }
 
     fun showHideClearEditTextButton(text: String) {
-        view.render(TracksState.ClearedEditText(text))
+        renderState(TracksState.ClearedEditText(text))
     }
 
     fun addTrackToHistory(track: Track) {
@@ -97,19 +103,33 @@ class TracksSearchPresenter(private val view: TracksView, private val context: C
 
     fun clearHistory() {
         tracksInteractor.clearHistory()
-        view.render(TracksState.Empty)
+        renderState(TracksState.Empty)
     }
 
     fun showHistory() {
         if (historyTrackList.isEmpty()) {
-            view.render(TracksState.Empty)
+            renderState(TracksState.Empty)
         } else {
-            view.render(TracksState.HistoryContent(historyTrackList))
+            renderState(TracksState.HistoryContent(historyTrackList))
         }
     }
 
     fun getHistory(): ArrayList<Track> {
         return tracksInteractor.getHistory()
+    }
+
+    fun renderState(state: TracksState) {
+        this.state = state
+        this.view?.render(state)
+    }
+
+    fun attachView(view: TracksView) {
+        this.view = view
+        state?.let { view.render(it) }
+    }
+
+    fun detachView() {
+        this.view = null
     }
 
     fun onDestroy() {
