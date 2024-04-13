@@ -5,7 +5,7 @@
     style="@style/main_activity_style"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.MainActivity">
+    tools:context=".main.ui.MainActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftBorder16dpMainActivity"

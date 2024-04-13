@@ -6,7 +6,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Parcelable
 import android.util.TypedValue
 import com.google.gson.Gson
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.search.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 

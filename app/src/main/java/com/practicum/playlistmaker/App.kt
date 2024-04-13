@@ -3,6 +3,7 @@ package com.practicum.playlistmaker
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import com.practicum.playlistmaker.creator.Creator
 
 class App : Application() {
     private var darkTheme = false
@@ -10,7 +11,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Creator.setData(this)
+        Creator.initializeCreatorValues(this)
         sharedPreferences =
             getSharedPreferences(SharedPreferencesData.SHARED_PREFERENCES_THEME_KEY, MODE_PRIVATE)
         darkTheme = sharedPreferences.getBoolean(SharedPreferencesData.DARK_THEME_KEY, false)
