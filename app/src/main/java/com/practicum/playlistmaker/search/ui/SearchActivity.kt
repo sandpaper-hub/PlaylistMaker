@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
@@ -16,7 +17,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.SharedPreferencesData
@@ -42,26 +42,19 @@ class SearchActivity : AppCompatActivity(), TracksView {
     private var restoredText = ""
     private var lastSearchText: String = ""
 
-    private lateinit var historyArray: ArrayList<Track>
     private var isClickAllowed = true
 
     private lateinit var trackListAdapter: TrackListAdapter
     private lateinit var historyAdapter: TrackListAdapter
 
-    private lateinit var sharedPreferences: SharedPreferences
-
     private lateinit var mainHandler: Handler
+    private var sharedPreferences: SharedPreferences? = null
     private var textWatcher: TextWatcher? = null
-    private val tracksSearchPresenter: TracksSearchPresenter = Creator.provideTracksSearchPresenter(this, this)
+    private val tracksSearchPresenter: TracksSearchPresenter =
+        Creator.provideTracksSearchPresenter(this, this)
 
     @SuppressLint("NotifyDataSetChanged")
-    private val sharedPreferencesChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            if (key == SharedPreferencesData.NEW_HISTORY_ITEM_KEY) {
-                historyAdapter.trackList = tracksSearchPresenter.getHistory()
-                historyAdapter.notifyDataSetChanged()
-            }
-        }
+    private var onSharedPreferencesChangeListener: OnSharedPreferenceChangeListener? = null
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,8 +70,6 @@ class SearchActivity : AppCompatActivity(), TracksView {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.historySearchContainer.isVisible =
-                    (binding.searchEditText.hasFocus() && s?.isEmpty() == true) && historyAdapter.trackList.isNotEmpty() == true
                 lastSearchText = tracksSearchPresenter.searchDebounce(s?.toString() ?: "")
             }
 
@@ -95,9 +86,17 @@ class SearchActivity : AppCompatActivity(), TracksView {
                 MODE_PRIVATE
             )
 
-        historyArray = tracksSearchPresenter.getHistory()
+        onSharedPreferencesChangeListener =
+            OnSharedPreferenceChangeListener { _, key ->
+                if (key == SharedPreferencesData.NEW_HISTORY_ITEM_KEY) {
+                    historyAdapter.trackList = tracksSearchPresenter.getHistory()
+                    historyAdapter.notifyDataSetChanged()
+                }
+            }
 
-        binding.historySearchContainer.isVisible = historyArray.isNotEmpty()
+        onSharedPreferencesChangeListener.let {
+            sharedPreferences?.registerOnSharedPreferenceChangeListener(it)
+        }
 
         historyAdapter =
             TrackListAdapter(object : TrackListAdapter.OnTrackClickListener {
@@ -109,11 +108,9 @@ class SearchActivity : AppCompatActivity(), TracksView {
                     }
                 }
             })
-        historyAdapter.trackList = historyArray
 
         binding.historyRecycler.adapter = historyAdapter
-
-        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
+        tracksSearchPresenter.showHistory()
 
         binding.clearHistory.setOnClickListener {
             tracksSearchPresenter.clearHistory()
@@ -190,6 +187,11 @@ class SearchActivity : AppCompatActivity(), TracksView {
     override fun onDestroy() {
         super.onDestroy()
         textWatcher.let { binding.searchEditText.removeTextChangedListener(it) }
+        onSharedPreferencesChangeListener.let {
+            sharedPreferences?.unregisterOnSharedPreferenceChangeListener(
+                it
+            )
+        }
         tracksSearchPresenter.onDestroy()
     }
 
@@ -213,7 +215,7 @@ class SearchActivity : AppCompatActivity(), TracksView {
 
             is TracksState.NothingFound -> showEmpty(state.message, state.drawable)
             is TracksState.ClearedEditText -> showHideClearEditTextButton(state.text)
-            is TracksState.HistoryContent -> showHistory()
+            is TracksState.HistoryContent -> showHistory(state.tracks)
             is TracksState.Empty -> showEmptyState()
         }
     }
@@ -272,10 +274,18 @@ class SearchActivity : AppCompatActivity(), TracksView {
 
     private fun showEmptyState() {
         binding.historySearchContainer.visibility = View.GONE
+        binding.trackListRecyclerView.visibility = View.GONE
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun showHistory() {
+    private fun showHistory(historyTrackList: List<Track>) {
         binding.historySearchContainer.visibility = View.VISIBLE
+        binding.connectionErrorGroup.visibility = View.GONE
+        binding.trackListRecyclerView.visibility = View.GONE
+
+        historyAdapter.trackList.clear()
+        historyAdapter.trackList.addAll(historyTrackList)
+        historyAdapter.notifyDataSetChanged()
+
     }
 }

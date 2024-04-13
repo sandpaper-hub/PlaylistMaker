@@ -15,9 +15,11 @@ class TracksSearchPresenter(private val view: TracksView, private val context: C
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
-    private val trackList: ArrayList<Track> = ArrayList()
-
     private val tracksInteractor = Creator.provideTracksInteractor(context)
+
+    private val trackList: ArrayList<Track> = ArrayList()
+    private var historyTrackList: ArrayList<Track> = tracksInteractor.getHistory()
+
     private val handler = Handler(Looper.getMainLooper())
 
     private var lastSearchText: String? = null
@@ -29,6 +31,12 @@ class TracksSearchPresenter(private val view: TracksView, private val context: C
 
     fun searchDebounce(changedText: String): String {
         lastSearchText = changedText
+        if (changedText.isEmpty()) {
+            historyTrackList = tracksInteractor.getHistory()
+            view.render(TracksState.HistoryContent(historyTrackList))
+        } else {
+            view.render(TracksState.Empty)
+        }
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
         return lastSearchText ?: ""
@@ -90,6 +98,14 @@ class TracksSearchPresenter(private val view: TracksView, private val context: C
     fun clearHistory() {
         tracksInteractor.clearHistory()
         view.render(TracksState.Empty)
+    }
+
+    fun showHistory() {
+        if (historyTrackList.isEmpty()) {
+            view.render(TracksState.Empty)
+        } else {
+            view.render(TracksState.HistoryContent(historyTrackList))
+        }
     }
 
     fun getHistory(): ArrayList<Track> {
