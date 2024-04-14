@@ -23,7 +23,6 @@ import com.practicum.playlistmaker.search.data.repository.TracksRepositoryImpl
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksRepository
 import com.practicum.playlistmaker.search.domain.impl.TracksInteractorImpl
-import com.practicum.playlistmaker.search.presentation.TracksSearchPresenter
 
 object Creator {
     private lateinit var application: Application
@@ -40,10 +39,6 @@ object Creator {
 
     fun provideTracksInteractor(context: Context): TracksInteractor {
         return TracksInteractorImpl(getTracksRepository(context), sharedPreferencesRepository)
-    }
-
-    fun provideTracksSearchPresenter(context: Context): TracksSearchPresenter {
-        return TracksSearchPresenter(context)
     }
 
     private fun getSharedPreferencesRepository(context: Context): SharedPreferencesRepository {

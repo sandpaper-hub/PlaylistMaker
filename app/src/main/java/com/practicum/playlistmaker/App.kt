@@ -4,12 +4,10 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.search.presentation.TracksSearchPresenter
 
 class App : Application() {
     private var darkTheme = false
     private lateinit var sharedPreferences: SharedPreferences
-    var tracksSearchPresenter: TracksSearchPresenter? = null
 
     override fun onCreate() {
         super.onCreate()

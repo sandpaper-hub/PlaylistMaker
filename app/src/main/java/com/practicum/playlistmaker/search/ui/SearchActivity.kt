@@ -11,26 +11,22 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.SharedPreferencesData
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.hasNullableData
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.search.domain.models.TracksState
-import com.practicum.playlistmaker.search.presentation.TracksSearchPresenter
-import com.practicum.playlistmaker.search.presentation.TracksView
-import moxy.MvpActivity
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
+import com.practicum.playlistmaker.search.presentation.TracksSearchViewModel
 
-class SearchActivity : MvpActivity(), TracksView {
+class SearchActivity : ComponentActivity() {
 
     companion object {
         const val INSTANCE_STATE_KEY = "SAVED_RESULT"
@@ -40,13 +36,7 @@ class SearchActivity : MvpActivity(), TracksView {
 
     private lateinit var binding: ActivitySearchBinding
 
-    @InjectPresenter
-    lateinit var tracksSearchPresenter: TracksSearchPresenter
-
-    @ProvidePresenter
-    fun providePresenter(): TracksSearchPresenter {
-        return Creator.provideTracksSearchPresenter(this.applicationContext)
-    }
+    private lateinit var viewModel: TracksSearchViewModel
 
     var savedText = ""
     private var restoredText = ""
@@ -71,6 +61,14 @@ class SearchActivity : MvpActivity(), TracksView {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModel = ViewModelProvider(
+            this,
+            TracksSearchViewModel.getViewModelFactory()
+        )[TracksSearchViewModel::class.java]
+        viewModel.observeState().observe(this) {
+            render(it)
+        }
+
         mainHandler = Handler(Looper.getMainLooper())
 
         textWatcher = object : TextWatcher {
@@ -79,7 +77,7 @@ class SearchActivity : MvpActivity(), TracksView {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                lastSearchText = tracksSearchPresenter.searchDebounce(s?.toString() ?: "")
+                lastSearchText = viewModel.searchDebounce(s?.toString() ?: "")
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -98,7 +96,7 @@ class SearchActivity : MvpActivity(), TracksView {
         onSharedPreferencesChangeListener =
             OnSharedPreferenceChangeListener { _, key ->
                 if (key == SharedPreferencesData.NEW_HISTORY_ITEM_KEY) {
-                    historyAdapter.trackList = tracksSearchPresenter.getHistory()
+                    historyAdapter.trackList = viewModel.getHistory()
                     historyAdapter.notifyDataSetChanged()
                 }
             }
@@ -119,10 +117,10 @@ class SearchActivity : MvpActivity(), TracksView {
             })
 
         binding.historyRecycler.adapter = historyAdapter
-        tracksSearchPresenter.showHistory()
+        viewModel.showHistory()
 
         binding.clearHistory.setOnClickListener {
-            tracksSearchPresenter.clearHistory()
+            viewModel.clearHistory()
         }
 
         trackListAdapter =
@@ -130,7 +128,7 @@ class SearchActivity : MvpActivity(), TracksView {
                 override fun onItemClick(track: Track) {
                     if (!track.hasNullableData()) {
                         if (clickDebounce()) {
-                            tracksSearchPresenter.addTrackToHistory(track)
+                            viewModel.addTrackToHistory(track)
                             val playerIntent =
                                 Intent(applicationContext, PlayerActivity::class.java)
                             playerIntent.putExtra(
@@ -157,14 +155,14 @@ class SearchActivity : MvpActivity(), TracksView {
 
         binding.searchEditText.isSaveEnabled = false
         binding.searchEditText.doOnTextChanged { text, _, _, _ ->  //ok
-            tracksSearchPresenter.showHideClearEditTextButton(text.toString())
+            viewModel.showHideClearEditTextButton(text.toString())
         }
 
         binding.searchEditText.setOnEditorActionListener { editTextView, actionId, _ -> //ok
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (editTextView.text.isNotEmpty()) {
                     lastSearchText =
-                        tracksSearchPresenter.searchDebounce(editTextView.text.toString())
+                        viewModel.searchDebounce(editTextView.text.toString())
                 }
             }
             false
@@ -178,7 +176,7 @@ class SearchActivity : MvpActivity(), TracksView {
         }
 
         binding.refreshSearchButton.setOnClickListener {//ok
-            lastSearchText = tracksSearchPresenter.searchDebounce(lastSearchText)
+            lastSearchText = viewModel.searchDebounce(lastSearchText)
         }
     }
 
@@ -202,7 +200,7 @@ class SearchActivity : MvpActivity(), TracksView {
         return current
     }
 
-    override fun render(state: TracksState) { //ok
+    private fun render(state: TracksState) { //ok
         when (state) {
             is TracksState.Loading -> showLoading()
             is TracksState.Content -> showContent(state.tracks)
@@ -254,7 +252,6 @@ class SearchActivity : MvpActivity(), TracksView {
         binding.badSearchResultText.text = errorMessage
         binding.badSearchResultImage.setImageDrawable(drawable)
         binding.badSearchResultGroup.visibility = View.VISIBLE
-        Log.d("RENDERING_STATE", binding.badSearchResultImage.visibility.toString())
 
         binding.trackListRecyclerView.visibility = View.GONE
         binding.searchProgressBar.visibility = View.GONE
@@ -270,13 +267,13 @@ class SearchActivity : MvpActivity(), TracksView {
         }
     }
 
-    private fun showEmptyState() {
+    private fun showEmptyState() { // HERE
         binding.historySearchContainer.visibility = View.GONE
         binding.trackListRecyclerView.visibility = View.GONE
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun showHistory(historyTrackList: List<Track>) {
+    private fun showHistory(historyTrackList: List<Track>) { //HERE
         binding.historySearchContainer.visibility = View.VISIBLE
         binding.connectionErrorGroup.visibility = View.GONE
         binding.trackListRecyclerView.visibility = View.GONE

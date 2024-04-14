@@ -1,24 +1,35 @@
 package com.practicum.playlistmaker.search.presentation
 
-import android.content.Context
+import android.app.Application
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.models.TracksState
-import moxy.MvpPresenter
 
-class TracksSearchPresenter(private val context: Context): MvpPresenter<TracksView>() {
+class TracksSearchViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
+            initializer { TracksSearchViewModel(this[APPLICATION_KEY] as Application) }
+        }
     }
 
-    private val tracksInteractor = Creator.provideTracksInteractor(context)
+    private val tracksInteractor = Creator.provideTracksInteractor(getApplication())
+    private val stateLiveData = MutableLiveData<TracksState>()
+    fun observeState(): LiveData<TracksState> = stateLiveData
 
-    private val trackList: ArrayList<Track> = ArrayList()
     private var historyTrackList: ArrayList<Track> = tracksInteractor.getHistory()
 
     private val handler = Handler(Looper.getMainLooper())
@@ -34,15 +45,15 @@ class TracksSearchPresenter(private val context: Context): MvpPresenter<TracksVi
         if (lastSearchText == changedText) {
             return lastSearchText ?: ""
         }
-        lastSearchText = changedText
         if (changedText.isEmpty()) {
             historyTrackList = tracksInteractor.getHistory()
-            viewState.render(TracksState.HistoryContent(historyTrackList))
+            renderState(TracksState.HistoryContent(historyTrackList))
         } else {
-            viewState.render(TracksState.Empty)
+            renderState(TracksState.Empty)
         }
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        lastSearchText = changedText
         return lastSearchText ?: ""
     }
 
@@ -52,37 +63,35 @@ class TracksSearchPresenter(private val context: Context): MvpPresenter<TracksVi
 
             tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
                 override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
-                    handler.post {
-                        if (foundTracks != null) {
-                            trackList.clear()
-                            trackList.addAll(foundTracks)
-                        }
+                    val tracks = mutableListOf<Track>()
+                    if (foundTracks != null) {
+                        tracks.addAll(foundTracks)
                         when {
                             errorMessage != null -> {
                                 renderState(
                                     TracksState.ConnectionError(
-                                        context.getString(R.string.connection_error),
+                                        getApplication<Application>().getString(R.string.connection_error),
                                         AppCompatResources.getDrawable(
-                                            context,
+                                            getApplication(),
                                             R.drawable.bad_connection_image
                                         )
                                     )
                                 )
                             }
 
-                            trackList.isEmpty() -> {
+                            tracks.isEmpty() -> {
                                 renderState(
                                     TracksState.NothingFound(
-                                        context.getString(R.string.nothing_found),
+                                        getApplication<Application>().getString(R.string.nothing_found),
                                         AppCompatResources.getDrawable(
-                                            context,
+                                            getApplication(),
                                             R.drawable.nothing_found_image
                                         )
                                     )
                                 )
                             }
 
-                            else -> renderState(TracksState.Content(trackList))
+                            else -> renderState(TracksState.Content(tracks))
                         }
                     }
                 }
@@ -117,11 +126,11 @@ class TracksSearchPresenter(private val context: Context): MvpPresenter<TracksVi
     }
 
     fun renderState(state: TracksState) {
-
-        viewState.render(state)
+        Log.d("SAMPLE1",state.toString())
+        stateLiveData.postValue(state)
     }
 
-    override fun onDestroy() {
+    override fun onCleared() {
         handler.removeCallbacks(searchRunnable)
     }
 }
