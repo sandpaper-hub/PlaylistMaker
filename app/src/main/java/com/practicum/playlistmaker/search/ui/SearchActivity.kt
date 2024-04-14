@@ -16,7 +16,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.SharedPreferencesData
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -32,6 +31,7 @@ class SearchActivity : ComponentActivity() {
         const val INSTANCE_STATE_KEY = "SAVED_RESULT"
         const val INTENT_EXTRA_KEY = "selectedTrack"
         const val CLICK_DEBOUNCE_DELAY = 1000L
+        const val CHECK_TEXT_DELAY = 200L
     }
 
     private lateinit var binding: ActivitySearchBinding
@@ -78,6 +78,10 @@ class SearchActivity : ComponentActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 lastSearchText = viewModel.searchDebounce(s?.toString() ?: "")
+                mainHandler.postDelayed(
+                    { viewModel.showHideClearEditTextButton(s.toString()) },
+                    CHECK_TEXT_DELAY
+                )
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -154,9 +158,6 @@ class SearchActivity : ComponentActivity() {
         }
 
         binding.searchEditText.isSaveEnabled = false
-        binding.searchEditText.doOnTextChanged { text, _, _, _ ->  //ok
-            viewModel.showHideClearEditTextButton(text.toString())
-        }
 
         binding.searchEditText.setOnEditorActionListener { editTextView, actionId, _ -> //ok
             if (actionId == EditorInfo.IME_ACTION_DONE) {
