@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/back_button_settingsActivity"
         style="@style/back_button_style"
         android:backgroundTint="@color/transparent"
@@ -13,13 +13,13 @@
         app:layout_constraintBaseline_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         style="@style/panelHeader"
         android:text="@string/settings_button"
         app:layout_constraintStart_toEndOf="@+id/back_button_settingsActivity"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/darkThemeTextView"
         style="@style/settings_activity_text_style"
         android:layout_marginTop="24dp"
@@ -38,14 +38,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/darkThemeTextView" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/shareTextView"
         style="@style/settings_activity_text_style"
         android:text="@string/share_app_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/darkThemeTextView" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/shareImageView"
         style="@style/settings_activity_small_icon_style"
         android:src="@drawable/share"
@@ -54,14 +54,14 @@
         app:layout_constraintTop_toTopOf="@+id/shareTextView"
         android:contentDescription="@string/share_app_title" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/supportTextView"
         style="@style/settings_activity_text_style"
         android:text="@string/write_to_support_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shareTextView" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/supportImageView"
         style="@style/settings_activity_small_icon_style"
         android:src="@drawable/support"
@@ -70,14 +70,14 @@
         app:layout_constraintTop_toTopOf="@+id/supportTextView"
         android:contentDescription="@string/write_to_support_title" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/privacyTextView"
         style="@style/settings_activity_text_style"
         android:text="@string/privacy"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/supportTextView" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/privacyImageView"
         style="@style/settings_activity_small_icon_style"
         android:src="@drawable/arrow"

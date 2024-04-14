@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".search.ui.SearchActivity">
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/back_button_searchActivity"
         style="@style/back_button_style"
         android:backgroundTint="@color/transparent"
@@ -15,14 +15,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/panelHeader"
         style="@style/panelHeader"
         android:text="@string/search_text"
         app:layout_constraintStart_toEndOf="@+id/back_button_searchActivity"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/search_editText"
         style="@style/edit_text_style"
         android:drawableStart="@drawable/search"
@@ -36,7 +36,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/panelHeader" />
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/clear_search_ediText"
         style="@style/clear_icon_style"
         android:layout_width="@dimen/button_back_size"
@@ -83,7 +83,7 @@
         android:visibility="gone"
         app:constraint_referenced_ids="badSearchResultText, badSearchResultImage" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/badSearchResultImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
         app:layout_constraintVertical_bias="0.2625"
         tools:src="@drawable/nothing_found_image" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/badSearchResultText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
         app:layout_constraintTop_toBottomOf="@+id/badSearchResultImage"
         tools:text="Ничего не нашлось" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/refresh_search_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
         app:layout_constraintTop_toBottomOf="@+id/search_editText"
         app:layout_constraintVertical_bias="0">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/historySearchText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -154,7 +154,7 @@
             android:layout_weight="1"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/clear_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -9,14 +9,12 @@ import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.models.TracksState
+import moxy.MvpPresenter
 
-class TracksSearchPresenter(private val context: Context) {
+class TracksSearchPresenter(private val context: Context): MvpPresenter<TracksView>() {
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
-
-    private var state: TracksState? = null
-    private var view: TracksView? = null
 
     private val tracksInteractor = Creator.provideTracksInteractor(context)
 
@@ -39,9 +37,9 @@ class TracksSearchPresenter(private val context: Context) {
         lastSearchText = changedText
         if (changedText.isEmpty()) {
             historyTrackList = tracksInteractor.getHistory()
-            view?.render(TracksState.HistoryContent(historyTrackList))
+            viewState.render(TracksState.HistoryContent(historyTrackList))
         } else {
-            view?.render(TracksState.Empty)
+            viewState.render(TracksState.Empty)
         }
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
@@ -119,20 +117,11 @@ class TracksSearchPresenter(private val context: Context) {
     }
 
     fun renderState(state: TracksState) {
-        this.state = state
-        this.view?.render(state)
+
+        viewState.render(state)
     }
 
-    fun attachView(view: TracksView) {
-        this.view = view
-        state?.let { view.render(it) }
-    }
-
-    fun detachView() {
-        this.view = null
-    }
-
-    fun onDestroy() {
+    override fun onDestroy() {
         handler.removeCallbacks(searchRunnable)
     }
 }
