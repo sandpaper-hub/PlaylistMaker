@@ -1,6 +1,7 @@
-package com.practicum.playlistmaker.search.domain.models
+package com.practicum.playlistmaker.search.presentation.viewModel
 
 import android.graphics.drawable.Drawable
+import com.practicum.playlistmaker.search.domain.models.Track
 
 sealed interface TracksState {
     data object Loading : TracksState

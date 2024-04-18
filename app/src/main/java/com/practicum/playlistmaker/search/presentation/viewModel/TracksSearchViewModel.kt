@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.search.presentation
+package com.practicum.playlistmaker.search.presentation.viewModel
 
 import android.app.Application
 import android.os.Handler
@@ -14,9 +14,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.search.domain.api.TracksInteractor
+import com.practicum.playlistmaker.search.presentation.interactor.TracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.search.domain.models.TracksState
 
 class TracksSearchViewModel(application: Application) : AndroidViewModel(application) {
     companion object {

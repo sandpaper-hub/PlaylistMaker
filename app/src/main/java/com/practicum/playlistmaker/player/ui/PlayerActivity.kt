@@ -1,48 +1,49 @@
 package com.practicum.playlistmaker.player.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.MediaPlayerState
+import com.practicum.playlistmaker.GlobalConstants
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.convertLongToTimeMillis
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.player.data.listeners.MediaPlayerListener
-import com.practicum.playlistmaker.player.presentation.PlaybackControlUseCase
-import com.practicum.playlistmaker.player.presentation.UpdateTrackTimerUseCase
 import com.practicum.playlistmaker.dpToPx
 import com.practicum.playlistmaker.getParcelableTrack
-import com.practicum.playlistmaker.search.ui.SearchActivity
-import com.practicum.playlistmaker.player.presentation.ReleasePlayerUseCase
+import com.practicum.playlistmaker.player.domain.model.MediaPlayerState
+import com.practicum.playlistmaker.player.presentation.MediaPlayerViewModel
+import com.practicum.playlistmaker.player.ui.model.PlayerState
 
-class PlayerActivity : AppCompatActivity(), MediaPlayerListener {
+class PlayerActivity : AppCompatActivity() {
 
     private var playerState = MediaPlayerState.STATE_DEFAULT
-    private lateinit var playbackControlUseCase: PlaybackControlUseCase
-    private lateinit var updateTrackTimerUseCase: UpdateTrackTimerUseCase
-    private lateinit var releasePlayerUseCase: ReleasePlayerUseCase
+
     private lateinit var track: Track
     private lateinit var binding: ActivityPlayerBinding
+    private lateinit var mediaPlayerViewModel: MediaPlayerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        track = intent.getParcelableTrack<Track>(SearchActivity.INTENT_EXTRA_KEY) ?:
-                Track("","","",
-                    0,"","","",
-                    "","","")
+        mediaPlayerViewModel = ViewModelProvider(
+            this,
+            MediaPlayerViewModel.getViewModelFactory()
+        )[MediaPlayerViewModel::class.java]
 
-        val preparePlayerUseCase = Creator.getPreparePlayerUseCase(this, track.previewUrl)
-        playerState = preparePlayerUseCase.execute()
-        playbackControlUseCase = Creator.getPlaybackControlUseCase()
-        updateTrackTimerUseCase = Creator.getUpdateTrackTimerUseCase(this)
-        releasePlayerUseCase = Creator.getReleasePlayerUseCase()
+        mediaPlayerViewModel.observeState().observe(this) { render(it) }
+
+
+        track = intent.getParcelableTrack<Track>(GlobalConstants.INTENT_EXTRA_KEY) ?: Track(
+            "", "", "",
+            0, "", "", "",
+            "", "", ""
+        )
+        playerState = mediaPlayerViewModel.preparePlayer(track.previewUrl)
 
         binding.durationValue.text =
             track.trackDuration!!.convertLongToTimeMillis()
@@ -68,43 +69,49 @@ class PlayerActivity : AppCompatActivity(), MediaPlayerListener {
         }
 
         binding.playButton.setOnClickListener {
-            playerState = playbackControlUseCase.execute(playerState)
-            updateTrackTimerUseCase.execute(playerState)
+            playerState = mediaPlayerViewModel.playbackControl(playerState)
         }
-    }
-
-    override fun onPlayerStart() {
-        binding.playButton.setImageResource(R.drawable.pause_button)
-    }
-
-    override fun onPlayerPaused() {
-        binding.playButton.setImageResource(R.drawable.play_button)
     }
 
     override fun onPause() {
         super.onPause()
-        playerState = playbackControlUseCase.execute(MediaPlayerState.STATE_PLAYING)
+        playerState = mediaPlayerViewModel.playbackControl(MediaPlayerState.STATE_PLAYING)
         binding.playButton.setImageResource(R.drawable.play_button)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        playerState = MediaPlayerState.STATE_PREPARED
-        releasePlayerUseCase.execute()
-        updateTrackTimerUseCase.execute(playerState)
+        mediaPlayerViewModel.releaseMediaPlayer()
     }
 
-    override fun onTrackPositionChanged(position: String) {
+    private fun render(state: PlayerState) {
+        when (state) {
+            is PlayerState.ChangePosition -> onTrackPositionChanged(state.position)
+            is PlayerState.Prepared -> onPreparedPlayer()
+            is PlayerState.Playing -> onPlayerStart()
+            is PlayerState.Pause -> onPlayerPaused()
+            is PlayerState.Complete -> onTrackComplete()
+        }
+    }
+
+    private fun onPlayerStart() {
+        binding.playButton.setImageResource(R.drawable.pause_button)
+    }
+
+    private fun onPlayerPaused() {
+        binding.playButton.setImageResource(R.drawable.play_button)
+    }
+
+    private fun onTrackPositionChanged(position: String) {
         binding.durationCurrentValue.text = position
     }
 
-    override fun onPreparedPlayer() {
+    private fun onPreparedPlayer() {
         binding.playButton.isEnabled = true
     }
 
-    override fun onTrackComplete() {
+    private fun onTrackComplete() {
         playerState = MediaPlayerState.STATE_PREPARED
-        updateTrackTimerUseCase.execute(playerState)
         binding.playButton.setImageResource(R.drawable.play_button)
         binding.durationCurrentValue.setText(R.string.durationSample)
     }

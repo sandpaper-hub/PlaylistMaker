@@ -15,21 +15,20 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.practicum.playlistmaker.SharedPreferencesData
+import com.practicum.playlistmaker.GlobalConstants
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.hasNullableData
 import com.practicum.playlistmaker.player.ui.PlayerActivity
-import com.practicum.playlistmaker.search.domain.models.TracksState
-import com.practicum.playlistmaker.search.presentation.TracksSearchViewModel
+import com.practicum.playlistmaker.search.presentation.viewModel.TracksState
+import com.practicum.playlistmaker.search.presentation.viewModel.TracksSearchViewModel
 
-class SearchActivity : ComponentActivity() {
+class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val INSTANCE_STATE_KEY = "SAVED_RESULT"
-        const val INTENT_EXTRA_KEY = "selectedTrack"
         const val CLICK_DEBOUNCE_DELAY = 1000L
         const val CHECK_TEXT_DELAY = 200L
     }
@@ -93,13 +92,13 @@ class SearchActivity : ComponentActivity() {
 
         sharedPreferences =
             getSharedPreferences(
-                SharedPreferencesData.SHARED_PREFERENCES_HISTORY_FILE,
+                GlobalConstants.SHARED_PREFERENCES_HISTORY_FILE,
                 MODE_PRIVATE
             )
 
         onSharedPreferencesChangeListener =
             OnSharedPreferenceChangeListener { _, key ->
-                if (key == SharedPreferencesData.NEW_HISTORY_ITEM_KEY) {
+                if (key == GlobalConstants.NEW_HISTORY_ITEM_KEY) {
                     historyAdapter.trackList = viewModel.getHistory()
                     historyAdapter.notifyDataSetChanged()
                 }
@@ -114,7 +113,7 @@ class SearchActivity : ComponentActivity() {
                 override fun onItemClick(track: Track) {
                     if (clickDebounce()) {
                         val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
-                        playerIntent.putExtra(INTENT_EXTRA_KEY, track)
+                        playerIntent.putExtra(GlobalConstants.INTENT_EXTRA_KEY, track)
                         startActivity(playerIntent)
                     }
                 }
@@ -136,7 +135,7 @@ class SearchActivity : ComponentActivity() {
                             val playerIntent =
                                 Intent(applicationContext, PlayerActivity::class.java)
                             playerIntent.putExtra(
-                                INTENT_EXTRA_KEY,
+                                GlobalConstants.INTENT_EXTRA_KEY,
                                 track
                             )
                             startActivity(playerIntent)

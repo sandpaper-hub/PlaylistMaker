@@ -13,8 +13,8 @@ class App : Application() {
         super.onCreate()
         Creator.initializeCreatorValues(this)
         sharedPreferences =
-            getSharedPreferences(SharedPreferencesData.SHARED_PREFERENCES_THEME_KEY, MODE_PRIVATE)
-        darkTheme = sharedPreferences.getBoolean(SharedPreferencesData.DARK_THEME_KEY, false)
+            getSharedPreferences(GlobalConstants.SHARED_PREFERENCES_THEME_KEY, MODE_PRIVATE)
+        darkTheme = sharedPreferences.getBoolean(GlobalConstants.DARK_THEME_KEY, false)
         AppCompatDelegate.setDefaultNightMode(
             if (darkTheme) {
                 AppCompatDelegate.MODE_NIGHT_YES
@@ -33,6 +33,6 @@ class App : Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
-        sharedPreferences.edit().putBoolean(SharedPreferencesData.DARK_THEME_KEY, darkTheme).apply()
+        sharedPreferences.edit().putBoolean(GlobalConstants.DARK_THEME_KEY, darkTheme).apply()
     }
 }

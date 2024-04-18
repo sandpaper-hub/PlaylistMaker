@@ -1,14 +1,15 @@
 package com.practicum.playlistmaker.search.domain.impl
 
 import com.practicum.playlistmaker.createArrayListFromJson
-import com.practicum.playlistmaker.search.domain.api.TracksInteractor
+import com.practicum.playlistmaker.search.presentation.interactor.TracksInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksRepository
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.repository.SharedPreferencesRepository
 import com.practicum.playlistmaker.util.Resource
 import java.util.concurrent.Executors
 
-class TracksInteractorImpl(private val repository: TracksRepository, private val sharedPreferencesRepository: SharedPreferencesRepository) : TracksInteractor {
+class TracksInteractorImpl(private val repository: TracksRepository, private val sharedPreferencesRepository: SharedPreferencesRepository) :
+    TracksInteractor {
 
     private val executor = Executors.newCachedThreadPool()
     override fun searchTracks(expression: String, consumer: TracksInteractor.TracksConsumer) {
