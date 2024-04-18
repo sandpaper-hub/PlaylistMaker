@@ -41,6 +41,10 @@ class MediaPlayerInteractorImpl : MediaPlayerInteractor {
     }
 
     override fun getTrackPosition(): Int {
+        if (mediaPlayerWrapper.isComplete) {
+            isMediaPlayerComplete = true
+            return -1
+        }
         return mediaPlayerWrapper.getTrackPosition()
     }
 }

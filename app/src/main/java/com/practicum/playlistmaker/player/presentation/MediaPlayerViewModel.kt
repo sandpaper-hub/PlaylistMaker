@@ -27,14 +27,14 @@ class MediaPlayerViewModel(application: Application) : AndroidViewModel(applicat
     fun observeState(): LiveData<PlayerState> = stateLiveData
 
 
-    private val mediaPlayerHandler = Creator.provideMediaPlayerInteractor()
+    private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
 
     private val handler = Handler(Looper.getMainLooper())
 
     private val timerUpdater = object : Runnable {
         override fun run() {
             completeMediaPlayer()
-            if (!mediaPlayerHandler.isMediaPlayerComplete) {
+            if (!mediaPlayerInteractor.isMediaPlayerComplete) {
                 updateTrackTimer()
                 handler.postDelayed(this, UPDATE_POSITION_DELAY)
             }
@@ -42,7 +42,7 @@ class MediaPlayerViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     fun playbackControl(playerState: MediaPlayerState): MediaPlayerState {
-        val mediaPlayerState = mediaPlayerHandler.playbackControl(playerState)
+        val mediaPlayerState = mediaPlayerInteractor.playbackControl(playerState)
         return if (mediaPlayerState == MediaPlayerState.STATE_PLAYING) {
             renderState(PlayerState.Playing)
             timerUpdater.let { handler.post(it) }
@@ -55,26 +55,29 @@ class MediaPlayerViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     fun preparePlayer(trackPreviewUrl: String?): MediaPlayerState {
-        mediaPlayerHandler.preparePlayer(trackPreviewUrl)
+        mediaPlayerInteractor.preparePlayer(trackPreviewUrl)
         renderState(PlayerState.Prepared)
-        return if (mediaPlayerHandler.isMediaPlayerPrepared) {
+        return if (mediaPlayerInteractor.isMediaPlayerPrepared) {
             MediaPlayerState.STATE_PREPARED
         } else MediaPlayerState.STATE_DEFAULT
     }
 
     fun releaseMediaPlayer() {
-        mediaPlayerHandler.releasePlayer()
+        mediaPlayerInteractor.releasePlayer()
     }
 
     fun completeMediaPlayer() {
-        if (mediaPlayerHandler.isMediaPlayerComplete) {
+        if (mediaPlayerInteractor.isMediaPlayerComplete) {
             timerUpdater.let { handler.removeCallbacks(it) }
             renderState(PlayerState.Complete)
         }
     }
 
     private fun updateTrackTimer() {
-        val trackPosition = mediaPlayerHandler.getTrackPosition().toLong().convertLongToTimeMillis()
+        if (mediaPlayerInteractor.getTrackPosition() == -1) {
+            return
+        }
+        val trackPosition = mediaPlayerInteractor.getTrackPosition().toLong().convertLongToTimeMillis()
         renderState(PlayerState.ChangePosition(trackPosition))
     }
 
