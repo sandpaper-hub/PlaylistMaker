@@ -3,9 +3,8 @@ package com.practicum.playlistmaker.player.presentation
 import com.practicum.playlistmaker.player.domain.model.MediaPlayerState
 
 interface MediaPlayerInteractor {
-    var isMediaPlayerPrepared:Boolean
     var isMediaPlayerComplete:Boolean
-    fun preparePlayer(trackPreviewUrl: String?): MediaPlayerState
+    fun preparePlayer(trackPreviewUrl: String?)
     fun playbackControl(playerState: MediaPlayerState): MediaPlayerState
 
     fun releasePlayer()

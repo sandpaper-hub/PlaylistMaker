@@ -57,9 +57,7 @@ class MediaPlayerViewModel(application: Application) : AndroidViewModel(applicat
     fun preparePlayer(trackPreviewUrl: String?): MediaPlayerState {
         mediaPlayerInteractor.preparePlayer(trackPreviewUrl)
         renderState(PlayerState.Prepared)
-        return if (mediaPlayerInteractor.isMediaPlayerPrepared) {
-            MediaPlayerState.STATE_PREPARED
-        } else MediaPlayerState.STATE_DEFAULT
+        return MediaPlayerState.STATE_PREPARED
     }
 
     fun releaseMediaPlayer() {
@@ -77,8 +75,11 @@ class MediaPlayerViewModel(application: Application) : AndroidViewModel(applicat
         if (mediaPlayerInteractor.getTrackPosition() == -1) {
             return
         }
-        val trackPosition = mediaPlayerInteractor.getTrackPosition().toLong().convertLongToTimeMillis()
-        renderState(PlayerState.ChangePosition(trackPosition))
+        renderState(
+            PlayerState.ChangePosition(
+                mediaPlayerInteractor.getTrackPosition().toLong().convertLongToTimeMillis()
+            )
+        )
     }
 
     private fun renderState(state: PlayerState) {
