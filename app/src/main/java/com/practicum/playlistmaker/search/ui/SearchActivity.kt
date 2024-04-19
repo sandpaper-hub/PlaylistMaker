@@ -17,10 +17,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.practicum.playlistmaker.GlobalConstants
+import com.practicum.playlistmaker.util.GlobalConstants
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
-import com.practicum.playlistmaker.hasNullableData
+import com.practicum.playlistmaker.util.hasNullableData
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.search.presentation.viewModel.TracksState
 import com.practicum.playlistmaker.search.presentation.viewModel.TracksSearchViewModel

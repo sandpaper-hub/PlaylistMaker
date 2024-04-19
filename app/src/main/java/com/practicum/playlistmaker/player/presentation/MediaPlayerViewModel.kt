@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.convertLongToTimeMillis
+import com.practicum.playlistmaker.util.convertLongToTimeMillis
 import com.practicum.playlistmaker.player.domain.model.MediaPlayerState
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.player.ui.model.PlayerState

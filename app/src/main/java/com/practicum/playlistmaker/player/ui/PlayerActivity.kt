@@ -6,13 +6,13 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.practicum.playlistmaker.GlobalConstants
+import com.practicum.playlistmaker.util.GlobalConstants
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.convertLongToTimeMillis
+import com.practicum.playlistmaker.util.convertLongToTimeMillis
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.dpToPx
-import com.practicum.playlistmaker.getParcelableTrack
+import com.practicum.playlistmaker.util.dpToPx
+import com.practicum.playlistmaker.util.getParcelableTrack
 import com.practicum.playlistmaker.player.domain.model.MediaPlayerState
 import com.practicum.playlistmaker.player.presentation.MediaPlayerViewModel
 import com.practicum.playlistmaker.player.ui.model.PlayerState

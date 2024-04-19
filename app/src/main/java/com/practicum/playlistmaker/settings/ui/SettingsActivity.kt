@@ -4,34 +4,40 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.practicum.playlistmaker.App
+import androidx.lifecycle.ViewModelProvider
+import com.practicum.playlistmaker.application.presentation.App
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.GlobalConstants
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
+import com.practicum.playlistmaker.settings.presentation.SettingsViewModel
 
 class SettingsActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: SettingsViewModel
+    private lateinit var binding: ActivitySettingsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivitySettingsBinding.inflate(layoutInflater)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val message = getString(R.string.sampleMessageForShare)
         val url = getString(R.string.privacyUrl)
         val email = getString(R.string.sampleEmail)
         val subject = getString(R.string.sampleSubject)
         val body = getString(R.string.sampleBodyMessage)
-        val sharedPreferences =
-            getSharedPreferences(GlobalConstants.SHARED_PREFERENCES_THEME_KEY, MODE_PRIVATE)
 
-        binding.darkThemeSwitcherCompat.isChecked = sharedPreferences.getBoolean(
-            GlobalConstants.DARK_THEME_KEY, false)
+        viewModel = ViewModelProvider(
+            this, SettingsViewModel.getViewModelFactory()
+        )[SettingsViewModel::class.java]
+        viewModel.observeState().observe(this) { render(it) }
+
+        binding.darkThemeSwitcherCompat.isChecked = viewModel.isChecked()
 
         binding.darkThemeSwitcherCompat.setOnCheckedChangeListener { _, isChecked ->
             (applicationContext as App).switchTheme(isChecked)
         }
 
         binding.backButtonSettingsActivity.setOnClickListener {
-                onBackPressedDispatcher.onBackPressed()
-            }
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         binding.shareImageView.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND)
@@ -42,14 +48,24 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.supportImageView.setOnClickListener {
-                val supportIntent = Intent(Intent.ACTION_SENDTO)
-                supportIntent.setData(Uri.parse("mailto:$email?subject=$subject&body=$body"))
-                startActivity(supportIntent)
-            }
+            val supportIntent = Intent(Intent.ACTION_SENDTO)
+            supportIntent.setData(Uri.parse("mailto:$email?subject=$subject&body=$body"))
+            startActivity(supportIntent)
+        }
 
         binding.privacyImageView.setOnClickListener {
             val privacyIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(privacyIntent)
         }
+    }
+
+    private fun render(state: SettingsState) {
+        when (state) {
+            is SettingsState.Switcher -> switchDarkMode(state.checked)
+        }
+    }
+
+    private fun switchDarkMode(isChecked: Boolean) {
+        binding.darkThemeSwitcherCompat.isChecked = isChecked
     }
 }
