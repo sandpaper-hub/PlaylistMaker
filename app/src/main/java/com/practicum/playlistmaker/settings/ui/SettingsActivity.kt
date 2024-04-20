@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.practicum.playlistmaker.application.presentation.App
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 import com.practicum.playlistmaker.settings.presentation.SettingsViewModel
@@ -27,12 +26,11 @@ class SettingsActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(
             this, SettingsViewModel.getViewModelFactory()
         )[SettingsViewModel::class.java]
-        viewModel.observeState().observe(this) { render(it) }
 
         binding.darkThemeSwitcherCompat.isChecked = viewModel.isChecked()
 
         binding.darkThemeSwitcherCompat.setOnCheckedChangeListener { _, isChecked ->
-            (applicationContext as App).switchTheme(isChecked)
+            viewModel.switchTheme(isChecked)
         }
 
         binding.backButtonSettingsActivity.setOnClickListener {
@@ -57,15 +55,5 @@ class SettingsActivity : AppCompatActivity() {
             val privacyIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(privacyIntent)
         }
-    }
-
-    private fun render(state: SettingsState) {
-        when (state) {
-            is SettingsState.Switcher -> switchDarkMode(state.checked)
-        }
-    }
-
-    private fun switchDarkMode(isChecked: Boolean) {
-        binding.darkThemeSwitcherCompat.isChecked = isChecked
     }
 }
