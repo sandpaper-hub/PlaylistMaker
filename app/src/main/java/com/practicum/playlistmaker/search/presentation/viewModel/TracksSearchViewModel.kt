@@ -3,7 +3,6 @@ package com.practicum.playlistmaker.search.presentation.viewModel
 import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -125,7 +124,6 @@ class TracksSearchViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun renderState(state: TracksState) {
-        Log.d("SAMPLE1",state.toString())
         stateLiveData.postValue(state)
     }
 

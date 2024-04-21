@@ -22,6 +22,7 @@ class MediaPlayerInteractorImpl : MediaPlayerInteractor, MediaPlayerListener {
 
     override fun startPlayer() {
         mediaPlayerWrapper.playerStart()
+        isMediaPlayerComplete = false
     }
 
     override fun pausePlayer() {

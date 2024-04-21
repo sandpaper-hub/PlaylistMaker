@@ -50,10 +50,8 @@ class MediaPlayerViewModel(application: Application) : AndroidViewModel(applicat
     fun preparePlayer(trackPreviewUrl: String?): PlayerState {
         mediaPlayerInteractor.preparePlayer(trackPreviewUrl)
         state = PlayerState.Prepared
-        return if (mediaPlayerInteractor.isMediaPlayerPrepared) {
-            renderState(state)
-            state
-        } else PlayerState.Created
+        handler.postDelayed({renderState(state)}, 50L)
+        return state
     }
 
     fun playbackControl(playerState: PlayerState): PlayerState {

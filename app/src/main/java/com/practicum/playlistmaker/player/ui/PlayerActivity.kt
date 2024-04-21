@@ -98,7 +98,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun onPlayerPrepared() {
-        binding.playButton.isEnabled = true
+        binding.playButton.isClickable = true
     }
 
     private fun onPlayerStart() {
