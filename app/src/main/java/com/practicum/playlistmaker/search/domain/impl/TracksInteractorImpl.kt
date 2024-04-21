@@ -6,9 +6,14 @@ import com.practicum.playlistmaker.search.domain.api.TracksRepository
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.repository.SharedPreferencesRepository
 import com.practicum.playlistmaker.util.Resource
+import com.practicum.playlistmaker.util.toDto
+import com.practicum.playlistmaker.util.toTrackList
 import java.util.concurrent.Executors
 
-class TracksInteractorImpl(private val repository: TracksRepository, private val sharedPreferencesRepository: SharedPreferencesRepository) :
+class TracksInteractorImpl(
+    private val repository: TracksRepository,
+    private val sharedPreferencesRepository: SharedPreferencesRepository
+) :
     TracksInteractor {
 
     private val executor = Executors.newCachedThreadPool()
@@ -16,7 +21,7 @@ class TracksInteractorImpl(private val repository: TracksRepository, private val
         executor.execute {
             when (val resource = repository.searchTracks(expression)) {
                 is Resource.Success -> {
-                    consumer.consume(resource.data, null)
+                    consumer.consume(resource.data?.toTrackList(), null)
                 }
 
                 is Resource.Error -> {
@@ -34,7 +39,7 @@ class TracksInteractorImpl(private val repository: TracksRepository, private val
         if (historyArray.size > 10) {
             historyArray.removeAt(10)
         }
-        sharedPreferencesRepository.save(historyArray)
+        sharedPreferencesRepository.save(historyArray.toDto())
     }
 
     override fun getHistory(): ArrayList<Track> {
@@ -47,7 +52,7 @@ class TracksInteractorImpl(private val repository: TracksRepository, private val
         if (json != null) {
             val array = json.createArrayListFromJson()
             array.clear()
-            sharedPreferencesRepository.save(array)
+            sharedPreferencesRepository.save(array.toDto())
         }
     }
 }

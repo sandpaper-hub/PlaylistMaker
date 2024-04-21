@@ -3,8 +3,8 @@ package com.practicum.playlistmaker.search.data.repository
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
+import com.practicum.playlistmaker.search.data.dto.TrackDto
 import com.practicum.playlistmaker.util.GlobalConstants
-import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.repository.SharedPreferencesRepository
 
 class SharedPreferencesRepositoryImpl(context: Context) :
@@ -15,7 +15,7 @@ class SharedPreferencesRepositoryImpl(context: Context) :
         AppCompatActivity.MODE_PRIVATE
     )
 
-    override fun save(arrayList: ArrayList<Track>) {
+    override fun save(arrayList: ArrayList<TrackDto>) {
         sharedPreferences.edit()
             .putString(GlobalConstants.NEW_HISTORY_ITEM_KEY, Gson().toJson(arrayList))
             .apply()
