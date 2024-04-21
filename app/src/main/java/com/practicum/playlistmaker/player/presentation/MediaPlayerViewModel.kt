@@ -57,7 +57,9 @@ class MediaPlayerViewModel(application: Application) : AndroidViewModel(applicat
     fun preparePlayer(trackPreviewUrl: String?): MediaPlayerState {
         mediaPlayerInteractor.preparePlayer(trackPreviewUrl)
         renderState(PlayerState.Prepared)
-        return MediaPlayerState.STATE_PREPARED
+        return if (mediaPlayerInteractor.isMediaPlayerPrepared) {
+            MediaPlayerState.STATE_PREPARED
+        } else MediaPlayerState.STATE_DEFAULT
     }
 
     fun releaseMediaPlayer() {

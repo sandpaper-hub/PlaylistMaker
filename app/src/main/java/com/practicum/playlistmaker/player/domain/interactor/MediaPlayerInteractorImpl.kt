@@ -1,16 +1,21 @@
 package com.practicum.playlistmaker.player.domain.interactor
 
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.player.presentation.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.model.MediaPlayerState
 
 class MediaPlayerInteractorImpl : MediaPlayerInteractor {
 
     override var isMediaPlayerComplete = false
+    override var isMediaPlayerPrepared = false
 
     private val mediaPlayerWrapper = Creator.provideMediaPlayerWrapper()
-    override fun preparePlayer(trackPreviewUrl: String?) {
+    override fun preparePlayer(trackPreviewUrl: String?): MediaPlayerState {
         mediaPlayerWrapper.preparePlayer(trackPreviewUrl)
+        return if (mediaPlayerWrapper.isPrepared) {
+            MediaPlayerState.STATE_PREPARED
+        } else {
+            MediaPlayerState.STATE_DEFAULT
+        }
     }
 
     override fun playbackControl(playerState: MediaPlayerState): MediaPlayerState {
@@ -26,7 +31,7 @@ class MediaPlayerInteractorImpl : MediaPlayerInteractor {
                 MediaPlayerState.STATE_PLAYING
             }
 
-            else -> MediaPlayerState.STATE_PAUSED
+            else -> MediaPlayerState.STATE_PREPARED
         }
     }
 

@@ -10,7 +10,7 @@ import com.practicum.playlistmaker.player.data.impl.MediaPlayerWrapperImpl
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.player.domain.wrapper.MediaPlayerWrapper
 import com.practicum.playlistmaker.search.data.repository.SharedPreferencesRepositoryImpl
-import com.practicum.playlistmaker.player.presentation.MediaPlayerInteractor
+import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractor
 import com.practicum.playlistmaker.search.domain.repository.SharedPreferencesRepository
 import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.search.data.repository.TracksRepositoryImpl
