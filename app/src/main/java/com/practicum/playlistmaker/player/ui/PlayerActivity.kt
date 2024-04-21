@@ -19,7 +19,7 @@ import com.practicum.playlistmaker.player.ui.model.PlayerState
 
 class PlayerActivity : AppCompatActivity() {
 
-    private var playerState = MediaPlayerState.STATE_DEFAULT
+    private lateinit var playerState: MediaPlayerState
 
     private lateinit var track: Track
     private lateinit var binding: ActivityPlayerBinding
@@ -43,8 +43,33 @@ class PlayerActivity : AppCompatActivity() {
             0, "", "", "",
             "", "", ""
         )
+        playerState = mediaPlayerViewModel.createPlayer()
         playerState = mediaPlayerViewModel.preparePlayer(track.previewUrl)
+    }
 
+    override fun onPause() {
+        super.onPause()
+        playerState = mediaPlayerViewModel.playbackControl(MediaPlayerState.STATE_PLAYING)
+        binding.playButton.setImageResource(R.drawable.play_button)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayerViewModel.releaseMediaPlayer()
+    }
+
+    private fun render(state: PlayerState) {
+        when (state) {
+            is PlayerState.Created -> onPlayerCreate()
+            is PlayerState.Prepared -> onPlayerPrepared()
+            is PlayerState.Playing -> onPlayerStart()
+            is PlayerState.Pause -> onPlayerPaused()
+            is PlayerState.Complete -> onTrackComplete()
+            is PlayerState.ChangePosition -> onTrackPositionChanged(state.position)
+        }
+    }
+
+    private fun onPlayerCreate() {
         binding.durationValue.text =
             track.trackDuration!!.convertLongToTimeMillis()
         if (track.collectionName!!.isEmpty()) {
@@ -73,25 +98,8 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        playerState = mediaPlayerViewModel.playbackControl(MediaPlayerState.STATE_PLAYING)
-        binding.playButton.setImageResource(R.drawable.play_button)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mediaPlayerViewModel.releaseMediaPlayer()
-    }
-
-    private fun render(state: PlayerState) {
-        when (state) {
-            is PlayerState.ChangePosition -> onTrackPositionChanged(state.position)
-            is PlayerState.Prepared -> onPreparedPlayer()
-            is PlayerState.Playing -> onPlayerStart()
-            is PlayerState.Pause -> onPlayerPaused()
-            is PlayerState.Complete -> onTrackComplete()
-        }
+    private fun onPlayerPrepared() {
+        binding.playButton.isEnabled = true
     }
 
     private fun onPlayerStart() {
@@ -104,10 +112,6 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun onTrackPositionChanged(position: String) {
         binding.durationCurrentValue.text = position
-    }
-
-    private fun onPreparedPlayer() {
-        binding.playButton.isEnabled = true
     }
 
     private fun onTrackComplete() {

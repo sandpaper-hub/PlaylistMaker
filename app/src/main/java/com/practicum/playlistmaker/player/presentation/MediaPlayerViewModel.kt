@@ -41,25 +41,37 @@ class MediaPlayerViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun playbackControl(playerState: MediaPlayerState): MediaPlayerState {
-        val mediaPlayerState = mediaPlayerInteractor.playbackControl(playerState)
-        return if (mediaPlayerState == MediaPlayerState.STATE_PLAYING) {
-            renderState(PlayerState.Playing)
-            timerUpdater.let { handler.post(it) }
-            mediaPlayerState
-        } else {
-            renderState(PlayerState.Pause)
-            timerUpdater.let { handler.removeCallbacks(it) }
-            mediaPlayerState
-        }
+    fun createPlayer(): MediaPlayerState {
+        renderState(PlayerState.Created)
+        return MediaPlayerState.STATE_DEFAULT
     }
 
     fun preparePlayer(trackPreviewUrl: String?): MediaPlayerState {
         mediaPlayerInteractor.preparePlayer(trackPreviewUrl)
-        renderState(PlayerState.Prepared)
         return if (mediaPlayerInteractor.isMediaPlayerPrepared) {
+            renderState(PlayerState.Prepared)
             MediaPlayerState.STATE_PREPARED
         } else MediaPlayerState.STATE_DEFAULT
+    }
+
+    fun playbackControl(playerState: MediaPlayerState): MediaPlayerState {
+        return when (playerState) {
+            MediaPlayerState.STATE_PREPARED, MediaPlayerState.STATE_PAUSED -> {
+                mediaPlayerInteractor.startPlayer()
+                renderState(PlayerState.Playing)
+                timerUpdater.let { handler.post(it) }
+                MediaPlayerState.STATE_PLAYING
+            }
+
+            MediaPlayerState.STATE_PLAYING -> {
+                mediaPlayerInteractor.pausePlayer()
+                renderState(PlayerState.Pause)
+                timerUpdater.let { handler.removeCallbacks(it) }
+                MediaPlayerState.STATE_PAUSED
+            }
+
+            MediaPlayerState.STATE_DEFAULT -> MediaPlayerState.STATE_PREPARED
+        }
     }
 
     fun releaseMediaPlayer() {

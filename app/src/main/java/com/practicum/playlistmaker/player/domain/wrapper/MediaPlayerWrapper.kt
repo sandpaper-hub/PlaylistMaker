@@ -1,9 +1,9 @@
 package com.practicum.playlistmaker.player.domain.wrapper
 
+import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerListener
+
 interface MediaPlayerWrapper {
-    var isPrepared: Boolean
-    var isComplete: Boolean
-    fun preparePlayer(trackPreviewUrl: String?)
+    fun preparePlayer(trackPreviewUrl: String?, mediaPlayerListener: MediaPlayerListener)
     fun playerStart()
     fun playerPause()
     fun playerRelease()

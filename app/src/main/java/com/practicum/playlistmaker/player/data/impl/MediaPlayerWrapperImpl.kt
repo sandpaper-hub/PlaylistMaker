@@ -1,21 +1,20 @@
 package com.practicum.playlistmaker.player.data.impl
 
 import android.media.MediaPlayer
+import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerListener
 import com.practicum.playlistmaker.player.domain.wrapper.MediaPlayerWrapper
 
 class MediaPlayerWrapperImpl : MediaPlayerWrapper {
     private val mediaPlayer = MediaPlayer()
-    override var isPrepared = false
-    override var isComplete = false
-    override fun preparePlayer(trackPreviewUrl: String?) {
+    override fun preparePlayer(trackPreviewUrl: String?, mediaPlayerListener: MediaPlayerListener) {
         mediaPlayer.setDataSource(trackPreviewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            isPrepared = true
+            mediaPlayerListener.isPrepared()
         }
 
         mediaPlayer.setOnCompletionListener {
-            isComplete = true
+            mediaPlayerListener.isComplete()
         }
     }
 

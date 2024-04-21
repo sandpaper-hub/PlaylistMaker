@@ -1,38 +1,31 @@
 package com.practicum.playlistmaker.player.domain.interactor
 
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.player.domain.model.MediaPlayerState
 
-class MediaPlayerInteractorImpl : MediaPlayerInteractor {
+class MediaPlayerInteractorImpl : MediaPlayerInteractor, MediaPlayerListener {
 
     override var isMediaPlayerComplete = false
     override var isMediaPlayerPrepared = false
 
     private val mediaPlayerWrapper = Creator.provideMediaPlayerWrapper()
-    override fun preparePlayer(trackPreviewUrl: String?): MediaPlayerState {
-        mediaPlayerWrapper.preparePlayer(trackPreviewUrl)
-        return if (mediaPlayerWrapper.isPrepared) {
-            MediaPlayerState.STATE_PREPARED
-        } else {
-            MediaPlayerState.STATE_DEFAULT
-        }
+    override fun preparePlayer(trackPreviewUrl: String?) {
+        mediaPlayerWrapper.preparePlayer(trackPreviewUrl, this)
     }
 
-    override fun playbackControl(playerState: MediaPlayerState): MediaPlayerState {
-        return when (playerState) {
-            MediaPlayerState.STATE_PLAYING -> {
-                mediaPlayerWrapper.playerPause()
-                MediaPlayerState.STATE_PAUSED
-            }
+    override fun isPrepared() {
+        isMediaPlayerPrepared = true
+    }
 
-            MediaPlayerState.STATE_PAUSED, MediaPlayerState.STATE_PREPARED -> {
-                mediaPlayerWrapper.playerStart()
-                isMediaPlayerComplete = false
-                MediaPlayerState.STATE_PLAYING
-            }
+    override fun isComplete() {
+        isMediaPlayerComplete = true
+    }
 
-            else -> MediaPlayerState.STATE_PREPARED
-        }
+    override fun startPlayer() {
+        mediaPlayerWrapper.playerStart()
+    }
+
+    override fun pausePlayer() {
+        mediaPlayerWrapper.playerPause()
     }
 
     override fun releasePlayer() {
@@ -40,7 +33,7 @@ class MediaPlayerInteractorImpl : MediaPlayerInteractor {
     }
 
     override fun getTrackPosition(): Int {
-        if (mediaPlayerWrapper.isComplete) {
+        if (isMediaPlayerComplete) {
             isMediaPlayerComplete = true
             return -1
         }
