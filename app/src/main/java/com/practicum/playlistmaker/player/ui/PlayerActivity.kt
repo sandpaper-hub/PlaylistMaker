@@ -13,13 +13,12 @@ import com.practicum.playlistmaker.util.convertLongToTimeMillis
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.util.dpToPx
 import com.practicum.playlistmaker.util.getParcelableTrack
-import com.practicum.playlistmaker.player.domain.model.MediaPlayerState
 import com.practicum.playlistmaker.player.presentation.MediaPlayerViewModel
 import com.practicum.playlistmaker.player.ui.model.PlayerState
 
 class PlayerActivity : AppCompatActivity() {
 
-    private lateinit var playerState: MediaPlayerState
+    private lateinit var playerState: PlayerState
 
     private lateinit var track: Track
     private lateinit var binding: ActivityPlayerBinding
@@ -49,7 +48,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        playerState = mediaPlayerViewModel.playbackControl(MediaPlayerState.STATE_PLAYING)
+        playerState = mediaPlayerViewModel.playbackControl(PlayerState.Playing)
         binding.playButton.setImageResource(R.drawable.play_button)
     }
 
@@ -115,7 +114,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun onTrackComplete() {
-        playerState = MediaPlayerState.STATE_PREPARED
+        playerState = PlayerState.Prepared
         binding.playButton.setImageResource(R.drawable.play_button)
         binding.durationCurrentValue.setText(R.string.durationSample)
     }

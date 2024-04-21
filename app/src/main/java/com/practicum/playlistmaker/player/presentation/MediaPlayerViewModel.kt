@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.util.convertLongToTimeMillis
-import com.practicum.playlistmaker.player.domain.model.MediaPlayerState
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.player.ui.model.PlayerState
 
@@ -26,6 +25,7 @@ class MediaPlayerViewModel(application: Application) : AndroidViewModel(applicat
     private val stateLiveData = MutableLiveData<PlayerState>()
     fun observeState(): LiveData<PlayerState> = stateLiveData
 
+    private lateinit var state: PlayerState
 
     private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
 
@@ -41,36 +41,43 @@ class MediaPlayerViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun createPlayer(): MediaPlayerState {
-        renderState(PlayerState.Created)
-        return MediaPlayerState.STATE_DEFAULT
+    fun createPlayer(): PlayerState {
+        state = PlayerState.Created
+        renderState(state)
+        return state
     }
 
-    fun preparePlayer(trackPreviewUrl: String?): MediaPlayerState {
+    fun preparePlayer(trackPreviewUrl: String?): PlayerState {
         mediaPlayerInteractor.preparePlayer(trackPreviewUrl)
+        state = PlayerState.Prepared
         return if (mediaPlayerInteractor.isMediaPlayerPrepared) {
-            renderState(PlayerState.Prepared)
-            MediaPlayerState.STATE_PREPARED
-        } else MediaPlayerState.STATE_DEFAULT
+            renderState(state)
+            state
+        } else PlayerState.Created
     }
 
-    fun playbackControl(playerState: MediaPlayerState): MediaPlayerState {
+    fun playbackControl(playerState: PlayerState): PlayerState {
         return when (playerState) {
-            MediaPlayerState.STATE_PREPARED, MediaPlayerState.STATE_PAUSED -> {
+            is PlayerState.Prepared, PlayerState.Pause -> {
+                state = PlayerState.Playing
                 mediaPlayerInteractor.startPlayer()
-                renderState(PlayerState.Playing)
+                renderState(state)
                 timerUpdater.let { handler.post(it) }
-                MediaPlayerState.STATE_PLAYING
+                state
             }
 
-            MediaPlayerState.STATE_PLAYING -> {
+            is PlayerState.Playing -> {
+                state = PlayerState.Pause
                 mediaPlayerInteractor.pausePlayer()
-                renderState(PlayerState.Pause)
+                renderState(state)
                 timerUpdater.let { handler.removeCallbacks(it) }
-                MediaPlayerState.STATE_PAUSED
+                state
             }
 
-            MediaPlayerState.STATE_DEFAULT -> MediaPlayerState.STATE_PREPARED
+            else -> {
+                state = PlayerState.Prepared
+                state
+            }
         }
     }
 
