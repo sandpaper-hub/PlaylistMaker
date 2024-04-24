@@ -5,10 +5,10 @@ import com.practicum.playlistmaker.application.presentation.interactor.DarkTheme
 
 class DarkThemeInteractorImpl(private val themeRepository: AppThemeRepository) : DarkThemeInteractor{
     override fun getThemeValue(): Boolean {
-        return themeRepository.getData()
+        return themeRepository.isDarkThemeEnabled()
     }
 
     override fun saveThemeValue(value: Boolean) {
-        themeRepository.saveData(value)
+        themeRepository.setDarkThemeEnabled(value)
     }
 }

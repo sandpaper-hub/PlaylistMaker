@@ -168,7 +168,6 @@
         android:layout_marginBottom="@dimen/indent_4dp"
         android:contentDescription="@string/playButtonText"
         android:src="@drawable/play_button"
-        android:clickable="false"
         app:layout_constraintBottom_toTopOf="@+id/durationCurrentValue"
         app:layout_constraintEnd_toStartOf="@+id/likeButton"
         app:layout_constraintStart_toEndOf="@+id/addToCollectionButton"
