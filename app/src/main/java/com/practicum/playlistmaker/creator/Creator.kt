@@ -22,7 +22,7 @@ object Creator {
     private lateinit var application: Application
     private lateinit var sharedPreferencesRepository: SharedPreferencesRepository
     fun initializeCreatorValues(application: Application) {
-        Creator.application = application
+        this.application = application
         sharedPreferencesRepository = getSharedPreferencesRepository(application)
     }
 
@@ -40,9 +40,10 @@ object Creator {
 
     fun provideMediaPlayerInteractor(
     ): MediaPlayerInteractor {
-       return MediaPlayerInteractorImpl()
+        return MediaPlayerInteractorImpl(provideMediaPlayerWrapper())
     }
-    fun provideMediaPlayerWrapper(): MediaPlayerWrapper {
+
+    private fun provideMediaPlayerWrapper(): MediaPlayerWrapper {
         return MediaPlayerWrapperImpl()
     }
 
