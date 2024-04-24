@@ -8,5 +8,5 @@ interface MediaPlayerInteractor {
     fun pausePlayer()
     fun releasePlayer()
 
-    fun getTrackPosition(): Int
+    fun getTrackPosition(): String
 }

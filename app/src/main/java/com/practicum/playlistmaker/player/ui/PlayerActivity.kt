@@ -17,9 +17,6 @@ import com.practicum.playlistmaker.player.presentation.MediaPlayerViewModel
 import com.practicum.playlistmaker.player.ui.model.PlayerState
 
 class PlayerActivity : AppCompatActivity() {
-
-    private lateinit var playerState: PlayerState
-
     private lateinit var track: Track
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var mediaPlayerViewModel: MediaPlayerViewModel
@@ -42,14 +39,13 @@ class PlayerActivity : AppCompatActivity() {
             0, "", "", "",
             "", "", ""
         )
-        playerState = mediaPlayerViewModel.createPlayer()
-        playerState = mediaPlayerViewModel.preparePlayer(track.previewUrl)
+        mediaPlayerViewModel.createPlayer()
+        mediaPlayerViewModel.preparePlayer(track.previewUrl)
     }
 
     override fun onPause() {
         super.onPause()
-        playerState = mediaPlayerViewModel.playbackControl(PlayerState.Playing)
-        binding.playButton.setImageResource(R.drawable.play_button)
+        mediaPlayerViewModel.pausePlayer()
     }
 
     override fun onDestroy() {
@@ -91,14 +87,13 @@ class PlayerActivity : AppCompatActivity() {
         binding.backButtonPlayerActivity.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
-        binding.playButton.setOnClickListener {
-            playerState = mediaPlayerViewModel.playbackControl(playerState)
-        }
     }
 
     private fun onPlayerPrepared() {
         binding.playButton.isClickable = true
+        binding.playButton.setOnClickListener {
+            mediaPlayerViewModel.playbackControl()
+        }
     }
 
     private fun onPlayerStart() {
@@ -114,7 +109,6 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun onTrackComplete() {
-        playerState = PlayerState.Prepared
         binding.playButton.setImageResource(R.drawable.play_button)
         binding.durationCurrentValue.setText(R.string.durationSample)
     }

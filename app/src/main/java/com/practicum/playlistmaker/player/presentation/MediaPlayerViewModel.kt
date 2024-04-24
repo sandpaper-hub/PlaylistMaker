@@ -1,33 +1,29 @@
 package com.practicum.playlistmaker.player.presentation
 
-import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.util.convertLongToTimeMillis
 import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractor
+import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.player.ui.model.PlayerState
 
-class MediaPlayerViewModel(application: Application) : AndroidViewModel(application) {
+class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
     companion object {
         private const val UPDATE_POSITION_DELAY = 250L
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer { MediaPlayerViewModel(this[APPLICATION_KEY] as Application) }
+            val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
+            initializer { MediaPlayerViewModel(mediaPlayerInteractor) }
         }
     }
 
     private val stateLiveData = MutableLiveData<PlayerState>()
     fun observeState(): LiveData<PlayerState> = stateLiveData
-
-    private lateinit var state: PlayerState
-
-    private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -41,42 +37,49 @@ class MediaPlayerViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun createPlayer(): PlayerState {
-        state = PlayerState.Created
-        renderState(state)
-        return state
+    private val preparePlayerRunnable = object : Runnable {
+        override fun run() {
+            if (mediaPlayerInteractor.isMediaPlayerPrepared) {
+                renderState(PlayerState.Prepared)
+            } else {
+                handler.post(this)
+            }
+        }
     }
 
-    fun preparePlayer(trackPreviewUrl: String?): PlayerState {
+    fun createPlayer() {
+        renderState(PlayerState.Created)
+    }
+
+    fun preparePlayer(trackPreviewUrl: String?) {
         mediaPlayerInteractor.preparePlayer(trackPreviewUrl)
-        state = PlayerState.Prepared
-        handler.postDelayed({renderState(state)}, 50L)
-        return state
+        preparePlayerRunnable.let { handler.post(it) }
     }
 
-    fun playbackControl(playerState: PlayerState): PlayerState {
-        return when (playerState) {
-            is PlayerState.Prepared, PlayerState.Pause -> {
-                state = PlayerState.Playing
+    fun playbackControl() {
+        when (stateLiveData.value) {
+            is PlayerState.Prepared, PlayerState.Pause, PlayerState.Complete -> {
                 mediaPlayerInteractor.startPlayer()
-                renderState(state)
+                renderState(PlayerState.Playing)
                 timerUpdater.let { handler.post(it) }
-                state
             }
 
-            is PlayerState.Playing -> {
-                state = PlayerState.Pause
-                mediaPlayerInteractor.pausePlayer()
-                renderState(state)
-                timerUpdater.let { handler.removeCallbacks(it) }
-                state
+            is PlayerState.Playing, PlayerState.ChangePosition(
+                mediaPlayerInteractor.getTrackPosition()
+            ) -> {
+                pausePlayer()
             }
 
             else -> {
-                state = PlayerState.Prepared
-                state
+                renderState(PlayerState.Prepared)
             }
         }
+    }
+
+    fun pausePlayer() {
+        mediaPlayerInteractor.pausePlayer()
+        renderState(PlayerState.Pause)
+        timerUpdater.let { handler.removeCallbacks(it) }
     }
 
     fun releaseMediaPlayer() {
@@ -91,12 +94,12 @@ class MediaPlayerViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     private fun updateTrackTimer() {
-        if (mediaPlayerInteractor.getTrackPosition() == -1) {
+        if (mediaPlayerInteractor.getTrackPosition() == MediaPlayerInteractorImpl.EMPTY_STRING) {
             return
         }
         renderState(
             PlayerState.ChangePosition(
-                mediaPlayerInteractor.getTrackPosition().toLong().convertLongToTimeMillis()
+                mediaPlayerInteractor.getTrackPosition()
             )
         )
     }
@@ -109,5 +112,4 @@ class MediaPlayerViewModel(application: Application) : AndroidViewModel(applicat
         super.onCleared()
         timerUpdater.let { handler.removeCallbacks(it) }
     }
-
 }

@@ -1,13 +1,18 @@
 package com.practicum.playlistmaker.player.domain.interactor
 
-import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.player.domain.wrapper.MediaPlayerWrapper
+import com.practicum.playlistmaker.util.convertLongToTimeMillis
 
-class MediaPlayerInteractorImpl : MediaPlayerInteractor, MediaPlayerListener {
+class MediaPlayerInteractorImpl(private val mediaPlayerWrapper: MediaPlayerWrapper) :
+    MediaPlayerInteractor, MediaPlayerListener {
+
+    companion object {
+        const val EMPTY_STRING = ""
+    }
 
     override var isMediaPlayerComplete = false
     override var isMediaPlayerPrepared = false
 
-    private val mediaPlayerWrapper = Creator.provideMediaPlayerWrapper()
     override fun preparePlayer(trackPreviewUrl: String?) {
         mediaPlayerWrapper.preparePlayer(trackPreviewUrl, this)
     }
@@ -33,11 +38,10 @@ class MediaPlayerInteractorImpl : MediaPlayerInteractor, MediaPlayerListener {
         mediaPlayerWrapper.playerRelease()
     }
 
-    override fun getTrackPosition(): Int {
+    override fun getTrackPosition(): String {
         if (isMediaPlayerComplete) {
-            isMediaPlayerComplete = true
-            return -1
+            return EMPTY_STRING
         }
-        return mediaPlayerWrapper.getTrackPosition()
+        return mediaPlayerWrapper.getTrackPosition().toLong().convertLongToTimeMillis()
     }
 }
