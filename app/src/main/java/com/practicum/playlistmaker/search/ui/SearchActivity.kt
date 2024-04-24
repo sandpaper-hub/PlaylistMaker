@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -17,6 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.util.GlobalConstants
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
@@ -204,12 +204,9 @@ class SearchActivity : AppCompatActivity() {
         when (state) {
             is TracksState.Loading -> showLoading()
             is TracksState.Content -> showContent(state.tracks)
-            is TracksState.ConnectionError -> showConnectionError(
-                state.errorMessage,
-                state.drawable
-            )
+            is TracksState.ConnectionError -> showConnectionError()
 
-            is TracksState.NothingFound -> showEmpty(state.message, state.drawable)
+            is TracksState.NothingFound -> showEmpty()
             is TracksState.ClearedEditText -> showHideClearEditTextButton(state.text)
             is TracksState.HistoryContent -> showHistory(state.tracks)
             is TracksState.Empty -> showEmptyState()
@@ -238,19 +235,19 @@ class SearchActivity : AppCompatActivity() {
         trackListAdapter.notifyDataSetChanged()
     }
 
-    private fun showConnectionError(errorMessage: String, drawable: Drawable?) { //ok
+    private fun showConnectionError() { //ok
         binding.connectionErrorGroup.visibility = View.VISIBLE
-        binding.badSearchResultText.text = errorMessage
-        binding.badSearchResultImage.setImageDrawable(drawable)
+        binding.badSearchResultText.setText(R.string.connection_error)
+        binding.badSearchResultImage.setImageResource(R.drawable.bad_connection_image)
 
         binding.trackListRecyclerView.visibility = View.GONE
         binding.searchProgressBar.visibility = View.GONE
         binding.historySearchContainer.visibility = View.GONE
     }
 
-    private fun showEmpty(errorMessage: String, drawable: Drawable?) { //ok
-        binding.badSearchResultText.text = errorMessage
-        binding.badSearchResultImage.setImageDrawable(drawable)
+    private fun showEmpty() { //ok
+        binding.badSearchResultText.setText(R.string.nothing_found)
+        binding.badSearchResultImage.setImageResource(R.drawable.nothing_found_image)
         binding.badSearchResultGroup.visibility = View.VISIBLE
 
         binding.trackListRecyclerView.visibility = View.GONE

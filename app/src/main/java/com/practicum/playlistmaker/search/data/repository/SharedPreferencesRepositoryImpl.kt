@@ -15,13 +15,13 @@ class SharedPreferencesRepositoryImpl(context: Context) :
         AppCompatActivity.MODE_PRIVATE
     )
 
-    override fun save(arrayList: ArrayList<TrackDto>) {
+    override fun saveArrayListToHistory(arrayList: ArrayList<TrackDto>) {
         sharedPreferences.edit()
             .putString(GlobalConstants.NEW_HISTORY_ITEM_KEY, Gson().toJson(arrayList))
             .apply()
     }
 
-    override fun getData(): String? {
+    override fun getHistoryJson(): String? {
         return sharedPreferences.getString(GlobalConstants.NEW_HISTORY_ITEM_KEY, null)
     }
 }

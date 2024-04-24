@@ -32,27 +32,27 @@ class TracksInteractorImpl(
     }
 
     override fun addTrackToHistory(track: Track) {
-        val json = sharedPreferencesRepository.getData()
+        val json = sharedPreferencesRepository.getHistoryJson()
         val historyArray = json?.createArrayListFromJson() ?: ArrayList()
         historyArray.removeIf { it == track }
         historyArray.add(0, track)
         if (historyArray.size > 10) {
             historyArray.removeAt(10)
         }
-        sharedPreferencesRepository.save(historyArray.toDto())
+        sharedPreferencesRepository.saveArrayListToHistory(historyArray.toDto())
     }
 
     override fun getHistory(): ArrayList<Track> {
-        val json = sharedPreferencesRepository.getData()
+        val json = sharedPreferencesRepository.getHistoryJson()
         return json?.createArrayListFromJson() ?: ArrayList()
     }
 
     override fun clearHistory() {
-        val json = sharedPreferencesRepository.getData()
+        val json = sharedPreferencesRepository.getHistoryJson()
         if (json != null) {
             val array = json.createArrayListFromJson()
             array.clear()
-            sharedPreferencesRepository.save(array.toDto())
+            sharedPreferencesRepository.saveArrayListToHistory(array.toDto())
         }
     }
 }

@@ -1,34 +1,30 @@
 package com.practicum.playlistmaker.search.presentation.viewModel
 
-import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.presentation.interactor.TracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
 
-class TracksSearchViewModel(application: Application) : AndroidViewModel(application) {
+class TracksSearchViewModel() : ViewModel() {
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer { TracksSearchViewModel(this[APPLICATION_KEY] as Application) }
+            initializer { TracksSearchViewModel() }
         }
     }
 
-    private val tracksInteractor = Creator.provideTracksInteractor(getApplication())
+    private val tracksInteractor = Creator.provideTracksInteractor()
     private val stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData
 
-    private var historyTrackList: ArrayList<Track> = tracksInteractor.getHistory()
+//    private var historyTrackList: ArrayList<Track> = tracksInteractor.getHistory()
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -44,7 +40,7 @@ class TracksSearchViewModel(application: Application) : AndroidViewModel(applica
             return lastSearchText ?: ""
         }
         if (changedText.isEmpty()) {
-            historyTrackList = tracksInteractor.getHistory()
+            val historyTrackList = tracksInteractor.getHistory()
             renderState(TracksState.HistoryContent(historyTrackList))
         } else {
             renderState(TracksState.Empty)
@@ -66,27 +62,11 @@ class TracksSearchViewModel(application: Application) : AndroidViewModel(applica
                         tracks.addAll(foundTracks)
                         when {
                             errorMessage != null -> {
-                                renderState(
-                                    TracksState.ConnectionError(
-                                        getApplication<Application>().getString(R.string.connection_error),
-                                        AppCompatResources.getDrawable(
-                                            getApplication(),
-                                            R.drawable.bad_connection_image
-                                        )
-                                    )
-                                )
+                                renderState(TracksState.ConnectionError)
                             }
 
                             tracks.isEmpty() -> {
-                                renderState(
-                                    TracksState.NothingFound(
-                                        getApplication<Application>().getString(R.string.nothing_found),
-                                        AppCompatResources.getDrawable(
-                                            getApplication(),
-                                            R.drawable.nothing_found_image
-                                        )
-                                    )
-                                )
+                                renderState(TracksState.NothingFound)
                             }
 
                             else -> renderState(TracksState.Content(tracks))
@@ -112,6 +92,7 @@ class TracksSearchViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun showHistory() {
+        val historyTrackList = tracksInteractor.getHistory()
         if (historyTrackList.isEmpty()) {
             renderState(TracksState.Empty)
         } else {

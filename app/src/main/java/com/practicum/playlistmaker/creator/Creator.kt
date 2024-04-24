@@ -34,8 +34,8 @@ object Creator {
         return SharedPreferencesRepositoryImpl(context)
     }
 
-    fun provideTracksInteractor(context: Context): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository(context), sharedPreferencesRepository)
+    fun provideTracksInteractor(): TracksInteractor {
+        return TracksInteractorImpl(getTracksRepository(application), sharedPreferencesRepository)
     }
 
     fun provideMediaPlayerInteractor(
