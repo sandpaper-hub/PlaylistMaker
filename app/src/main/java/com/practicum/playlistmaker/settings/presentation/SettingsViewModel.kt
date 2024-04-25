@@ -1,22 +1,20 @@
 package com.practicum.playlistmaker.settings.presentation
 
-import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.creator.Creator
 
-class SettingsViewModel(application: Application) : AndroidViewModel(application) {
+class SettingsViewModel() : ViewModel() {
     companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer { SettingsViewModel(this[APPLICATION_KEY] as Application) }
+            initializer { SettingsViewModel() }
         }
     }
 
-    private val darkThemeInteractor = Creator.provideDarkThemeInteractor(getApplication())
+    private val darkThemeInteractor = Creator.provideDarkThemeInteractor()
 
     fun isChecked(): Boolean {
         return darkThemeInteractor.getThemeValue()

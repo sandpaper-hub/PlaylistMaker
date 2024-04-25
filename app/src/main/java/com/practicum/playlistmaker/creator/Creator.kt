@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.creator
 
 import android.app.Application
-import android.content.Context
 import com.practicum.playlistmaker.application.data.repository.AppThemeRepositoryImpl
 import com.practicum.playlistmaker.application.domain.interactor.DarkThemeInteractorImpl
 import com.practicum.playlistmaker.application.domain.repository.AppThemeRepository
@@ -23,19 +22,19 @@ object Creator {
     private lateinit var sharedPreferencesRepository: SharedPreferencesRepository
     fun initializeCreatorValues(application: Application) {
         this.application = application
-        sharedPreferencesRepository = getSharedPreferencesRepository(application)
+        sharedPreferencesRepository = getSharedPreferencesRepository()
     }
 
-    private fun getTracksRepository(context: Context): TracksRepository {
-        return TracksRepositoryImpl(RetrofitNetworkClient(context))
+    private fun getTracksRepository(): TracksRepository {
+        return TracksRepositoryImpl(RetrofitNetworkClient(application))
     }
 
-    private fun getSharedPreferencesRepository(context: Context): SharedPreferencesRepository {
-        return SharedPreferencesRepositoryImpl(context)
+    private fun getSharedPreferencesRepository(): SharedPreferencesRepository {
+        return SharedPreferencesRepositoryImpl(application)
     }
 
     fun provideTracksInteractor(): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository(application), sharedPreferencesRepository)
+        return TracksInteractorImpl(getTracksRepository(), sharedPreferencesRepository)
     }
 
     fun provideMediaPlayerInteractor(
@@ -47,11 +46,11 @@ object Creator {
         return MediaPlayerWrapperImpl()
     }
 
-    private fun getAppThemeRepository(context: Context): AppThemeRepository {
-        return AppThemeRepositoryImpl(context)
+    private fun getAppThemeRepository(): AppThemeRepository {
+        return AppThemeRepositoryImpl(application)
     }
 
-    fun provideDarkThemeInteractor(context: Context): DarkThemeInteractor {
-        return DarkThemeInteractorImpl(getAppThemeRepository(context))
+    fun provideDarkThemeInteractor(): DarkThemeInteractor {
+        return DarkThemeInteractorImpl(getAppThemeRepository())
     }
 }

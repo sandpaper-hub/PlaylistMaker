@@ -11,7 +11,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         Creator.initializeCreatorValues(this)
-        darkThemeInteractor = Creator.provideDarkThemeInteractor(this)
+        darkThemeInteractor = Creator.provideDarkThemeInteractor()
         setDefaultNightMode(darkThemeInteractor.getThemeValue())
     }
 
