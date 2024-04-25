@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.search.ui
+package com.practicum.playlistmaker.search.presentation
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -21,11 +21,10 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.util.hasNullableData
-import com.practicum.playlistmaker.player.ui.PlayerActivity
+import com.practicum.playlistmaker.player.presentation.PlayerActivity
 import com.practicum.playlistmaker.search.NEW_HISTORY_ITEM_KEY
 import com.practicum.playlistmaker.search.SHARED_PREFERENCES_HISTORY_FILE
-import com.practicum.playlistmaker.search.presentation.viewModel.TracksState
-import com.practicum.playlistmaker.search.presentation.viewModel.TracksSearchViewModel
+import com.practicum.playlistmaker.search.presentation.model.TracksState
 
 class SearchActivity : AppCompatActivity() {
 

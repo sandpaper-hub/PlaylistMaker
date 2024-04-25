@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.player.ui
+package com.practicum.playlistmaker.player.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -11,10 +11,9 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.convertLongToTimeMillis
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
+import com.practicum.playlistmaker.player.presentation.model.PlayerState
 import com.practicum.playlistmaker.util.dpToPx
 import com.practicum.playlistmaker.util.getSerializableTrack
-import com.practicum.playlistmaker.player.presentation.MediaPlayerViewModel
-import com.practicum.playlistmaker.player.ui.model.PlayerState
 
 class PlayerActivity : AppCompatActivity() {
     private lateinit var track: Track

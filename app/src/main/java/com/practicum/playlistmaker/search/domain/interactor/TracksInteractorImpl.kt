@@ -1,7 +1,7 @@
-package com.practicum.playlistmaker.search.domain.impl
+package com.practicum.playlistmaker.search.domain.interactor
 
+import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.util.createArrayListFromJson
-import com.practicum.playlistmaker.search.presentation.interactor.TracksInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksRepository
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.repository.SharedPreferencesRepository

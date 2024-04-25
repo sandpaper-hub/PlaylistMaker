@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.player.domain.interactor
+package com.practicum.playlistmaker.player.domain.api
 
 interface MediaPlayerInteractor {
     var isMediaPlayerComplete: Boolean

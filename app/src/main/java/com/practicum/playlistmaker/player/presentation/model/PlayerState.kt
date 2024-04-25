@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.player.ui.model
+package com.practicum.playlistmaker.player.presentation.model
 
 interface PlayerState {
     object Prepared : PlayerState

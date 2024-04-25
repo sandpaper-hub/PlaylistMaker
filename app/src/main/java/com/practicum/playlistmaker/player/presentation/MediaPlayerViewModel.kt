@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractor
+import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
-import com.practicum.playlistmaker.player.ui.model.PlayerState
+import com.practicum.playlistmaker.player.presentation.model.PlayerState
 
 class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
     companion object {

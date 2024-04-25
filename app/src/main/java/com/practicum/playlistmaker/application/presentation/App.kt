@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.application.presentation
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.practicum.playlistmaker.application.presentation.interactor.DarkThemeInteractor
+import com.practicum.playlistmaker.application.domain.api.DarkThemeInteractor
 import com.practicum.playlistmaker.creator.Creator
 
 class App : Application() {

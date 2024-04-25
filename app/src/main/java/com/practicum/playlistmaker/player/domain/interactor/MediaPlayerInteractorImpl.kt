@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.player.domain.interactor
 
+import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.wrapper.MediaPlayerWrapper
 import com.practicum.playlistmaker.util.convertLongToTimeMillis
 

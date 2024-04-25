@@ -4,18 +4,18 @@ import android.app.Application
 import com.practicum.playlistmaker.application.data.repository.AppThemeRepositoryImpl
 import com.practicum.playlistmaker.application.domain.interactor.DarkThemeInteractorImpl
 import com.practicum.playlistmaker.application.domain.repository.AppThemeRepository
-import com.practicum.playlistmaker.application.presentation.interactor.DarkThemeInteractor
+import com.practicum.playlistmaker.application.domain.api.DarkThemeInteractor
 import com.practicum.playlistmaker.player.data.impl.MediaPlayerWrapperImpl
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.player.domain.wrapper.MediaPlayerWrapper
 import com.practicum.playlistmaker.search.data.repository.SharedPreferencesRepositoryImpl
-import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractor
+import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.search.domain.repository.SharedPreferencesRepository
 import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.search.data.repository.TracksRepositoryImpl
-import com.practicum.playlistmaker.search.presentation.interactor.TracksInteractor
+import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksRepository
-import com.practicum.playlistmaker.search.domain.impl.TracksInteractorImpl
+import com.practicum.playlistmaker.search.domain.interactor.TracksInteractorImpl
 
 object Creator {
     private lateinit var application: Application
