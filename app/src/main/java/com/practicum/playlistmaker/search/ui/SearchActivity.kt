@@ -10,7 +10,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -29,7 +28,6 @@ import com.practicum.playlistmaker.search.presentation.viewModel.TracksSearchVie
 class SearchActivity : AppCompatActivity() {
 
     companion object {
-        const val INSTANCE_STATE_KEY = "SAVED_RESULT"
         const val CLICK_DEBOUNCE_DELAY = 1000L
         const val CHECK_TEXT_DELAY = 200L
     }
@@ -37,11 +35,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
 
     private lateinit var viewModel: TracksSearchViewModel
-
-    private var savedText = ""
-    private var restoredText = ""
-
-    private var lastSearchText: String = ""
 
     private var isClickAllowed = true
     private lateinit var trackListAdapter: TrackListAdapter
@@ -67,27 +60,23 @@ class SearchActivity : AppCompatActivity() {
         )[TracksSearchViewModel::class.java]
         viewModel.observeState().observe(this) {
             render(it)
-            Log.d("12345", it.toString())
         }
 
         mainHandler = Handler(Looper.getMainLooper())
+        binding.searchEditText.setText(viewModel.lastSearchText)
 
         textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                lastSearchText = viewModel.searchDebounce(s?.toString() ?: "")
+                viewModel.searchDebounce(s?.toString() ?: "")
                 mainHandler.postDelayed(
                     { viewModel.showHideClearEditTextButton(s.toString()) },
                     CHECK_TEXT_DELAY
                 )
             }
 
-            override fun afterTextChanged(s: Editable?) {
-                savedText = binding.searchEditText.text.toString()
-            }
+            override fun afterTextChanged(s: Editable?) {}
         }
 
         textWatcher.let { binding.searchEditText.addTextChangedListener(it) }
@@ -163,8 +152,7 @@ class SearchActivity : AppCompatActivity() {
         binding.searchEditText.setOnEditorActionListener { editTextView, actionId, _ -> //ok
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (editTextView.text.isNotEmpty()) {
-                    lastSearchText =
-                        viewModel.searchDebounce(editTextView.text.toString())
+                    viewModel.searchDebounce(editTextView.text.toString())
                 }
             }
             false
@@ -178,19 +166,8 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.refreshSearchButton.setOnClickListener {//ok
-            lastSearchText = viewModel.searchDebounce(lastSearchText)
+            viewModel.searchDebounce(viewModel.lastSearchText)
         }
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) { //остаётся
-        super.onRestoreInstanceState(savedInstanceState)
-        restoredText = savedInstanceState.getString(INSTANCE_STATE_KEY).toString()
-        binding.searchEditText.setText(restoredText)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) { //остаётся
-        super.onSaveInstanceState(outState)
-        outState.putString(INSTANCE_STATE_KEY, savedText)
     }
 
     override fun onPause() {

@@ -2,9 +2,7 @@ package com.practicum.playlistmaker.search.presentation.viewModel
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -21,26 +19,24 @@ class TracksSearchViewModel : ViewModel() {
             initializer { TracksSearchViewModel() }
         }
     }
+
     var isCreated = false
+    var lastSearchText: String = ""
 
     private val tracksInteractor = Creator.provideTracksInteractor()
     private val stateLiveData = MutableLiveData<TracksState>()
-    fun observeState(): LiveData<TracksState> = stateLiveData
 
     private val handler = Handler(Looper.getMainLooper())
 
-    private var lastSearchText: String? = null
+    fun observeState(): LiveData<TracksState> = stateLiveData
 
     private val searchRunnable = Runnable {
-        val newSearchText = lastSearchText ?: ""
+        val newSearchText = lastSearchText
         searchRequest(newSearchText)
     }
 
-    fun searchDebounce(changedText: String): String {
-        if (lastSearchText == changedText) {
-            return lastSearchText ?: ""
-        }
-        if (changedText.isEmpty()) {
+    fun searchDebounce(changedText: String?) {
+        if (changedText!!.isEmpty()) {
             val historyTrackList = tracksInteractor.getHistory()
             renderState(TracksState.HistoryContent(historyTrackList))
         } else {
@@ -49,7 +45,6 @@ class TracksSearchViewModel : ViewModel() {
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
         lastSearchText = changedText
-        return lastSearchText ?: ""
     }
 
     private fun searchRequest(newSearchText: String) {
