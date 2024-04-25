@@ -16,26 +16,6 @@ inline fun <reified T : Serializable> Intent.getSerializableTrack(key: String): 
     else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
 }
 
-fun List<TrackDto>.toTrackList(): ArrayList<Track> {
-    val resultList = ArrayList<Track>()
-    for (trackDto in this) {
-        val track = Track(
-            trackDto.trackId,
-            trackDto.trackName,
-            trackDto.artistName,
-            trackDto.trackTimeMillis,
-            trackDto.artworkUrl100,
-            trackDto.collectionName,
-            trackDto.releaseDate,
-            trackDto.primaryGenreName,
-            trackDto.country,
-            trackDto.previewUrl
-        )
-        resultList.add(track)
-    }
-    return resultList
-}
-
 fun ArrayList<Track>.toDto(): ArrayList<TrackDto> {
     val resultList = ArrayList<TrackDto>()
     for (track in this) {

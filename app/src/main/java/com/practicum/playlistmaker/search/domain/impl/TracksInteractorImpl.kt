@@ -5,9 +5,9 @@ import com.practicum.playlistmaker.search.presentation.interactor.TracksInteract
 import com.practicum.playlistmaker.search.domain.api.TracksRepository
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.repository.SharedPreferencesRepository
+import com.practicum.playlistmaker.search.domain.toDomain
 import com.practicum.playlistmaker.util.Resource
 import com.practicum.playlistmaker.util.toDto
-import com.practicum.playlistmaker.util.toTrackList
 import java.util.concurrent.Executors
 
 class TracksInteractorImpl(
@@ -21,7 +21,7 @@ class TracksInteractorImpl(
         executor.execute {
             when (val resource = repository.searchTracks(expression)) {
                 is Resource.Success -> {
-                    consumer.consume(resource.data?.toTrackList(), null)
+                    consumer.consume(resource.data?.toDomain(), null)
                 }
 
                 is Resource.Error -> {
