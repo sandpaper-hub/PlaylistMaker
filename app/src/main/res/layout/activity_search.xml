@@ -31,6 +31,7 @@
         android:importantForAutofill="no"
         android:inputType="text"
         android:maxLines="1"
+        android:saveEnabled="false"
         android:paddingStart="@dimen/indent_12dp"
         android:paddingEnd="40dp"
         app:layout_constraintStart_toStartOf="parent"

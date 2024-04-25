@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -37,7 +38,7 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var viewModel: TracksSearchViewModel
 
-    var savedText = ""
+    private var savedText = ""
     private var restoredText = ""
 
     private var lastSearchText: String = ""
@@ -66,6 +67,7 @@ class SearchActivity : AppCompatActivity() {
         )[TracksSearchViewModel::class.java]
         viewModel.observeState().observe(this) {
             render(it)
+            Log.d("12345", it.toString())
         }
 
         mainHandler = Handler(Looper.getMainLooper())
@@ -120,7 +122,9 @@ class SearchActivity : AppCompatActivity() {
             })
 
         binding.historyRecycler.adapter = historyAdapter
-        viewModel.showHistory()
+        if (!viewModel.isCreated) {
+            viewModel.showHistory()
+        }
 
         binding.clearHistory.setOnClickListener {
             viewModel.clearHistory()
@@ -156,8 +160,6 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.searchEditText.isSaveEnabled = false
-
         binding.searchEditText.setOnEditorActionListener { editTextView, actionId, _ -> //ok
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (editTextView.text.isNotEmpty()) {
@@ -189,6 +191,24 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) { //остаётся
         super.onSaveInstanceState(outState)
         outState.putString(INSTANCE_STATE_KEY, savedText)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        onSharedPreferencesChangeListener.let {
+            sharedPreferences?.unregisterOnSharedPreferenceChangeListener(
+                it
+            )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        onSharedPreferencesChangeListener.let {
+            sharedPreferences?.registerOnSharedPreferenceChangeListener(
+                it
+            )
+        }
     }
 
     private fun clickDebounce(): Boolean { //остаётся

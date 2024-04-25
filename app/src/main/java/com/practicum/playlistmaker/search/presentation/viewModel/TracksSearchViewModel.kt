@@ -2,7 +2,9 @@ package com.practicum.playlistmaker.search.presentation.viewModel
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -12,19 +14,18 @@ import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.presentation.interactor.TracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
 
-class TracksSearchViewModel() : ViewModel() {
+class TracksSearchViewModel : ViewModel() {
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer { TracksSearchViewModel() }
         }
     }
+    var isCreated = false
 
     private val tracksInteractor = Creator.provideTracksInteractor()
     private val stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData
-
-//    private var historyTrackList: ArrayList<Track> = tracksInteractor.getHistory()
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -96,6 +97,7 @@ class TracksSearchViewModel() : ViewModel() {
         if (historyTrackList.isEmpty()) {
             renderState(TracksState.Empty)
         } else {
+            isCreated = true
             renderState(TracksState.HistoryContent(historyTrackList))
         }
     }
