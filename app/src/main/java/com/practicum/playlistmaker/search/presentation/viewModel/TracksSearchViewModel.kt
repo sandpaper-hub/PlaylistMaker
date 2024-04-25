@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.presentation.interactor.TracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
+import com.practicum.playlistmaker.search.ui.SearchActivity
 
 class TracksSearchViewModel : ViewModel() {
     companion object {
@@ -22,6 +23,7 @@ class TracksSearchViewModel : ViewModel() {
 
     var isCreated = false
     var lastSearchText: String = ""
+    private var isClickAllowed = true
 
     private val tracksInteractor = Creator.provideTracksInteractor()
     private val stateLiveData = MutableLiveData<TracksState>()
@@ -29,11 +31,6 @@ class TracksSearchViewModel : ViewModel() {
     private val handler = Handler(Looper.getMainLooper())
 
     fun observeState(): LiveData<TracksState> = stateLiveData
-
-    private val searchRunnable = Runnable {
-        val newSearchText = lastSearchText
-        searchRequest(newSearchText)
-    }
 
     fun searchDebounce(changedText: String?) {
         if (changedText!!.isEmpty()) {
@@ -45,6 +42,11 @@ class TracksSearchViewModel : ViewModel() {
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
         lastSearchText = changedText
+    }
+
+    private val searchRunnable = Runnable {
+        val newSearchText = lastSearchText
+        searchRequest(newSearchText)
     }
 
     private fun searchRequest(newSearchText: String) {
@@ -107,5 +109,14 @@ class TracksSearchViewModel : ViewModel() {
 
     override fun onCleared() {
         handler.removeCallbacks(searchRunnable)
+    }
+
+    fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, SearchActivity.CLICK_DEBOUNCE_DELAY)
+        }
+        return current
     }
 }

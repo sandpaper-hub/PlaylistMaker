@@ -36,7 +36,6 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var viewModel: TracksSearchViewModel
 
-    private var isClickAllowed = true
     private lateinit var trackListAdapter: TrackListAdapter
 
     private lateinit var historyAdapter: TrackListAdapter
@@ -102,7 +101,7 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter =
             TrackListAdapter(object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
-                    if (clickDebounce()) {
+                    if (viewModel.clickDebounce()) {
                         val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
                         playerIntent.putExtra(GlobalConstants.INTENT_EXTRA_KEY, track)
                         startActivity(playerIntent)
@@ -123,7 +122,7 @@ class SearchActivity : AppCompatActivity() {
             TrackListAdapter(object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
                     if (!track.hasNullableData()) {
-                        if (clickDebounce()) {
+                        if (viewModel.clickDebounce()) {
                             viewModel.addTrackToHistory(track)
                             val playerIntent =
                                 Intent(applicationContext, PlayerActivity::class.java)
@@ -145,11 +144,11 @@ class SearchActivity : AppCompatActivity() {
 
         binding.trackListRecyclerView.adapter = trackListAdapter
 
-        binding.backButtonSearchActivity.setOnClickListener {//ok
+        binding.backButtonSearchActivity.setOnClickListener {
             finish()
         }
 
-        binding.searchEditText.setOnEditorActionListener { editTextView, actionId, _ -> //ok
+        binding.searchEditText.setOnEditorActionListener { editTextView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (editTextView.text.isNotEmpty()) {
                     viewModel.searchDebounce(editTextView.text.toString())
@@ -158,14 +157,14 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
-        binding.clearSearchEdiText.setOnClickListener {//ok
+        binding.clearSearchEdiText.setOnClickListener {
             binding.searchEditText.setText("")
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(it.windowToken, 0)
         }
 
-        binding.refreshSearchButton.setOnClickListener {//ok
+        binding.refreshSearchButton.setOnClickListener {
             viewModel.searchDebounce(viewModel.lastSearchText)
         }
     }
@@ -186,15 +185,6 @@ class SearchActivity : AppCompatActivity() {
                 it
             )
         }
-    }
-
-    private fun clickDebounce(): Boolean { //остаётся
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            mainHandler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
     }
 
     private fun render(state: TracksState) { //ok
