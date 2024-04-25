@@ -16,12 +16,14 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.practicum.playlistmaker.util.INTENT_EXTRA_KEY
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.util.GlobalConstants
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.util.hasNullableData
 import com.practicum.playlistmaker.player.ui.PlayerActivity
+import com.practicum.playlistmaker.search.NEW_HISTORY_ITEM_KEY
+import com.practicum.playlistmaker.search.SHARED_PREFERENCES_HISTORY_FILE
 import com.practicum.playlistmaker.search.presentation.viewModel.TracksState
 import com.practicum.playlistmaker.search.presentation.viewModel.TracksSearchViewModel
 
@@ -78,13 +80,13 @@ class SearchActivity : AppCompatActivity() {
 
         sharedPreferences =
             getSharedPreferences(
-                GlobalConstants.SHARED_PREFERENCES_HISTORY_FILE,
+                SHARED_PREFERENCES_HISTORY_FILE,
                 MODE_PRIVATE
             )
 
         onSharedPreferencesChangeListener =
             OnSharedPreferenceChangeListener { _, key ->
-                if (key == GlobalConstants.NEW_HISTORY_ITEM_KEY) {
+                if (key == NEW_HISTORY_ITEM_KEY) {
                     historyAdapter.trackList = viewModel.getHistory()
                     historyAdapter.notifyDataSetChanged()
                 }
@@ -99,7 +101,7 @@ class SearchActivity : AppCompatActivity() {
                 override fun onItemClick(track: Track) {
                     if (viewModel.clickDebounce()) {
                         val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
-                        playerIntent.putExtra(GlobalConstants.INTENT_EXTRA_KEY, track)
+                        playerIntent.putExtra(INTENT_EXTRA_KEY, track)
                         startActivity(playerIntent)
                     }
                 }
@@ -123,7 +125,7 @@ class SearchActivity : AppCompatActivity() {
                             val playerIntent =
                                 Intent(applicationContext, PlayerActivity::class.java)
                             playerIntent.putExtra(
-                                GlobalConstants.INTENT_EXTRA_KEY,
+                                INTENT_EXTRA_KEY,
                                 track
                             )
                             startActivity(playerIntent)

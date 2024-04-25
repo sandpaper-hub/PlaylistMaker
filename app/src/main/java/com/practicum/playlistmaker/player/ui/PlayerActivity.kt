@@ -6,7 +6,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.practicum.playlistmaker.util.GlobalConstants
+import com.practicum.playlistmaker.util.INTENT_EXTRA_KEY
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.convertLongToTimeMillis
@@ -34,7 +34,7 @@ class PlayerActivity : AppCompatActivity() {
         mediaPlayerViewModel.observeState().observe(this) { render(it) }
 
 
-        track = intent.getSerializableTrack<Track>(GlobalConstants.INTENT_EXTRA_KEY) ?: Track(
+        track = intent.getSerializableTrack<Track>(INTENT_EXTRA_KEY) ?: Track(
             "", "", "",
             0, "", "", "",
             "", "", ""
