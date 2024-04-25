@@ -16,6 +16,7 @@ import com.practicum.playlistmaker.search.ui.SearchActivity
 class TracksSearchViewModel : ViewModel() {
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CHECK_TEXT_DELAY = 50L
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer { TracksSearchViewModel() }
         }
@@ -77,7 +78,8 @@ class TracksSearchViewModel : ViewModel() {
     }
 
     fun showHideClearEditTextButton(text: String) {
-        renderState(TracksState.ClearedEditText(text))
+        handler.postDelayed({renderState(TracksState.ClearedEditText(text))}, CHECK_TEXT_DELAY)
+
     }
 
     fun addTrackToHistory(track: Track) {

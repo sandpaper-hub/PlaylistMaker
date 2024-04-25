@@ -29,7 +29,6 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val CLICK_DEBOUNCE_DELAY = 1000L
-        const val CHECK_TEXT_DELAY = 200L
     }
 
     private lateinit var binding: ActivitySearchBinding
@@ -69,10 +68,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.searchDebounce(s?.toString() ?: "")
-                mainHandler.postDelayed(
-                    { viewModel.showHideClearEditTextButton(s.toString()) },
-                    CHECK_TEXT_DELAY
-                )
+                viewModel.showHideClearEditTextButton(s.toString())
             }
 
             override fun afterTextChanged(s: Editable?) {}
