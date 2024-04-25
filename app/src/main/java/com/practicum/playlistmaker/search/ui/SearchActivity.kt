@@ -196,67 +196,67 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun showLoading() { //ok
-        binding.searchProgressBar.visibility = View.VISIBLE
+    private fun showLoading() = with(binding) {
+        searchProgressBar.visibility = View.VISIBLE
 
-        binding.badSearchResultGroup.visibility = View.GONE
-        binding.historySearchContainer.visibility = View.GONE
-        binding.trackListRecyclerView.visibility = View.GONE
-        binding.connectionErrorGroup.visibility = View.GONE
+        badSearchResultGroup.visibility = View.GONE
+        historySearchContainer.visibility = View.GONE
+        trackListRecyclerView.visibility = View.GONE
+        connectionErrorGroup.visibility = View.GONE
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun showContent(tracks: List<Track>) { //ok
-        binding.trackListRecyclerView.visibility = View.VISIBLE
+    private fun showContent(tracks: List<Track>) = with(binding){
+        trackListRecyclerView.visibility = View.VISIBLE
 
-        binding.searchProgressBar.visibility = View.GONE
-        binding.historySearchContainer.visibility = View.GONE
-        binding.connectionErrorGroup.visibility = View.GONE
+        searchProgressBar.visibility = View.GONE
+        historySearchContainer.visibility = View.GONE
+        connectionErrorGroup.visibility = View.GONE
 
         trackListAdapter.trackList.clear()
         trackListAdapter.trackList.addAll(tracks)
         trackListAdapter.notifyDataSetChanged()
     }
 
-    private fun showConnectionError() { //ok
-        binding.connectionErrorGroup.visibility = View.VISIBLE
-        binding.badSearchResultText.setText(R.string.connection_error)
-        binding.badSearchResultImage.setImageResource(R.drawable.bad_connection_image)
+    private fun showConnectionError() = with(binding) {
+        connectionErrorGroup.visibility = View.VISIBLE
+        badSearchResultText.setText(R.string.connection_error)
+        badSearchResultImage.setImageResource(R.drawable.bad_connection_image)
 
-        binding.trackListRecyclerView.visibility = View.GONE
-        binding.searchProgressBar.visibility = View.GONE
-        binding.historySearchContainer.visibility = View.GONE
+        trackListRecyclerView.visibility = View.GONE
+        searchProgressBar.visibility = View.GONE
+        historySearchContainer.visibility = View.GONE
     }
 
-    private fun showEmpty() { //ok
-        binding.badSearchResultText.setText(R.string.nothing_found)
-        binding.badSearchResultImage.setImageResource(R.drawable.nothing_found_image)
-        binding.badSearchResultGroup.visibility = View.VISIBLE
+    private fun showEmpty() = with(binding) {
+        badSearchResultText.setText(R.string.nothing_found)
+        badSearchResultImage.setImageResource(R.drawable.nothing_found_image)
+        badSearchResultGroup.visibility = View.VISIBLE
 
-        binding.trackListRecyclerView.visibility = View.GONE
-        binding.searchProgressBar.visibility = View.GONE
-        binding.historySearchContainer.visibility = View.GONE
+        trackListRecyclerView.visibility = View.GONE
+        searchProgressBar.visibility = View.GONE
+        historySearchContainer.visibility = View.GONE
     }
 
-    private fun showHideClearEditTextButton(text: String) {
+    private fun showHideClearEditTextButton(text: String) = with(binding) {
         if (text.isEmpty()) {
-            binding.clearSearchEdiText.visibility = View.GONE
-            binding.trackListRecyclerView.visibility = View.GONE
+            clearSearchEdiText.visibility = View.GONE
+            trackListRecyclerView.visibility = View.GONE
         } else {
-            binding.clearSearchEdiText.visibility = View.VISIBLE
+            clearSearchEdiText.visibility = View.VISIBLE
         }
     }
 
-    private fun showEmptyState() { // HERE
-        binding.historySearchContainer.visibility = View.GONE
-        binding.trackListRecyclerView.visibility = View.GONE
+    private fun showEmptyState() = with(binding) {
+        historySearchContainer.visibility = View.GONE
+        trackListRecyclerView.visibility = View.GONE
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun showHistory(historyTrackList: List<Track>) { //HERE
-        binding.historySearchContainer.visibility = View.VISIBLE
-        binding.connectionErrorGroup.visibility = View.GONE
-        binding.trackListRecyclerView.visibility = View.GONE
+    private fun showHistory(historyTrackList: List<Track>) = with(binding) {
+        historySearchContainer.visibility = View.VISIBLE
+        connectionErrorGroup.visibility = View.GONE
+        trackListRecyclerView.visibility = View.GONE
 
         historyAdapter.trackList.clear()
         historyAdapter.trackList.addAll(historyTrackList)
