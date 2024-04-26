@@ -22,9 +22,13 @@ class RetrofitNetworkClient(private val context: Context) : NetworkClient {
         }
 
         return if (dto is TrackSearchRequest) {
-            val response = iTunesSearchService.search(dto.expression).execute()
-            val body: Response = (response.body() ?: Response())
-            body.apply { resultCode = response.code() }
+            try {
+                val response = iTunesSearchService.search(dto.expression).execute()
+                val body: Response = (response.body() ?: Response())
+                body.apply { resultCode = response.code() }
+            } catch (exception: Exception) {
+                Response().apply { resultCode = -1 }
+            }
         } else {
             Response().apply { resultCode = 400 }
         }

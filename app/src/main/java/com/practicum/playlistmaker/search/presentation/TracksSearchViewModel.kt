@@ -60,25 +60,22 @@ class TracksSearchViewModel : ViewModel() {
                     if (foundTracks != null) {
                         tracks.addAll(foundTracks)
                         when {
-                            errorMessage != null -> {
-                                renderState(TracksState.ConnectionError)
-                            }
-
                             tracks.isEmpty() -> {
                                 renderState(TracksState.NothingFound)
                             }
 
                             else -> renderState(TracksState.Content(tracks))
                         }
+                    } else {
+                        renderState(TracksState.ConnectionError)
                     }
                 }
-
             })
         }
     }
 
     fun showHideClearEditTextButton(text: String) {
-        handler.postDelayed({renderState(TracksState.ClearedEditText(text))}, CHECK_TEXT_DELAY)
+        handler.postDelayed({ renderState(TracksState.ClearedEditText(text)) }, CHECK_TEXT_DELAY)
 
     }
 
