@@ -6,8 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -39,7 +37,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackListAdapter: TrackListAdapter
 
     private lateinit var historyAdapter: TrackListAdapter
-    private lateinit var mainHandler: Handler
     private var sharedPreferences: SharedPreferences? = null
 
     private var textWatcher: TextWatcher? = null
@@ -57,7 +54,6 @@ class SearchActivity : AppCompatActivity() {
             render(it)
         }
 
-        mainHandler = Handler(Looper.getMainLooper())
         binding.searchEditText.setText(viewModel.lastSearchText)
 
         textWatcher = object : TextWatcher {
