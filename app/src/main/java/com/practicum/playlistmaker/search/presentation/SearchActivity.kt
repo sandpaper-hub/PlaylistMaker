@@ -14,8 +14,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.util.INTENT_EXTRA_KEY
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -34,7 +34,7 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
 
-    private lateinit var viewModel: TracksSearchViewModel
+    private val viewModel by viewModels<TracksSearchViewModel> { TracksSearchViewModel.getViewModelFactory() }
 
     private lateinit var trackListAdapter: TrackListAdapter
 
@@ -53,10 +53,6 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(
-            this,
-            TracksSearchViewModel.getViewModelFactory()
-        )[TracksSearchViewModel::class.java]
         viewModel.observeState().observe(this) {
             render(it)
         }

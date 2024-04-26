@@ -3,14 +3,14 @@ package com.practicum.playlistmaker.settings.presentation
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: SettingsViewModel
+    private val viewModel by viewModels<SettingsViewModel> { SettingsViewModel.getViewModelFactory() }
     private lateinit var binding: ActivitySettingsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,10 +21,6 @@ class SettingsActivity : AppCompatActivity() {
         val email = getString(R.string.sampleEmail)
         val subject = getString(R.string.sampleSubject)
         val body = getString(R.string.sampleBodyMessage)
-
-        viewModel = ViewModelProvider(
-            this, SettingsViewModel.getViewModelFactory()
-        )[SettingsViewModel::class.java]
 
         binding.darkThemeSwitcherCompat.isChecked = viewModel.isChecked()
 

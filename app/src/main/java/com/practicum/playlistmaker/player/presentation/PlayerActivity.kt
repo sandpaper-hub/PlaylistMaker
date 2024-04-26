@@ -1,9 +1,9 @@
 package com.practicum.playlistmaker.player.presentation
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.util.INTENT_EXTRA_KEY
@@ -18,17 +18,12 @@ import com.practicum.playlistmaker.util.getSerializableTrack
 class PlayerActivity : AppCompatActivity() {
     private lateinit var track: Track
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var mediaPlayerViewModel: MediaPlayerViewModel
+    private  val mediaPlayerViewModel by viewModels<MediaPlayerViewModel> { MediaPlayerViewModel.getViewModelFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        mediaPlayerViewModel = ViewModelProvider(
-            this,
-            MediaPlayerViewModel.getViewModelFactory()
-        )[MediaPlayerViewModel::class.java]
 
         mediaPlayerViewModel.observeState().observe(this) { render(it) }
 
