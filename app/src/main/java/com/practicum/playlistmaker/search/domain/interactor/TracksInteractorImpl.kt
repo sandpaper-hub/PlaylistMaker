@@ -7,7 +7,6 @@ import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.repository.SharedPreferencesRepository
 import com.practicum.playlistmaker.search.domain.toDomain
 import com.practicum.playlistmaker.util.Resource
-import com.practicum.playlistmaker.util.toDto
 import java.util.concurrent.Executors
 
 class TracksInteractorImpl(
@@ -39,7 +38,7 @@ class TracksInteractorImpl(
         if (historyArray.size > 10) {
             historyArray.removeAt(10)
         }
-        sharedPreferencesRepository.saveArrayListToHistory(historyArray.toDto())
+        sharedPreferencesRepository.saveArrayListToHistory(historyArray)
     }
 
     override fun getHistory(): ArrayList<Track> {
@@ -52,7 +51,7 @@ class TracksInteractorImpl(
         if (json != null) {
             val array = json.createArrayListFromJson()
             array.clear()
-            sharedPreferencesRepository.saveArrayListToHistory(array.toDto())
+            sharedPreferencesRepository.saveArrayListToHistory(array)
         }
     }
 }
