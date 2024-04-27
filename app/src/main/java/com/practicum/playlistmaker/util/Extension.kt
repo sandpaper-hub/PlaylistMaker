@@ -13,7 +13,7 @@ import java.util.Locale
 
 inline fun <reified T : Serializable> Intent.getSerializableTrack(key: String): T? = when {
     SDK_INT >= 33 -> getSerializableExtra(key, T::class.java)
-    else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
+    else -> @Suppress("DEPRECATION") getSerializableExtra(key) as? T
 }
 
 fun ArrayList<Track>.toDto(): ArrayList<TrackDto> {
