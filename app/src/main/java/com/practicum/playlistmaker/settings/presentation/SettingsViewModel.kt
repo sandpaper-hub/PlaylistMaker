@@ -5,16 +5,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.practicum.playlistmaker.application.domain.api.DarkThemeInteractor
 import com.practicum.playlistmaker.creator.Creator
 
-class SettingsViewModel() : ViewModel() {
+class SettingsViewModel(private val darkThemeInteractor: DarkThemeInteractor) : ViewModel() {
     companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer { SettingsViewModel() }
+            val darkThemeInteractor = Creator.provideDarkThemeInteractor()
+            initializer { SettingsViewModel(darkThemeInteractor) }
         }
     }
-
-    private val darkThemeInteractor = Creator.provideDarkThemeInteractor()
 
     fun isChecked(): Boolean {
         return darkThemeInteractor.getThemeValue()

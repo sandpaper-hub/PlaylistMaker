@@ -13,12 +13,13 @@ import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.presentation.model.TracksState
 
-class TracksSearchViewModel : ViewModel() {
+class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : ViewModel() {
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CHECK_TEXT_DELAY = 50L
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer { TracksSearchViewModel() }
+            val tracksInteractor = Creator.provideTracksInteractor()
+            initializer { TracksSearchViewModel(tracksInteractor) }
         }
     }
 
@@ -26,7 +27,6 @@ class TracksSearchViewModel : ViewModel() {
     var lastSearchText: String = ""
     private var isClickAllowed = true
 
-    private val tracksInteractor = Creator.provideTracksInteractor()
     private val stateLiveData = MutableLiveData<TracksState>()
 
     private val handler = Handler(Looper.getMainLooper())

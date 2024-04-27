@@ -5,22 +5,20 @@ import com.practicum.playlistmaker.util.createArrayListFromJson
 import com.practicum.playlistmaker.search.domain.api.TracksRepository
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.api.SharedPreferencesRepository
-import com.practicum.playlistmaker.search.domain.toDomain
 import com.practicum.playlistmaker.util.Resource
 import java.util.concurrent.Executors
 
 class TracksInteractorImpl(
     private val repository: TracksRepository,
     private val sharedPreferencesRepository: SharedPreferencesRepository
-) :
-    TracksInteractor {
+) : TracksInteractor {
 
     private val executor = Executors.newCachedThreadPool()
     override fun searchTracks(expression: String, consumer: TracksInteractor.TracksConsumer) {
         executor.execute {
             when (val resource = repository.searchTracks(expression)) {
                 is Resource.Success -> {
-                    consumer.consume(resource.data?.toDomain(), null)
+                    consumer.consume(resource.data, null)
                 }
 
                 is Resource.Error -> {
