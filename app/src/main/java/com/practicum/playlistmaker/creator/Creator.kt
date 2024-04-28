@@ -1,10 +1,6 @@
 package com.practicum.playlistmaker.creator
 
 import android.app.Application
-import com.practicum.playlistmaker.application.data.repository.AppThemeRepositoryImpl
-import com.practicum.playlistmaker.application.domain.interactor.DarkThemeInteractorImpl
-import com.practicum.playlistmaker.application.domain.repository.AppThemeRepository
-import com.practicum.playlistmaker.application.domain.api.DarkThemeInteractor
 import com.practicum.playlistmaker.player.data.impl.MediaPlayerWrapperImpl
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.player.domain.wrapper.MediaPlayerWrapper
@@ -44,13 +40,5 @@ object Creator {
 
     private fun provideMediaPlayerWrapper(): MediaPlayerWrapper {
         return MediaPlayerWrapperImpl()
-    }
-
-    private fun getAppThemeRepository(): AppThemeRepository {
-        return AppThemeRepositoryImpl(application)
-    }
-
-    fun provideDarkThemeInteractor(): DarkThemeInteractor {
-        return DarkThemeInteractorImpl(getAppThemeRepository())
     }
 }
