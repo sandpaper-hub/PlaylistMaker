@@ -5,10 +5,6 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.player.presentation.model.PlayerState
@@ -16,10 +12,6 @@ import com.practicum.playlistmaker.player.presentation.model.PlayerState
 class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
     companion object {
         private const val UPDATE_POSITION_DELAY = 250L
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
-            initializer { MediaPlayerViewModel(mediaPlayerInteractor) }
-        }
     }
 
     private val stateLiveData = MutableLiveData<PlayerState>()

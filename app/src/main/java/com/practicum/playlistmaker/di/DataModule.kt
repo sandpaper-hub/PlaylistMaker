@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.media.MediaPlayer
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -13,7 +14,7 @@ val dataModule = module {
         androidContext().getSharedPreferences(SHARED_PREFERENCES_THEME_KEY, Context.MODE_PRIVATE)
     }
 
-
-
-
+    factory <MediaPlayer> {
+        MediaPlayer()
+    }
 }
