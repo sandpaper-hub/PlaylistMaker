@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:backgroundTint="@color/transparent">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/cover"
         android:layout_width="@dimen/coverSize_dp"
         android:layout_height="@dimen/coverSize_dp"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/placeholder" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/trackName"
         style="@style/track_text_style_songName"
         android:layout_marginTop="13dp"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ut lorem sit amet nisl tempor commodo. Suspendisse sed vehicula tortor. Maecenas lobortis est at dolor condimentum, nec venenatis metus condimentum. Cras aliquet tellus vel nisl auctor ornare. Ut ultricies facilisis mi, sed maximus ex vestibulum non. In a ex vel enim pellentesque ultricies at id turpis. Integer sollicitudin euismod varius. Praesent elementum non velit efficitur cursus. Fusce fringilla risus nisi, ut hendrerit tortor rutrum ut. Pellentesque facilisis mattis rhoncus." />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/artistName"
         style="@style/track_text_style_artist"
         android:layout_marginTop="1dp"
@@ -39,7 +39,7 @@
         app:layout_constraintTop_toBottomOf="@+id/trackName"
         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ut lorem sit amet nisl tempor commodo. Suspendisse sed vehicula tortor. Maecenas lobortis est at dolor condimentum, nec venenatis metus condimentum. Cras aliquet tellus vel nisl auctor ornare. Ut ultricies facilisis mi, sed maximus ex vestibulum non. In a ex vel enim pellentesque ultricies at id turpis. Integer sollicitudin euismod varius. Praesent elementum non velit efficitur cursus. Fusce fringilla risus nisi, ut hendrerit tortor rutrum ut. Pellentesque facilisis mattis rhoncus." />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/dot_point"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
         app:layout_constraintTop_toTopOf="@id/artistName"
         app:tint="@color/YP_Text_Gray" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/trackDuration"
         style="@style/track_text_style_artist"
         android:layout_marginStart="0dp"
@@ -70,7 +70,7 @@
         app:barrierDirection="start"
         app:constraint_referenced_ids="trackArrow" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/trackArrow"
         style="@style/settings_activity_small_icon_style"
         android:layout_marginTop="@dimen/indent_18dp"

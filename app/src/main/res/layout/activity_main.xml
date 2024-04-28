@@ -5,7 +5,7 @@
     style="@style/main_activity_style"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.MainActivity">
+    tools:context=".main.ui.MainActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftBorder16dpMainActivity"
@@ -21,7 +21,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="@dimen/indent_16dp" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title"
         style="@style/panelHeader"
         android:text="@string/app_name"

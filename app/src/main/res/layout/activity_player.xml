@@ -50,7 +50,7 @@
         style="@style/invisibleViewStyle"
         app:constraint_referenced_ids="countryDescription, countryValue" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/countryDescription"
         style="@style/trackInfoDescriptionStyle"
         android:layout_marginBottom="20dp"
@@ -58,7 +58,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/leftBorder16dp" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/countryValue"
         style="@style/trackInfoValueStyle"
         app:layout_constraintBaseline_toBaselineOf="@+id/countryDescription"
@@ -69,14 +69,14 @@
         style="@style/invisibleViewStyle"
         app:constraint_referenced_ids="genreDescription, genreValue" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/genreDescription"
         style="@style/trackInfoDescriptionStyle"
         android:text="@string/genre"
         app:layout_constraintBottom_toTopOf="@+id/countryDescription"
         app:layout_constraintStart_toStartOf="@+id/leftBorder16dp" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/genreValue"
         style="@style/trackInfoValueStyle"
         app:layout_constraintBaseline_toBaselineOf="@+id/genreDescription"
@@ -87,14 +87,14 @@
         style="@style/invisibleViewStyle"
         app:constraint_referenced_ids="yearDescription, yearValue" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/yearDescription"
         style="@style/trackInfoDescriptionStyle"
         android:text="@string/year"
         app:layout_constraintBottom_toTopOf="@+id/genreDescription"
         app:layout_constraintStart_toStartOf="@+id/leftBorder16dp" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/yearValue"
         style="@style/trackInfoValueStyle"
         app:layout_constraintBaseline_toBaselineOf="@+id/yearDescription"
@@ -106,14 +106,14 @@
         style="@style/invisibleViewStyle"
         app:constraint_referenced_ids="albumDescription, albumValue" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/albumDescription"
         style="@style/trackInfoDescriptionStyle"
         android:text="@string/album"
         app:layout_constraintBottom_toTopOf="@+id/yearDescription"
         app:layout_constraintStart_toStartOf="@id/leftBorder16dp" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/albumValue"
         style="@style/trackInfoValueStyle"
         app:layout_constraintBaseline_toBaselineOf="@+id/albumDescription"
@@ -124,21 +124,21 @@
         style="@style/invisibleViewStyle"
         app:constraint_referenced_ids="durationValue, durationDescription" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/durationDescription"
         style="@style/trackInfoDescriptionStyle"
         android:text="@string/duration"
         app:layout_constraintBottom_toTopOf="@+id/albumDescription"
         app:layout_constraintStart_toStartOf="@id/leftBorder16dp" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/durationValue"
         style="@style/trackInfoValueStyle"
         app:layout_constraintBaseline_toBaselineOf="@+id/durationDescription"
         app:layout_constraintEnd_toEndOf="@id/rightBorder16dp"
         app:layout_constraintStart_toEndOf="@+id/textBarrierVertical" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/durationCurrentValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/playButton" />
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/addToCollectionButton"
         style="@style/playerButtonStyle"
         android:contentDescription="@string/addButtonText"
@@ -162,7 +162,7 @@
         app:layout_constraintStart_toStartOf="@id/leftBorder24dpPlayerActivity"
         app:layout_constraintTop_toTopOf="@+id/playButton" />
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/playButton"
         style="@style/playerButtonStyle"
         android:layout_marginBottom="@dimen/indent_4dp"
@@ -174,7 +174,7 @@
         app:layout_constraintTop_toBottomOf="@id/coverBarrier"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/likeButton"
         style="@style/playerButtonStyle"
         android:contentDescription="@string/likeButtonText"
@@ -184,7 +184,7 @@
         app:layout_constraintStart_toEndOf="@+id/playButton"
         app:layout_constraintTop_toTopOf="@+id/playButton" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/artistNamePlayerActivity"
         style="@style/trackNameArtisStyle"
         android:layout_marginTop="@dimen/indent_12dp"
@@ -193,7 +193,7 @@
         app:layout_constraintStart_toStartOf="@id/leftBorder24dpPlayerActivity"
         app:layout_constraintTop_toBottomOf="@+id/trackNamePlayerActivity" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/trackNamePlayerActivity"
         style="@style/trackNameArtisStyle"
         android:layout_marginTop="@dimen/indent_24dp"
@@ -202,7 +202,7 @@
         app:layout_constraintStart_toStartOf="@id/leftBorder24dpPlayerActivity"
         app:layout_constraintTop_toBottomOf="@+id/album_cover" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/album_cover"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -215,7 +215,7 @@
         app:layout_constraintStart_toStartOf="@id/leftBorder24dpPlayerActivity"
         app:layout_constraintTop_toBottomOf="@+id/back_button_playerActivity" />
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/back_button_playerActivity"
         style="@style/back_button_style"
         android:backgroundTint="@color/transparent"

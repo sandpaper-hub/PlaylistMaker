@@ -2,10 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".App"
+        android:name=".application.presentation.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,10 +17,11 @@
         android:theme="@style/Base.Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.ui.PlayerActivity"
+            android:name=".player.presentation.PlayerActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.MainActivity"
+            android:name=".main.ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,14 +30,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.ui.SearchActivity"
+            android:name=".search.presentation.SearchActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.MediaLibraryActivity"
+            android:name=".mediaLibrary.ui.MediaLibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.SettingsActivity"
+            android:name=".settings.presentation.SettingsActivity"
             android:exported="false" />
     </application>
 
