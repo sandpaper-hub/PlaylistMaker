@@ -4,8 +4,7 @@ import android.media.MediaPlayer
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerListener
 import com.practicum.playlistmaker.player.domain.wrapper.MediaPlayerWrapper
 
-class MediaPlayerWrapperImpl : MediaPlayerWrapper {
-    private val mediaPlayer = MediaPlayer()
+class MediaPlayerWrapperImpl(private val mediaPlayer: MediaPlayer) : MediaPlayerWrapper {
     override fun preparePlayer(trackPreviewUrl: String?, mediaPlayerListener: MediaPlayerListener) {
         mediaPlayer.setDataSource(trackPreviewUrl)
         mediaPlayer.prepareAsync()

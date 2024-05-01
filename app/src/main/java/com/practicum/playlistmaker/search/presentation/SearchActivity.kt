@@ -12,7 +12,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.util.INTENT_EXTRA_KEY
 import com.practicum.playlistmaker.R
@@ -23,6 +22,7 @@ import com.practicum.playlistmaker.player.presentation.PlayerActivity
 import com.practicum.playlistmaker.search.NEW_HISTORY_ITEM_KEY
 import com.practicum.playlistmaker.search.SHARED_PREFERENCES_HISTORY_FILE
 import com.practicum.playlistmaker.search.presentation.model.TracksState
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
@@ -32,7 +32,7 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
 
-    private val viewModel by viewModels<TracksSearchViewModel> { TracksSearchViewModel.getViewModelFactory() }
+    private val viewModel by viewModel<TracksSearchViewModel>()
 
     private lateinit var trackListAdapter: TrackListAdapter
 

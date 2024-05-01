@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.player.presentation
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -14,11 +13,12 @@ import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.presentation.model.PlayerState
 import com.practicum.playlistmaker.util.dpToPx
 import com.practicum.playlistmaker.util.getSerializableTrack
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : AppCompatActivity() {
     private lateinit var track: Track
     private lateinit var binding: ActivityPlayerBinding
-    private  val mediaPlayerViewModel by viewModels<MediaPlayerViewModel> { MediaPlayerViewModel.getViewModelFactory() }
+    private  val mediaPlayerViewModel by viewModel<MediaPlayerViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

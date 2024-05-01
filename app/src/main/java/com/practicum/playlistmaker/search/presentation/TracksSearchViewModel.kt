@@ -5,10 +5,6 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.presentation.model.TracksState
@@ -17,10 +13,6 @@ class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : Vi
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CHECK_TEXT_DELAY = 50L
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            val tracksInteractor = Creator.provideTracksInteractor()
-            initializer { TracksSearchViewModel(tracksInteractor) }
-        }
     }
 
     var isCreated = false

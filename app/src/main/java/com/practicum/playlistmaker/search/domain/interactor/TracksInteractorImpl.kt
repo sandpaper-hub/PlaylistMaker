@@ -9,14 +9,14 @@ import com.practicum.playlistmaker.util.Resource
 import java.util.concurrent.Executors
 
 class TracksInteractorImpl(
-    private val repository: TracksRepository,
+    private val tracksRepository: TracksRepository,
     private val sharedPreferencesRepository: SharedPreferencesRepository
 ) : TracksInteractor {
 
     private val executor = Executors.newCachedThreadPool()
     override fun searchTracks(expression: String, consumer: TracksInteractor.TracksConsumer) {
         executor.execute {
-            when (val resource = repository.searchTracks(expression)) {
+            when (val resource = tracksRepository.searchTracks(expression)) {
                 is Resource.Success -> {
                     consumer.consume(resource.data, null)
                 }
