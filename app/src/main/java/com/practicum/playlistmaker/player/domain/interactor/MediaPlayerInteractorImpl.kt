@@ -8,7 +8,7 @@ class MediaPlayerInteractorImpl(private val mediaPlayerWrapper: MediaPlayerWrapp
     MediaPlayerInteractor, MediaPlayerListener {
 
     companion object {
-        const val EMPTY_STRING = ""
+        private const val EMPTY_STRING = ""
     }
 
     override var isMediaPlayerComplete = false

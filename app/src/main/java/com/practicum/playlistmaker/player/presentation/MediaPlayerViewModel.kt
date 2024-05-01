@@ -6,12 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
-import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.player.presentation.model.PlayerState
 
 class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
     companion object {
         private const val UPDATE_POSITION_DELAY = 250L
+        private const val EMPTY_STRING = ""
     }
 
     private val stateLiveData = MutableLiveData<PlayerState>()
@@ -86,7 +86,7 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
     }
 
     private fun updateTrackTimer() {
-        if (mediaPlayerInteractor.getTrackPosition() == MediaPlayerInteractorImpl.EMPTY_STRING) {
+        if (mediaPlayerInteractor.getTrackPosition() == EMPTY_STRING) {
             return
         }
         renderState(
