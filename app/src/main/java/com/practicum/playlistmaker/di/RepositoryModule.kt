@@ -10,12 +10,12 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     /* создание AppThemeRepository */
-    single<AppThemeRepository> {
-        AppThemeRepositoryImpl(get())
+    single <AppThemeRepository> {
+        AppThemeRepositoryImpl(get(themeQualifier))
     }
 
     single<SharedPreferencesRepository> {
-        SharedPreferencesRepositoryImpl(get())
+        SharedPreferencesRepositoryImpl(get(historyQualifier))
     }
 
     single<TracksRepository> {
