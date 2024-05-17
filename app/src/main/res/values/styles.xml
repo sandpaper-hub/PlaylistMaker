@@ -135,4 +135,21 @@
         <item name="layout_constraintHorizontal_bias">1</item>
     </style>
 
+    <style name="badResultTextStyle">
+        <item name="marginHorizontal">@dimen/indent_24dp</item>
+        <item name="android:layout_marginTop">@dimen/indent_16dp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:gravity">center_horizontal|top</item>
+        <item name="android:textSize">@dimen/textSize_19sp</item>
+    </style>
+
+    <style name="materialButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/indent_24dp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/textSize_14sp</item>
+        <item name="cornerRadius">@dimen/radius_54dp</item>
+    </style>
 </resources>

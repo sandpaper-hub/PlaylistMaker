@@ -23,12 +23,19 @@ class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : Vi
 
     private val handler = Handler(Looper.getMainLooper())
 
-    fun observeState(): LiveData<TracksState> = stateLiveData
+    fun observeState(): LiveData<TracksState> {
+        isCreated = true
+        return stateLiveData
+    }
 
     fun searchDebounce(changedText: String?) {
         if (changedText!!.isEmpty()) {
             val historyTrackList = tracksInteractor.getHistory()
-            renderState(TracksState.HistoryContent(historyTrackList))
+            if (historyTrackList.isEmpty()) {
+                renderState(TracksState.Empty)
+            } else {
+                renderState(TracksState.HistoryContent(historyTrackList))
+            }
         } else {
             renderState(TracksState.Empty)
         }
@@ -40,6 +47,10 @@ class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : Vi
     private val searchRunnable = Runnable {
         val newSearchText = lastSearchText
         searchRequest(newSearchText)
+    }
+
+    fun init() {
+        showHistory()
     }
 
     private fun searchRequest(newSearchText: String) {
@@ -80,12 +91,11 @@ class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : Vi
         renderState(TracksState.Empty)
     }
 
-    fun showHistory() {
+    private fun showHistory() {
         val historyTrackList = tracksInteractor.getHistory()
         if (historyTrackList.isEmpty()) {
             renderState(TracksState.Empty)
         } else {
-            isCreated = true
             renderState(TracksState.HistoryContent(historyTrackList))
         }
     }

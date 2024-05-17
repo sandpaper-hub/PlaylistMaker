@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
+import com.practicum.playlistmaker.settings.presentation.model.SettingsState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
@@ -16,13 +17,15 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        viewModel.observeState().observe(this){
+            render(it)
+        }
         val message = getString(R.string.sampleMessageForShare)
         val url = getString(R.string.privacyUrl)
         val email = getString(R.string.sampleEmail)
         val subject = getString(R.string.sampleSubject)
         val body = getString(R.string.sampleBodyMessage)
-
-        binding.darkThemeSwitcherCompat.isChecked = viewModel.isChecked()
 
         binding.darkThemeSwitcherCompat.setOnCheckedChangeListener { _, isChecked ->
             viewModel.switchTheme(isChecked)
@@ -50,5 +53,15 @@ class SettingsActivity : AppCompatActivity() {
             val privacyIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(privacyIntent)
         }
+    }
+
+    private fun render(state: SettingsState) {
+        when (state) {
+            is SettingsState.DarkTheme -> switchTheme(state.isChecked)
+        }
+    }
+
+    private fun switchTheme(isChecked: Boolean) {
+        binding.darkThemeSwitcherCompat.isChecked = isChecked
     }
 }

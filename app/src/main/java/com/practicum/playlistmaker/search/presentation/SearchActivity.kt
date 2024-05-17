@@ -54,6 +54,10 @@ class SearchActivity : AppCompatActivity() {
             render(it)
         }
 
+        if (viewModel.isCreated) {
+            viewModel.init()
+        }
+
         binding.searchEditText.setText(viewModel.lastSearchText)
 
         textWatcher = object : TextWatcher {
@@ -99,9 +103,6 @@ class SearchActivity : AppCompatActivity() {
             })
 
         binding.historyRecycler.adapter = historyAdapter
-        if (!viewModel.isCreated) {
-            viewModel.showHistory()
-        }
 
         binding.clearHistory.setOnClickListener {
             viewModel.clearHistory()
