@@ -31,7 +31,11 @@ class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : Vi
     fun searchDebounce(changedText: String?) {
         if (changedText!!.isEmpty()) {
             val historyTrackList = tracksInteractor.getHistory()
-            renderState(TracksState.HistoryContent(historyTrackList))
+            if (historyTrackList.isEmpty()) {
+                renderState(TracksState.Empty)
+            } else {
+                renderState(TracksState.HistoryContent(historyTrackList))
+            }
         } else {
             renderState(TracksState.Empty)
         }
