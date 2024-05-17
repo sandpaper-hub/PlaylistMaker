@@ -34,7 +34,7 @@
             android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
-            android:name=".mediaLibrary.ui.MediaLibraryActivity"
+            android:name=".mediaLibrary.presentation.MediaLibraryActivity"
             android:exported="false" />
         <activity
             android:name=".settings.presentation.SettingsActivity"
