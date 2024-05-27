@@ -20,8 +20,6 @@ class SettingsViewModel(private val darkThemeInteractor: DarkThemeInteractor) : 
 
     fun switchTheme(isChecked: Boolean) {
         darkThemeInteractor.switchTheme(isChecked)
-        darkThemeInteractor.saveThemeValue(isChecked)
-        renderState(SettingsState.DarkTheme(isChecked))
     }
 
     private fun renderState(state: SettingsState) {

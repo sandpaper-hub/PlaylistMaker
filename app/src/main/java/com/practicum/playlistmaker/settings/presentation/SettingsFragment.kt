@@ -3,22 +3,34 @@ package com.practicum.playlistmaker.settings.presentation
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.transition.Fade
+import android.transition.Transition
+import android.transition.TransitionManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
+import com.practicum.playlistmaker.databinding.FragmentSettingsBinding
 import com.practicum.playlistmaker.settings.presentation.model.SettingsState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActivity : AppCompatActivity() {
-
+class SettingsFragment : Fragment() {
     private val viewModel by viewModel<SettingsViewModel>()
-    private lateinit var binding: ActivitySettingsBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    private lateinit var binding: FragmentSettingsBinding
 
-        viewModel.observeState().observe(this){
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.observeState().observe(viewLifecycleOwner){
             render(it)
         }
         val message = getString(R.string.sampleMessageForShare)
@@ -29,10 +41,6 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.darkThemeSwitcherCompat.setOnCheckedChangeListener { _, isChecked ->
             viewModel.switchTheme(isChecked)
-        }
-
-        binding.backButtonSettingsActivity.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.shareImageView.setOnClickListener {

@@ -4,28 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mediaLibrary.presentation.MediaLibraryActivity">
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/back_button_mediaLibraryActivity"
-        style="@style/back_button_style"
-        android:backgroundTint="@color/transparent"
-        android:contentDescription="@string/back_button"
-        android:src="@drawable/back_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    tools:context=".mediaLibrary.presentation.MediaLibraryFragment">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/panelHeader"
         style="@style/panelHeader"
         android:text="@string/media_library"
-        app:layout_constraintStart_toEndOf="@+id/back_button_mediaLibraryActivity"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/mediaLibraryTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/text_color"
         app:layout_constraintTop_toBottomOf="@+id/panelHeader"
         app:tabTextColor="@color/element_color" />
 
