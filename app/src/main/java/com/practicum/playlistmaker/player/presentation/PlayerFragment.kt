@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.player.presentation
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -50,7 +52,14 @@ class PlayerFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         mediaPlayerViewModel.pausePlayer()
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    override fun onResume() {
+        super.onResume()
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     override fun onDestroy() {

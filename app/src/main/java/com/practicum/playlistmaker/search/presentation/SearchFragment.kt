@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.search.presentation
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -37,12 +36,8 @@ class SearchFragment : Fragment() {
     private lateinit var trackListAdapter: TrackListAdapter
 
     private lateinit var historyAdapter: TrackListAdapter
-    private var sharedPreferences: SharedPreferences? = null
 
     private var textWatcher: TextWatcher? = null
-
-    private var onSharedPreferencesChangeListener: SharedPreferences.OnSharedPreferenceChangeListener? =
-        null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,24 +70,6 @@ class SearchFragment : Fragment() {
         }
 
         textWatcher.let { binding.searchEditText.addTextChangedListener(it) }
-
-        sharedPreferences =
-            requireContext().getSharedPreferences(
-                SHARED_PREFERENCES_HISTORY_FILE,
-                AppCompatActivity.MODE_PRIVATE
-            )
-
-        onSharedPreferencesChangeListener =
-            SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-                if (key == NEW_HISTORY_ITEM_KEY) {
-                    historyAdapter.trackList = viewModel.getHistory()
-                    historyAdapter.notifyDataSetChanged()
-                }
-            }
-
-        onSharedPreferencesChangeListener.let {
-            sharedPreferences?.registerOnSharedPreferenceChangeListener(it)
-        }
 
         historyAdapter =
             TrackListAdapter(object : TrackListAdapter.OnTrackClickListener {
@@ -158,20 +135,10 @@ class SearchFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        onSharedPreferencesChangeListener.let {
-            sharedPreferences?.unregisterOnSharedPreferenceChangeListener(
-                it
-            )
-        }
     }
 
     override fun onResume() {
         super.onResume()
-        onSharedPreferencesChangeListener.let {
-            sharedPreferences?.registerOnSharedPreferenceChangeListener(
-                it
-            )
-        }
     }
 
     private fun render(state: TracksState) { //ok
