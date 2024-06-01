@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.player.presentation.model
 
 interface PlayerState {
-    object Prepared : PlayerState
+    data class Prepared(val position: String) : PlayerState
     object Playing : PlayerState
     object Pause : PlayerState
     object Complete : PlayerState

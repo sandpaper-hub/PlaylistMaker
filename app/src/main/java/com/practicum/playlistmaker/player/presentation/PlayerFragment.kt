@@ -43,7 +43,10 @@ class PlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mediaPlayerViewModel.observeState().observe(viewLifecycleOwner) { render(it) }
+        binding.backButtonPlayerActivity.setOnClickListener {
+            findNavController().navigateUp()
+        }
+        mediaPlayerViewModel.observeState().observe(requireActivity()) { render(it) }
 
         track = requireArguments().getSerializableTrack<Track>(TRACK)!!
         mediaPlayerViewModel.createPlayer()
@@ -52,25 +55,13 @@ class PlayerFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         mediaPlayerViewModel.pausePlayer()
-    }
-
-    @SuppressLint("SourceLockedOrientationActivity")
-    override fun onResume() {
-        super.onResume()
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mediaPlayerViewModel.releaseMediaPlayer()
     }
 
     private fun render(state: PlayerState) {
         when (state) {
             is PlayerState.Created -> onPlayerCreate()
-            is PlayerState.Prepared -> onPlayerPrepared()
+            is PlayerState.Prepared -> onPlayerPrepared(state.position)
             is PlayerState.Playing -> onPlayerStart()
             is PlayerState.Pause -> onPlayerPaused()
             is PlayerState.Complete -> onTrackComplete()
@@ -103,8 +94,9 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    private fun onPlayerPrepared() {
+    private fun onPlayerPrepared(position: String) {
         binding.playButton.isClickable = true
+        binding.durationCurrentValue.text = position
         binding.playButton.setOnClickListener {
             mediaPlayerViewModel.playbackControl()
         }
