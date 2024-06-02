@@ -1,38 +1,54 @@
 package com.practicum.playlistmaker.player.presentation
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.practicum.playlistmaker.util.INTENT_EXTRA_KEY
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
+import com.practicum.playlistmaker.player.presentation.model.PlayerState
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.convertLongToTimeMillis
-import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.player.presentation.model.PlayerState
 import com.practicum.playlistmaker.util.dpToPx
 import com.practicum.playlistmaker.util.getSerializableTrack
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerFragment : Fragment() {
+
+    companion object {
+        private const val TRACK = "track"
+        fun createArgs(track: Track): Bundle = bundleOf(TRACK to track)
+    }
+
     private lateinit var track: Track
-    private lateinit var binding: ActivityPlayerBinding
-    private  val mediaPlayerViewModel by viewModel<MediaPlayerViewModel>()
+    private lateinit var binding: FragmentPlayerBinding
+    private val mediaPlayerViewModel by viewModel<MediaPlayerViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentPlayerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        mediaPlayerViewModel.observeState().observe(this) { render(it) }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.backButtonPlayerActivity.setOnClickListener {
+            findNavController().navigateUp()
+        }
+        mediaPlayerViewModel.observeState().observe(requireActivity()) { render(it) }
 
-
-        track = intent.getSerializableTrack<Track>(INTENT_EXTRA_KEY) ?: Track(
-            "", "", "",
-            0, "", "", "",
-            "", "", ""
-        )
+        track = requireArguments().getSerializableTrack<Track>(TRACK)!!
         mediaPlayerViewModel.createPlayer()
         mediaPlayerViewModel.preparePlayer(track.previewUrl)
     }
@@ -42,15 +58,10 @@ class PlayerActivity : AppCompatActivity() {
         mediaPlayerViewModel.pausePlayer()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mediaPlayerViewModel.releaseMediaPlayer()
-    }
-
     private fun render(state: PlayerState) {
         when (state) {
             is PlayerState.Created -> onPlayerCreate()
-            is PlayerState.Prepared -> onPlayerPrepared()
+            is PlayerState.Prepared -> onPlayerPrepared(state.position)
             is PlayerState.Playing -> onPlayerStart()
             is PlayerState.Pause -> onPlayerPaused()
             is PlayerState.Complete -> onTrackComplete()
@@ -71,20 +82,21 @@ class PlayerActivity : AppCompatActivity() {
         binding.countryValue.text = track.country
         binding.trackNamePlayerActivity.text = track.trackName
         binding.artistNamePlayerActivity.text = track.artistName
-        Glide.with(applicationContext)
+        Glide.with(requireContext())
             .load(track.artworkUrl100!!.replaceAfterLast('/', "512x512bb.jpg"))
             .fitCenter()
             .placeholder(R.drawable.album)
-            .transform(RoundedCorners(2f.dpToPx(applicationContext)))
+            .transform(RoundedCorners(2f.dpToPx(requireContext())))
             .into(binding.albumCover)
 
         binding.backButtonPlayerActivity.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            findNavController().navigateUp()
         }
     }
 
-    private fun onPlayerPrepared() {
+    private fun onPlayerPrepared(position: String) {
         binding.playButton.isClickable = true
+        binding.durationCurrentValue.text = position
         binding.playButton.setOnClickListener {
             mediaPlayerViewModel.playbackControl()
         }

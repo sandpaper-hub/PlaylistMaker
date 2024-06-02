@@ -2,61 +2,59 @@ package com.practicum.playlistmaker.search.presentation
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.practicum.playlistmaker.util.INTENT_EXTRA_KEY
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
-import com.practicum.playlistmaker.util.hasNullableData
-import com.practicum.playlistmaker.player.presentation.PlayerActivity
+import com.practicum.playlistmaker.databinding.FragmentSearchBinding
+import com.practicum.playlistmaker.player.presentation.PlayerFragment
 import com.practicum.playlistmaker.search.NEW_HISTORY_ITEM_KEY
 import com.practicum.playlistmaker.search.SHARED_PREFERENCES_HISTORY_FILE
+import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.presentation.model.TracksState
+import com.practicum.playlistmaker.util.hasNullableData
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
-
+class SearchFragment : Fragment() {
     companion object {
         const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
-    private lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: FragmentSearchBinding
 
     private val viewModel by viewModel<TracksSearchViewModel>()
 
     private lateinit var trackListAdapter: TrackListAdapter
 
     private lateinit var historyAdapter: TrackListAdapter
-    private var sharedPreferences: SharedPreferences? = null
 
     private var textWatcher: TextWatcher? = null
 
-    private var onSharedPreferencesChangeListener: OnSharedPreferenceChangeListener? = null
-
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     @SuppressLint("NotifyDataSetChanged")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        viewModel.observeState().observe(this) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
 
-        if (viewModel.isCreated) {
-            viewModel.init()
-        }
 
         binding.searchEditText.setText(viewModel.lastSearchText)
 
@@ -73,31 +71,14 @@ class SearchActivity : AppCompatActivity() {
 
         textWatcher.let { binding.searchEditText.addTextChangedListener(it) }
 
-        sharedPreferences =
-            getSharedPreferences(
-                SHARED_PREFERENCES_HISTORY_FILE,
-                MODE_PRIVATE
-            )
-
-        onSharedPreferencesChangeListener =
-            OnSharedPreferenceChangeListener { _, key ->
-                if (key == NEW_HISTORY_ITEM_KEY) {
-                    historyAdapter.trackList = viewModel.getHistory()
-                    historyAdapter.notifyDataSetChanged()
-                }
-            }
-
-        onSharedPreferencesChangeListener.let {
-            sharedPreferences?.registerOnSharedPreferenceChangeListener(it)
-        }
-
         historyAdapter =
             TrackListAdapter(object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
                     if (viewModel.clickDebounce()) {
-                        val playerIntent = Intent(applicationContext, PlayerActivity::class.java)
-                        playerIntent.putExtra(INTENT_EXTRA_KEY, track)
-                        startActivity(playerIntent)
+                        findNavController().navigate(
+                            R.id.action_searchFragment_to_playerFragment,
+                            PlayerFragment.createArgs(track)
+                        )
                     }
                 }
             })
@@ -114,17 +95,14 @@ class SearchActivity : AppCompatActivity() {
                     if (!track.hasNullableData()) {
                         if (viewModel.clickDebounce()) {
                             viewModel.addTrackToHistory(track)
-                            val playerIntent =
-                                Intent(applicationContext, PlayerActivity::class.java)
-                            playerIntent.putExtra(
-                                INTENT_EXTRA_KEY,
-                                track
+                            findNavController().navigate(
+                                R.id.action_searchFragment_to_playerFragment,
+                                PlayerFragment.createArgs(track)
                             )
-                            startActivity(playerIntent)
                         }
                     } else {
                         Toast.makeText(
-                            applicationContext,
+                            requireContext(),
                             "Track has empty data",
                             Toast.LENGTH_SHORT
                         ).show()
@@ -133,10 +111,6 @@ class SearchActivity : AppCompatActivity() {
             })
 
         binding.trackListRecyclerView.adapter = trackListAdapter
-
-        binding.backButtonSearchActivity.setOnClickListener {
-            finish()
-        }
 
         binding.searchEditText.setOnEditorActionListener { editTextView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -150,7 +124,7 @@ class SearchActivity : AppCompatActivity() {
         binding.clearSearchEdiText.setOnClickListener {
             binding.searchEditText.setText("")
             val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(it.windowToken, 0)
         }
 
@@ -161,20 +135,10 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        onSharedPreferencesChangeListener.let {
-            sharedPreferences?.unregisterOnSharedPreferenceChangeListener(
-                it
-            )
-        }
     }
 
     override fun onResume() {
         super.onResume()
-        onSharedPreferencesChangeListener.let {
-            sharedPreferences?.registerOnSharedPreferenceChangeListener(
-                it
-            )
-        }
     }
 
     private fun render(state: TracksState) { //ok
@@ -200,8 +164,9 @@ class SearchActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun showContent(tracks: List<Track>) = with(binding){
+    private fun showContent(tracks: List<Track>) = with(binding) {
         trackListRecyclerView.visibility = View.VISIBLE
+        clearSearchEdiText.visibility = View.VISIBLE
 
         searchProgressBar.visibility = View.GONE
         historySearchContainer.visibility = View.GONE
@@ -255,6 +220,5 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter.trackList.clear()
         historyAdapter.trackList.addAll(historyTrackList)
         historyAdapter.notifyDataSetChanged()
-
     }
 }

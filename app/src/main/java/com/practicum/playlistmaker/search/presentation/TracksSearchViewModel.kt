@@ -15,16 +15,17 @@ class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : Vi
         private const val CHECK_TEXT_DELAY = 50L
     }
 
-    var isCreated = false
     var lastSearchText: String = ""
     private var isClickAllowed = true
 
     private val stateLiveData = MutableLiveData<TracksState>()
 
+    init {
+        showHistory()
+    }
     private val handler = Handler(Looper.getMainLooper())
 
     fun observeState(): LiveData<TracksState> {
-        isCreated = true
         return stateLiveData
     }
 
@@ -47,10 +48,6 @@ class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : Vi
     private val searchRunnable = Runnable {
         val newSearchText = lastSearchText
         searchRequest(newSearchText)
-    }
-
-    fun init() {
-        showHistory()
     }
 
     private fun searchRequest(newSearchText: String) {
@@ -116,7 +113,7 @@ class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : Vi
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, SearchActivity.CLICK_DEBOUNCE_DELAY)
+            handler.postDelayed({ isClickAllowed = true }, SearchFragment.CLICK_DEBOUNCE_DELAY)
         }
         return current
     }

@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/back_button_settingsActivity"
-        style="@style/back_button_style"
-        android:backgroundTint="@color/transparent"
-        android:contentDescription="@string/back_button"
-        android:src="@drawable/back_icon"
-        app:layout_constraintBaseline_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    android:layout_height="match_parent"
+    tools:context=".settings.presentation.SettingsFragment">
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/panelHeader"
         style="@style/panelHeader"
         android:text="@string/settings_button"
-        app:layout_constraintStart_toEndOf="@+id/back_button_settingsActivity"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -27,7 +21,7 @@
         android:paddingBottom="21dp"
         android:text="@string/dark_theme_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/back_button_settingsActivity" />
+        app:layout_constraintTop_toBottomOf="@+id/panelHeader" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/darkThemeSwitcherCompat"
@@ -48,11 +42,11 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/shareImageView"
         style="@style/settings_activity_small_icon_style"
+        android:contentDescription="@string/share_app_title"
         android:src="@drawable/share"
         app:layout_constraintBottom_toBottomOf="@+id/shareTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/shareTextView"
-        android:contentDescription="@string/share_app_title" />
+        app:layout_constraintTop_toTopOf="@+id/shareTextView" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/supportTextView"
@@ -64,11 +58,11 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/supportImageView"
         style="@style/settings_activity_small_icon_style"
+        android:contentDescription="@string/write_to_support_title"
         android:src="@drawable/support"
         app:layout_constraintBottom_toBottomOf="@+id/supportTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/supportTextView"
-        android:contentDescription="@string/write_to_support_title" />
+        app:layout_constraintTop_toTopOf="@+id/supportTextView" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/privacyTextView"
@@ -80,10 +74,10 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/privacyImageView"
         style="@style/settings_activity_small_icon_style"
+        android:contentDescription="@string/privacy"
         android:src="@drawable/arrow"
         app:layout_constraintBottom_toBottomOf="@+id/privacyTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/privacyTextView"
-        android:contentDescription="@string/privacy" />
+        app:layout_constraintTop_toTopOf="@+id/privacyTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

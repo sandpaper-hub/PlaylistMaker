@@ -2,10 +2,6 @@
 <resources>
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    <style name="main_activity_style">
-        <item name="android:background">@color/Yp_Blue</item>
-    </style>
-
     <style name="main_activity_button_style" parent="Widget.Material3.Button.UnelevatedButton">
         <item name="android:textColor">@color/YP_Black</item>
         <item name="android:textSize">@dimen/textSize_22sp</item>

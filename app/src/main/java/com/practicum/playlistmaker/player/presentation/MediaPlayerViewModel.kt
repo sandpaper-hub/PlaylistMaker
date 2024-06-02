@@ -9,11 +9,13 @@ import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.presentation.model.PlayerState
 
 class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
+
     companion object {
         private const val UPDATE_POSITION_DELAY = 250L
         private const val EMPTY_STRING = ""
     }
 
+    private var isCreated = false
     private val stateLiveData = MutableLiveData<PlayerState>()
     fun observeState(): LiveData<PlayerState> = stateLiveData
 
@@ -32,7 +34,7 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
     private val preparePlayerRunnable = object : Runnable {
         override fun run() {
             if (mediaPlayerInteractor.isMediaPlayerPrepared) {
-                renderState(PlayerState.Prepared)
+                renderState(PlayerState.Prepared(mediaPlayerInteractor.getTrackPosition()))
             } else {
                 handler.post(this)
             }
@@ -44,7 +46,10 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
     }
 
     fun preparePlayer(trackPreviewUrl: String?) {
-        mediaPlayerInteractor.preparePlayer(trackPreviewUrl)
+        if (!isCreated) {
+            mediaPlayerInteractor.preparePlayer(trackPreviewUrl)
+            isCreated = true
+        }
         preparePlayerRunnable.let { handler.post(it) }
     }
 
@@ -63,19 +68,17 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
             }
 
             else -> {
-                renderState(PlayerState.Prepared)
+                renderState(PlayerState.Prepared(mediaPlayerInteractor.getTrackPosition()))
             }
         }
     }
 
     fun pausePlayer() {
-        mediaPlayerInteractor.pausePlayer()
-        renderState(PlayerState.Pause)
-        timerUpdater.let { handler.removeCallbacks(it) }
-    }
-
-    fun releaseMediaPlayer() {
-        mediaPlayerInteractor.releasePlayer()
+        if (stateLiveData.value != PlayerState.Prepared(mediaPlayerInteractor.getTrackPosition())) {
+            mediaPlayerInteractor.pausePlayer()
+            renderState(PlayerState.Pause)
+            timerUpdater.let { handler.removeCallbacks(it) }
+        }
     }
 
     fun completeMediaPlayer() {
@@ -103,5 +106,6 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
     override fun onCleared() {
         super.onCleared()
         timerUpdater.let { handler.removeCallbacks(it) }
+        mediaPlayerInteractor.releasePlayer()
     }
 }
