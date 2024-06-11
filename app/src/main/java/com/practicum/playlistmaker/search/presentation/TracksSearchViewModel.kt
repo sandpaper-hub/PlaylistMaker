@@ -55,27 +55,23 @@ class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : Vi
     }
 
     private fun searchRequest(newSearchText: String) {
-        Log.d("EXAMPLE_TEST", "SEARCH request")
         if (newSearchText.isNotEmpty()) {
             renderState(TracksState.Loading)
 
-            tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
-                override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
+            viewModelScope.launch {
+                tracksInteractor.searchTracks((newSearchText)).collect{pair ->
                     val tracks = mutableListOf<Track>()
-                    if (foundTracks != null) {
-                        tracks.addAll(foundTracks)
-                        when {
-                            tracks.isEmpty() -> {
-                                renderState(TracksState.NothingFound)
-                            }
+                    if (pair.first != null) {
+                        tracks.addAll(pair.first!!)
+                    }
 
-                            else -> renderState(TracksState.Content(tracks))
-                        }
-                    } else {
-                        renderState(TracksState.ConnectionError)
+                    when {
+                        pair.second != null -> renderState(TracksState.ConnectionError)
+                        tracks.isEmpty() -> renderState(TracksState.NothingFound)
+                        else -> renderState(TracksState.Content(tracks))
                     }
                 }
-            })
+            }
         }
     }
 
