@@ -1,17 +1,20 @@
 package com.practicum.playlistmaker.player.presentation
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.presentation.model.PlayerState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
 
     companion object {
-        private const val UPDATE_POSITION_DELAY = 250L
+        private const val UPDATE_POSITION_DELAY = 150L
+        private const val CHECK_PREPARE_PLAYER_DELAY = 50L
         private const val EMPTY_STRING = ""
     }
 
@@ -19,27 +22,8 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
     private val stateLiveData = MutableLiveData<PlayerState>()
     fun observeState(): LiveData<PlayerState> = stateLiveData
 
-    private val handler = Handler(Looper.getMainLooper())
-
-    private val timerUpdater = object : Runnable {
-        override fun run() {
-            completeMediaPlayer()
-            if (!mediaPlayerInteractor.isMediaPlayerComplete) {
-                updateTrackTimer()
-                handler.postDelayed(this, UPDATE_POSITION_DELAY)
-            }
-        }
-    }
-
-    private val preparePlayerRunnable = object : Runnable {
-        override fun run() {
-            if (mediaPlayerInteractor.isMediaPlayerPrepared) {
-                renderState(PlayerState.Prepared(mediaPlayerInteractor.getTrackPosition()))
-            } else {
-                handler.post(this)
-            }
-        }
-    }
+    private var timerJob: Job? = null
+    private var prepareJob: Job? = null
 
     fun createPlayer() {
         renderState(PlayerState.Created)
@@ -50,7 +34,12 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
             mediaPlayerInteractor.preparePlayer(trackPreviewUrl)
             isCreated = true
         }
-        preparePlayerRunnable.let { handler.post(it) }
+        prepareJob = viewModelScope.launch {
+            while (!mediaPlayerInteractor.isMediaPlayerPrepared) {
+                delay(CHECK_PREPARE_PLAYER_DELAY)
+            }
+            renderState(PlayerState.Prepared(mediaPlayerInteractor.getTrackPosition()))
+        }
     }
 
     fun playbackControl() {
@@ -58,7 +47,13 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
             is PlayerState.Prepared, PlayerState.Pause, PlayerState.Complete -> {
                 mediaPlayerInteractor.startPlayer()
                 renderState(PlayerState.Playing)
-                timerUpdater.let { handler.post(it) }
+                timerJob = viewModelScope.launch {
+                    while (!mediaPlayerInteractor.isMediaPlayerComplete) {
+                        delay(UPDATE_POSITION_DELAY)
+                        completeMediaPlayer()
+                        updateTrackTimer()
+                    }
+                }
             }
 
             is PlayerState.Playing, PlayerState.ChangePosition(
@@ -77,13 +72,13 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
         if (stateLiveData.value != PlayerState.Prepared(mediaPlayerInteractor.getTrackPosition())) {
             mediaPlayerInteractor.pausePlayer()
             renderState(PlayerState.Pause)
-            timerUpdater.let { handler.removeCallbacks(it) }
+            timerJob?.cancel()
         }
     }
 
     fun completeMediaPlayer() {
         if (mediaPlayerInteractor.isMediaPlayerComplete) {
-            timerUpdater.let { handler.removeCallbacks(it) }
+            timerJob?.cancel()
             renderState(PlayerState.Complete)
         }
     }
@@ -105,7 +100,6 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
 
     override fun onCleared() {
         super.onCleared()
-        timerUpdater.let { handler.removeCallbacks(it) }
         mediaPlayerInteractor.releasePlayer()
     }
 }
