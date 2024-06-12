@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
 
     companion object {
-        private const val UPDATE_POSITION_DELAY = 150L
+        private const val UPDATE_POSITION_DELAY = 300L
         private const val CHECK_PREPARE_PLAYER_DELAY = 50L
         private const val EMPTY_STRING = ""
     }
