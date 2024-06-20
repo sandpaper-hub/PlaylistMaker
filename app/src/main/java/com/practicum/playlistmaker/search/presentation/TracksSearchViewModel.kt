@@ -1,13 +1,15 @@
 package com.practicum.playlistmaker.search.presentation
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.presentation.model.TracksState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : ViewModel() {
     companion object {
@@ -16,14 +18,15 @@ class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : Vi
     }
 
     var lastSearchText: String = ""
-    private var isClickAllowed = true
 
     private val stateLiveData = MutableLiveData<TracksState>()
 
     init {
         showHistory()
     }
-    private val handler = Handler(Looper.getMainLooper())
+
+    private var debounceSearchJob: Job? = null
+    private var showHideClearEditTextJob: Job? = null
 
     fun observeState(): LiveData<TracksState> {
         return stateLiveData
@@ -40,43 +43,42 @@ class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : Vi
         } else {
             renderState(TracksState.Empty)
         }
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-        lastSearchText = changedText
-    }
 
-    private val searchRunnable = Runnable {
-        val newSearchText = lastSearchText
-        searchRequest(newSearchText)
+        lastSearchText = changedText
+        debounceSearchJob?.cancel()
+        debounceSearchJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY)
+            searchRequest(changedText)
+        }
+
     }
 
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
             renderState(TracksState.Loading)
 
-            tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
-                override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
+            viewModelScope.launch {
+                tracksInteractor.searchTracks((newSearchText)).collect{pair ->
                     val tracks = mutableListOf<Track>()
-                    if (foundTracks != null) {
-                        tracks.addAll(foundTracks)
-                        when {
-                            tracks.isEmpty() -> {
-                                renderState(TracksState.NothingFound)
-                            }
+                    if (pair.first != null) {
+                        tracks.addAll(pair.first!!)
+                    }
 
-                            else -> renderState(TracksState.Content(tracks))
-                        }
-                    } else {
-                        renderState(TracksState.ConnectionError)
+                    when {
+                        pair.second != null -> renderState(TracksState.ConnectionError)
+                        tracks.isEmpty() -> renderState(TracksState.NothingFound)
+                        else -> renderState(TracksState.Content(tracks))
                     }
                 }
-            })
+            }
         }
     }
 
     fun showHideClearEditTextButton(text: String) {
-        handler.postDelayed({ renderState(TracksState.ClearedEditText(text)) }, CHECK_TEXT_DELAY)
-
+        showHideClearEditTextJob = viewModelScope.launch {
+            delay(CHECK_TEXT_DELAY)
+            renderState(TracksState.ClearedEditText(text))
+        }
     }
 
     fun addTrackToHistory(track: Track) {
@@ -103,18 +105,5 @@ class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : Vi
 
     fun renderState(state: TracksState) {
         stateLiveData.postValue(state)
-    }
-
-    override fun onCleared() {
-        handler.removeCallbacks(searchRunnable)
-    }
-
-    fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, SearchFragment.CLICK_DEBOUNCE_DELAY)
-        }
-        return current
     }
 }
