@@ -14,6 +14,7 @@
     <dimen name="indent_19dp">19dp</dimen>
     <dimen name="indent_24dp">24dp</dimen>
     <dimen name="indent_44dp">44dp</dimen>
+    <dimen name="indent_46dp">46dp</dimen>
     <dimen name="radius_16dp">16dp</dimen>
     <dimen name="radius_54dp">54dp</dimen>
     <dimen name="coverSize_dp">45dp</dimen>

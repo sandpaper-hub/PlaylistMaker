@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.mediaLibrary.presentation
+package com.practicum.playlistmaker.mediaLibrary.presentation.collection
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,19 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.FragmentFavouriteTracksBinding
-import com.practicum.playlistmaker.mediaLibrary.presentation.model.FavoriteTracksState
+import com.practicum.playlistmaker.databinding.FragmentCollectionBinding
+import com.practicum.playlistmaker.mediaLibrary.presentation.model.PlaylistsState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class FavoriteTracksFragment : Fragment() {
+class PlaylistsFragment : Fragment() {
     companion object {
-        fun newInstance() = FavoriteTracksFragment()
+        fun newInstance() = PlaylistsFragment()
     }
 
-    private lateinit var binding: FragmentFavouriteTracksBinding
-    private val viewModel by viewModel<FavoriteTracksViewModel> {
-        parametersOf(getText(R.string.emptyLibrary))
+    private lateinit var binding: FragmentCollectionBinding
+    private val viewModel by viewModel<PlaylistsViewModel> {
+        parametersOf(getText(R.string.noPlaylist))
     }
 
     override fun onCreateView(
@@ -26,7 +26,7 @@ class FavoriteTracksFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentFavouriteTracksBinding.inflate(inflater, container, false)
+        binding = FragmentCollectionBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -37,14 +37,14 @@ class FavoriteTracksFragment : Fragment() {
         }
     }
 
-    private fun render(state: FavoriteTracksState) {
+    private fun render(state: PlaylistsState) {
         when (state) {
-            is FavoriteTracksState.EmptyMediaLibrary -> showEmpty(state.message)
+            is PlaylistsState.Empty -> showEmpty(state.message)
         }
     }
 
     private fun showEmpty(message: String) = with(binding) {
-        newPlaylistButton.visibility = View.GONE
+        newPlaylistButton.visibility = View.VISIBLE
         emptyFavoriteTextView.text = message
     }
 }
