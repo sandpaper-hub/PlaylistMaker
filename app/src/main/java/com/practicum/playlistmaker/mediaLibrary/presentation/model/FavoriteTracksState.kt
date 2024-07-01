@@ -1,5 +1,9 @@
 package com.practicum.playlistmaker.mediaLibrary.presentation.model
 
+import com.practicum.playlistmaker.search.domain.models.Track
+
 sealed interface FavoriteTracksState {
-    data class EmptyMediaLibrary(val message: String) : FavoriteTracksState
+
+    object EmptyMediaLibrary : FavoriteTracksState
+    data class Content(val tracks: List<Track>) : FavoriteTracksState
 }

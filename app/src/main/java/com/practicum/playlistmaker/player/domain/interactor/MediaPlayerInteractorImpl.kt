@@ -1,10 +1,17 @@
 package com.practicum.playlistmaker.player.domain.interactor
 
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
+import com.practicum.playlistmaker.player.domain.repository.MediaPlayerRepository
 import com.practicum.playlistmaker.player.domain.wrapper.MediaPlayerWrapper
+import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.convertLongToTimeMillis
+import com.practicum.playlistmaker.util.convertToDto
+import kotlinx.coroutines.flow.Flow
 
-class MediaPlayerInteractorImpl(private val mediaPlayerWrapper: MediaPlayerWrapper) :
+class MediaPlayerInteractorImpl(
+    private val mediaPlayerWrapper: MediaPlayerWrapper,
+    private val mediaPlayerRepository: MediaPlayerRepository
+) :
     MediaPlayerInteractor, MediaPlayerListener {
 
     companion object {
@@ -44,5 +51,17 @@ class MediaPlayerInteractorImpl(private val mediaPlayerWrapper: MediaPlayerWrapp
             return EMPTY_STRING
         }
         return mediaPlayerWrapper.getTrackPosition().toLong().convertLongToTimeMillis()
+    }
+
+    override suspend fun addTrackToFavorite(track: Track) {
+        mediaPlayerRepository.addTrackToFavorite(track.convertToDto())
+    }
+
+    override suspend fun removeTrackFromFavorite(track: Track) {
+        mediaPlayerRepository.removeTrackFromFavorite(track.convertToDto())
+    }
+
+    override fun getFavoriteTracksId(): Flow<List<String>> {
+        return mediaPlayerRepository.getFavoriteTracksId()
     }
 }

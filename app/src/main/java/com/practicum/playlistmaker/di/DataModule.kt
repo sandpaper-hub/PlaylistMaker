@@ -3,6 +3,8 @@ package com.practicum.playlistmaker.di
 import android.content.Context
 import android.content.SharedPreferences
 import android.media.MediaPlayer
+import androidx.room.Room
+import com.practicum.playlistmaker.mediaLibrary.data.db.AppDatabase
 import com.practicum.playlistmaker.search.SHARED_PREFERENCES_HISTORY_FILE
 import com.practicum.playlistmaker.search.data.network.ITunesSearchApi
 import com.practicum.playlistmaker.search.data.network.NetworkClient
@@ -21,7 +23,7 @@ val historyQualifier = named("history")
 
 val dataModule = module {
     /* создание SharedPreferences */
-    single<SharedPreferences> (themeQualifier) {
+    single<SharedPreferences>(themeQualifier) {
         androidContext().getSharedPreferences(
             SHARED_PREFERENCES_THEME_KEY,
             Context.MODE_PRIVATE
@@ -49,5 +51,9 @@ val dataModule = module {
 
     single<NetworkClient> {
         RetrofitNetworkClient(get(), androidContext())
+    }
+
+    single<AppDatabase> {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build()
     }
 }

@@ -2,6 +2,8 @@ package com.practicum.playlistmaker.di
 
 import com.practicum.playlistmaker.application.domain.api.DarkThemeInteractor
 import com.practicum.playlistmaker.application.domain.interactor.DarkThemeInteractorImpl
+import com.practicum.playlistmaker.mediaLibrary.domain.api.FavoriteTracksInteractor
+import com.practicum.playlistmaker.mediaLibrary.domain.impl.FavoriteTracksInteractorImpl
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerListener
@@ -18,10 +20,14 @@ val interactorModule = module {
     }
 
     factory<MediaPlayerInteractor> {
-        MediaPlayerInteractorImpl(get())
+        MediaPlayerInteractorImpl(get(), get())
     } binds (arrayOf(MediaPlayerInteractor::class, MediaPlayerListener::class))
 
     single<TracksInteractor> {
         TracksInteractorImpl(get(), get())
+    }
+
+    single<FavoriteTracksInteractor> {
+        FavoriteTracksInteractorImpl(get())
     }
 }

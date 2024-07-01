@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mediaLibrary.presentation.FavoriteTracksFragment">
+    tools:context=".mediaLibrary.presentation.favorite.FavoriteTracksFragment">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/newPlaylistButton"
@@ -18,7 +18,7 @@
         android:id="@+id/emptyLibrary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="46dp"
+        android:layout_marginTop="@dimen/indent_46dp"
         android:src="@drawable/nothing_found_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
