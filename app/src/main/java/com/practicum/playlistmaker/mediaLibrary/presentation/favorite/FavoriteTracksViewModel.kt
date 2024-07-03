@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.mediaLibrary.presentation.favorite
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.mediaLibrary.domain.api.FavoriteTracksInteractor
+import com.practicum.playlistmaker.mediaLibrary.domain.db.FavoriteTracksInteractor
 import com.practicum.playlistmaker.mediaLibrary.presentation.model.FavoriteTracksState
 import com.practicum.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.launch

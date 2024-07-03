@@ -36,21 +36,6 @@ fun ArrayList<Track>.toDto(): ArrayList<TrackDto> {
     return resultList
 }
 
-fun Track.convertToDto(): TrackDto {
-    return TrackDto(
-        this.trackId,
-        this.trackName,
-        this.artistName,
-        this.trackDuration,
-        this.artworkUrl100,
-        this.collectionName,
-        this.releaseDate,
-        this.primaryGenreName,
-        this.country,
-        this.previewUrl
-    )
-}
-
 fun Long.convertLongToTimeMillis(): String {
     return SimpleDateFormat("mm:ss", Locale.getDefault()).format(this)
 }

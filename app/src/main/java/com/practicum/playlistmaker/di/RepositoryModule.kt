@@ -4,7 +4,7 @@ import com.practicum.playlistmaker.application.data.repository.AppThemeRepositor
 import com.practicum.playlistmaker.application.domain.repository.AppThemeRepository
 import com.practicum.playlistmaker.mediaLibrary.data.converters.TrackDbConverter
 import com.practicum.playlistmaker.mediaLibrary.data.repository.FavoriteTracksTracksRepositoryImpl
-import com.practicum.playlistmaker.mediaLibrary.domain.api.FavoriteTracksRepository
+import com.practicum.playlistmaker.mediaLibrary.domain.db.FavoriteTracksRepository
 import com.practicum.playlistmaker.player.data.repository.PlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.repository.MediaPlayerRepository
 import com.practicum.playlistmaker.search.data.repository.SharedPreferencesRepositoryImpl
