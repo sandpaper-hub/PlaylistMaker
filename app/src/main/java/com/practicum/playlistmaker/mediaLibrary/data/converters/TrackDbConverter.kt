@@ -7,7 +7,7 @@ import com.practicum.playlistmaker.util.convertLongToTimeMillis
 import com.practicum.playlistmaker.util.convertStringToLongMillis
 
 class TrackDbConverter {
-    fun map(track: TrackDto): TrackEntity {
+    fun map(track: Track): TrackEntity {
         return TrackEntity(
             track.trackId ?: "",
             track.artworkUrl100 ?: "",
@@ -17,12 +17,12 @@ class TrackDbConverter {
             track.releaseDate ?: "",
             track.primaryGenreName ?: "",
             track.country ?: "",
-            track.trackTimeMillis?.convertLongToTimeMillis() ?: "",
+            track.trackDuration?.convertLongToTimeMillis() ?: "",
             track.previewUrl ?: ""
         )
     }
 
-    fun map(track: TrackEntity): Track {
+    private fun map(track: TrackEntity): Track {
         return Track(
             track.id,
             track.trackName,
@@ -36,6 +36,7 @@ class TrackDbConverter {
             track.trackUrl
         )
     }
+
     fun convertFromTracksEntity(tracks: List<TrackEntity>): List<Track> {
         return tracks.map { track -> map(track) }
     }
