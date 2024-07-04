@@ -35,8 +35,16 @@ fun ArrayList<Track>.toDto(): ArrayList<TrackDto> {
     }
     return resultList
 }
+
 fun Long.convertLongToTimeMillis(): String {
     return SimpleDateFormat("mm:ss", Locale.getDefault()).format(this)
+}
+
+fun String.convertStringToLongMillis(): Long {
+    val parts = this.split(":")
+    val minutes = parts[0].toLong()
+    val seconds = parts[1].toLong()
+    return (minutes * 60 + seconds) * 1000
 }
 
 fun Float.dpToPx(context: Context): Int {

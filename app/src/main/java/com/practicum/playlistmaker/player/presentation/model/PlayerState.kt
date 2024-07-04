@@ -5,8 +5,9 @@ interface PlayerState {
     object Playing : PlayerState
     object Pause : PlayerState
     object Complete : PlayerState
+    data class Favorite(val inFavorite: Boolean): PlayerState
 
-    object Created : PlayerState
+    data class Created(val inFavorite: Boolean) : PlayerState
 
     data class ChangePosition(val position: String) : PlayerState
 

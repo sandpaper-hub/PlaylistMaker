@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.player.presentation
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +50,7 @@ class PlayerFragment : Fragment() {
         mediaPlayerViewModel.observeState().observe(requireActivity()) { render(it) }
 
         track = requireArguments().getSerializableTrack<Track>(TRACK)!!
-        mediaPlayerViewModel.createPlayer()
+        mediaPlayerViewModel.createPlayer(track.trackId)
         mediaPlayerViewModel.preparePlayer(track.previewUrl)
     }
 
@@ -60,16 +61,25 @@ class PlayerFragment : Fragment() {
 
     private fun render(state: PlayerState) {
         when (state) {
-            is PlayerState.Created -> onPlayerCreate()
+            is PlayerState.Created -> onPlayerCreate(state.inFavorite)
             is PlayerState.Prepared -> onPlayerPrepared(state.position)
             is PlayerState.Playing -> onPlayerStart()
             is PlayerState.Pause -> onPlayerPaused()
             is PlayerState.Complete -> onTrackComplete()
             is PlayerState.ChangePosition -> onTrackPositionChanged(state.position)
+            is PlayerState.Favorite -> updateFavorite(state.inFavorite)
         }
     }
 
-    private fun onPlayerCreate() {
+    private fun updateFavorite(inFavorite: Boolean) {
+        if (inFavorite) {
+            binding.favoriteButton.setImageResource(R.drawable.infavorite_button)
+        } else {
+            binding.favoriteButton.setImageResource(R.drawable.non_favorite_button)
+        }
+    }
+
+    private fun onPlayerCreate(inFavorite: Boolean) {
         binding.durationValue.text =
             track.trackDuration!!.convertLongToTimeMillis()
         if (track.collectionName!!.isEmpty()) {
@@ -82,6 +92,8 @@ class PlayerFragment : Fragment() {
         binding.countryValue.text = track.country
         binding.trackNamePlayerActivity.text = track.trackName
         binding.artistNamePlayerActivity.text = track.artistName
+        updateFavorite(inFavorite)
+
         Glide.with(requireContext())
             .load(track.artworkUrl100!!.replaceAfterLast('/', "512x512bb.jpg"))
             .fitCenter()
@@ -99,6 +111,9 @@ class PlayerFragment : Fragment() {
         binding.durationCurrentValue.text = position
         binding.playButton.setOnClickListener {
             mediaPlayerViewModel.playbackControl()
+        }
+        binding.favoriteButton.setOnClickListener {
+            mediaPlayerViewModel.updateFavorite(track)
         }
     }
 
