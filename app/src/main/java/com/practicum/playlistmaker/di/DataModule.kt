@@ -17,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 private const val SHARED_PREFERENCES_THEME_KEY = "PlaylistMakerThemePreferences"
 private const val baseUrl = "https://itunes.apple.com"
+private const val databaseName = "database.db"
 val themeQualifier = named("theme")
 val historyQualifier = named("history")
 
@@ -54,6 +55,6 @@ val dataModule = module {
     }
 
     single<AppDatabase> {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build()
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, databaseName).build()
     }
 }
