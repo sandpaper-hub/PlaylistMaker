@@ -40,8 +40,6 @@ class SearchFragment : Fragment() {
 
     private var textWatcher: TextWatcher? = null
 
-    private var debounceJob: Job? = null
-
     private var isClickAllowed = true
 
 
@@ -232,7 +230,7 @@ class SearchFragment : Fragment() {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            debounceJob = lifecycleScope.launch {
+            lifecycleScope.launch {
                 delay(CLICK_DEBOUNCE_DELAY)
                 isClickAllowed = true
             }

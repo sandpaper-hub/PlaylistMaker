@@ -58,6 +58,7 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
             ), PlayerState.Favorite(false) -> {
                 mediaPlayerInteractor.startPlayer()
                 renderState(PlayerState.Playing)
+                timerJob?.cancel()
                 timerJob = viewModelScope.launch {
                     while (!mediaPlayerInteractor.isMediaPlayerComplete) {
                         delay(UPDATE_POSITION_DELAY)
