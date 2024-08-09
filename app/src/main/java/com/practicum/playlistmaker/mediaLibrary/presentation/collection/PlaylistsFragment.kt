@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentCollectionBinding
 import com.practicum.playlistmaker.mediaLibrary.presentation.model.PlaylistsState
@@ -34,6 +35,9 @@ class PlaylistsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
+        }
+        binding.newPlaylistButton.setOnClickListener {
+            findNavController().navigate(R.id.action_mediaLibraryFragment_to_createPlaylistFragment)
         }
     }
 
