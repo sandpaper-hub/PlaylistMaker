@@ -24,55 +24,51 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/strokeRectangleImageView"
+        android:id="@+id/albumCoverImageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/indent_24dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="@dimen/indent_26dp"
         android:background="@drawable/stroke_rectangle"
+        android:contentDescription="@string/albumCover"
         app:layout_constraintDimensionRatio="w, 1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/panelHeader" />
 
     <ImageView
-        android:id="@+id/addPhoto"
+        android:id="@+id/addPhotoIconImageView"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="@dimen/indent_24dp"
-        android:layout_marginTop="26dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/photoPickerIcon"
         android:src="@drawable/add_photo"
-        app:layout_constraintBottom_toBottomOf="@id/strokeRectangleImageView"
-        app:layout_constraintDimensionRatio="w, 1:1"
-        app:layout_constraintEnd_toEndOf="@id/strokeRectangleImageView"
-        app:layout_constraintStart_toStartOf="@id/strokeRectangleImageView"
-        app:layout_constraintTop_toTopOf="@id/strokeRectangleImageView" />
+        app:layout_constraintBottom_toBottomOf="@id/albumCoverImageView"
+        app:layout_constraintEnd_toEndOf="@id/albumCoverImageView"
+        app:layout_constraintStart_toStartOf="@id/albumCoverImageView"
+        app:layout_constraintTop_toTopOf="@id/albumCoverImageView" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/albumNameEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/indent_16dp"
-        android:layout_marginTop="32dp"
+        style="@style/edit_text_style"
+        android:layout_marginTop="@dimen/indent_32dp"
         android:background="@drawable/album_edit_text"
-        android:hint="Название*"
+        android:hint="@string/albumName"
         android:paddingHorizontal="@dimen/indent_16dp"
         android:paddingVertical="@dimen/indent_19dp"
-        android:textSize="@dimen/textSize_16sp"
+        android:textColorHint="@color/YP_Black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/strokeRectangleImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/albumCoverImageView" />
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/indent_16dp"
+        android:id="@+id/albumDescriptionEditText"
+        style="@style/edit_text_style"
         android:layout_marginTop="@dimen/indent_16dp"
         android:background="@drawable/album_edit_text"
-        android:hint="Описание"
+        android:hint="@string/description"
         android:paddingHorizontal="@dimen/indent_16dp"
         android:paddingVertical="@dimen/indent_19dp"
-        android:textSize="@dimen/textSize_16sp"
+        android:textColorHint="@color/YP_Black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/albumNameEditText" />
@@ -81,10 +77,10 @@
         android:id="@+id/createButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="17dp"
-        android:layout_marginBottom="32dp"
-        android:text="Создать"
+        android:layout_marginHorizontal="@dimen/indent_17dp"
+        android:layout_marginBottom="@dimen/indent_32dp"
         android:background="@drawable/create_button_selector"
+        android:text="@string/create"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -10,9 +10,12 @@
     <dimen name="indent_10dp">10dp</dimen>
     <dimen name="indent_12dp">12dp</dimen>
     <dimen name="indent_16dp">16dp</dimen>
+    <dimen name="indent_17dp">17dp</dimen>
     <dimen name="indent_18dp">18dp</dimen>
     <dimen name="indent_19dp">19dp</dimen>
     <dimen name="indent_24dp">24dp</dimen>
+    <dimen name="indent_26dp">26dp</dimen>
+    <dimen name="indent_32dp">32dp</dimen>
     <dimen name="indent_44dp">44dp</dimen>
     <dimen name="indent_46dp">46dp</dimen>
     <dimen name="radius_16dp">16dp</dimen>

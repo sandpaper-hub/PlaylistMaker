@@ -33,6 +33,11 @@
     <string name="addButtonText">Добавить в коллекцию</string>
     <string name="playButtonText">Воспроизвести</string>
     <string name="likeButtonText">Нравится</string>
+    <string name="create">Создать</string>
+    <string name="description">Описание</string>
+    <string name="albumName">Название*</string>
+    <string name="photoPickerIcon">Иконка для PhotoPicker</string>
+    <string name="albumCover">Обложка альбома</string>
 
     <string name="sampleEmail">electro.passion92@gmail.com</string>
     <string name="sampleSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
