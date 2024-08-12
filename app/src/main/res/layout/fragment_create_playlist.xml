@@ -81,6 +81,7 @@
         android:layout_marginBottom="@dimen/indent_32dp"
         android:background="@drawable/create_button_selector"
         android:text="@string/create"
+        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
