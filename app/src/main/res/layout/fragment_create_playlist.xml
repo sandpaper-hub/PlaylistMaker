@@ -31,6 +31,7 @@
         android:layout_marginTop="@dimen/indent_26dp"
         android:background="@drawable/stroke_rectangle"
         android:contentDescription="@string/albumCover"
+        android:scaleType="center"
         app:layout_constraintDimensionRatio="w, 1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,8 +81,8 @@
         android:layout_marginHorizontal="@dimen/indent_17dp"
         android:layout_marginBottom="@dimen/indent_32dp"
         android:background="@drawable/create_button_selector"
-        android:text="@string/create"
         android:enabled="false"
+        android:text="@string/create"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

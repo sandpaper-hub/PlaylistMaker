@@ -98,7 +98,7 @@ class PlayerFragment : Fragment() {
             .load(track.artworkUrl100!!.replaceAfterLast('/', "512x512bb.jpg"))
             .fitCenter()
             .placeholder(R.drawable.album)
-            .transform(RoundedCorners(2f.dpToPx(requireContext())))
+            .transform(RoundedCorners(8f.dpToPx(requireContext())))
             .into(binding.albumCover)
 
         binding.backButtonPlayerActivity.setOnClickListener {
