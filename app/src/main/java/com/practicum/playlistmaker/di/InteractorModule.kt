@@ -2,7 +2,9 @@ package com.practicum.playlistmaker.di
 
 import com.practicum.playlistmaker.application.domain.api.DarkThemeInteractor
 import com.practicum.playlistmaker.application.domain.interactor.DarkThemeInteractorImpl
+import com.practicum.playlistmaker.mediaLibrary.domain.db.CreatePlaylistInteractor
 import com.practicum.playlistmaker.mediaLibrary.domain.db.FavoriteTracksInteractor
+import com.practicum.playlistmaker.mediaLibrary.domain.impl.CreatePlaylistInteractorImpl
 import com.practicum.playlistmaker.mediaLibrary.domain.impl.FavoriteTracksInteractorImpl
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
@@ -29,5 +31,9 @@ val interactorModule = module {
 
     single<FavoriteTracksInteractor> {
         FavoriteTracksInteractorImpl(get())
+    }
+
+    single<CreatePlaylistInteractor> {
+        CreatePlaylistInteractorImpl(get())
     }
 }
