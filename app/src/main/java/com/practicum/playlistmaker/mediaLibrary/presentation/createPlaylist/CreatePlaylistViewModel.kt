@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.mediaLibrary.presentation.createPlaylistFragment
+package com.practicum.playlistmaker.mediaLibrary.presentation.createPlaylist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -34,8 +34,10 @@ class CreatePlaylistViewModel(private val createPlaylistInteractor: CreatePlayli
         stateLiveData.postValue(state)
     }
 
-    fun savePlaylist(uriCoverString: String, fileCoverName: String, playlist: Playlist) {
-        createPlaylistInteractor.saveCover(uriCoverString, fileCoverName)
+    fun savePlaylist(uriCoverString: String?, fileCoverName: String, playlist: Playlist) {
+        if (uriCoverString != null) {
+            playlist.playlistCover = createPlaylistInteractor.saveCover(uriCoverString, fileCoverName)
+        }
         viewModelScope.launch {
             createPlaylistInteractor.addNewPlaylist(playlist)
         }

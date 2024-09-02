@@ -12,7 +12,7 @@ class CreatePlaylistInteractorImpl(
         createPlaylistRepository.addNewPlaylist(playlist)
     }
 
-    override fun saveCover(uriString: String, fileName: String) {
-        createPlaylistRepository.saveCover(uriString, fileName)
+    override fun saveCover(uriString: String, fileName: String): String {
+        return createPlaylistRepository.saveCover(uriString, fileName)
     }
 }

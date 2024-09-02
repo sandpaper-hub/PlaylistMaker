@@ -17,7 +17,4 @@ interface PlaylistDao {
 
     @Query("SELECT * FROM album_table")
     suspend fun getPlaylists(): List<PlaylistEntity>
-
-    @Query("SELECT playlistName FROM album_table")
-    suspend fun getPlaylistsName(): List<String>
 }

@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface CreatePlaylistRepository {
     suspend fun addNewPlaylist(playlist: Playlist)
-    fun saveCover(uriString: String, fileName: String)
+    fun saveCover(uriString: String, fileName: String): String
 }

@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import androidx.core.net.toUri
 import com.practicum.playlistmaker.mediaLibrary.data.converters.PlaylistDbConverter
 import com.practicum.playlistmaker.mediaLibrary.data.db.AppDatabase
@@ -24,7 +25,7 @@ class CreatePlaylistRepositoryImpl(
         appDatabase.playlistDao().insertPlaylist(playlistEntity)
     }
 
-    override fun saveCover(uriString: String, fileName: String) {
+    override fun saveCover(uriString: String, fileName: String): String {
         val filePath =
             File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "albumCoverFiles")
 
@@ -33,10 +34,11 @@ class CreatePlaylistRepositoryImpl(
         }
 
         val uri = Uri.parse(uriString)
-        val file = File(filePath, "${fileName}.jpg")
+        val file = File(filePath, "$fileName")
         val inputStream = context.contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
         BitmapFactory.decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+        return file.path
     }
 }

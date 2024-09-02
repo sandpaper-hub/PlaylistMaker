@@ -4,7 +4,7 @@ data class Playlist (
     val id: Int,
     val playlistName: String,
     val playlistDescription: String,
-    val playlistCover: String,
+    var playlistCover: String?,
     val tracksId: String,
     val tracksCount: Int
 )

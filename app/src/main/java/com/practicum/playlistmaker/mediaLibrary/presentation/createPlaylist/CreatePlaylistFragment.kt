@@ -1,13 +1,8 @@
-package com.practicum.playlistmaker.mediaLibrary.presentation.createPlaylistFragment
+package com.practicum.playlistmaker.mediaLibrary.presentation.createPlaylist
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +12,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -29,8 +23,6 @@ import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
 import com.practicum.playlistmaker.mediaLibrary.presentation.model.CreatePlaylistState
 import com.practicum.playlistmaker.util.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
-import java.io.FileOutputStream
 
 class CreatePlaylistFragment : Fragment() {
     private lateinit var binding: FragmentCreatePlaylistBinding
@@ -38,7 +30,7 @@ class CreatePlaylistFragment : Fragment() {
     private lateinit var textWatcher: TextWatcher
     private lateinit var imagePicker: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
-    private var coverUri: Uri? = null
+    private var coverUriString: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,7 +75,7 @@ class CreatePlaylistFragment : Fragment() {
 
         imagePicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                coverUri = uri
+                coverUriString = uri.toString()
                 Glide.with(requireContext())
                     .load(uri)
                     .placeholder(R.drawable.placeholder)
@@ -104,13 +96,13 @@ class CreatePlaylistFragment : Fragment() {
 
         binding.createButton.setOnClickListener {
             viewModel.savePlaylist(
-                coverUri.toString(),
+                coverUriString,
                 "${binding.albumNameEditText.text.toString()}.jpg",
                 Playlist(
                     0,
                     binding.albumNameEditText.text.toString(),
                     binding.albumDescriptionEditText.text.toString(),
-                    coverUri.toString(),
+                    null,
                     "", 0
                 )
             )

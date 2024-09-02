@@ -6,8 +6,10 @@ import com.practicum.playlistmaker.mediaLibrary.data.converters.PlaylistDbConver
 import com.practicum.playlistmaker.mediaLibrary.data.converters.TrackDbConverter
 import com.practicum.playlistmaker.mediaLibrary.data.repository.CreatePlaylistRepositoryImpl
 import com.practicum.playlistmaker.mediaLibrary.data.repository.FavoriteTracksTracksRepositoryImpl
+import com.practicum.playlistmaker.mediaLibrary.data.repository.PlaylistsRepositoryImpl
 import com.practicum.playlistmaker.mediaLibrary.domain.db.CreatePlaylistRepository
 import com.practicum.playlistmaker.mediaLibrary.domain.db.FavoriteTracksRepository
+import com.practicum.playlistmaker.mediaLibrary.domain.db.PlaylistsRepository
 import com.practicum.playlistmaker.player.data.repository.PlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.repository.MediaPlayerRepository
 import com.practicum.playlistmaker.search.data.repository.SharedPreferencesRepositoryImpl
@@ -48,5 +50,9 @@ val repositoryModule = module {
 
     single<CreatePlaylistRepository> {
         CreatePlaylistRepositoryImpl(androidContext(), get(), get())
+    }
+
+    single<PlaylistsRepository> {
+        PlaylistsRepositoryImpl(get(), get())
     }
 }
