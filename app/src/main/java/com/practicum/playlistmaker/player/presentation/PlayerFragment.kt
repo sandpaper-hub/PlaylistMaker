@@ -7,12 +7,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.player.presentation.model.PlayerState
@@ -31,6 +33,7 @@ class PlayerFragment : Fragment() {
 
     private lateinit var track: Track
     private lateinit var binding: FragmentPlayerBinding
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private val mediaPlayerViewModel by viewModel<MediaPlayerViewModel>()
 
     override fun onCreateView(
@@ -52,6 +55,36 @@ class PlayerFragment : Fragment() {
         track = requireArguments().getSerializableTrack<Track>(TRACK)!!
         mediaPlayerViewModel.createPlayer(track.trackId)
         mediaPlayerViewModel.preparePlayer(track.previewUrl)
+
+
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetContainer)
+
+        binding.addToCollectionButton.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_EXPANDED, BottomSheetBehavior.STATE_DRAGGING, BottomSheetBehavior.STATE_COLLAPSED -> {
+                        binding.dimView.visibility = View.VISIBLE
+                        if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                            binding.dimView.alpha = 1f
+                        }
+                    }
+
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.dimView.visibility = View.GONE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                if (slideOffset >= 0.0f) {
+                    binding.dimView.alpha = slideOffset + 1f
+                }
+            }
+        })
     }
 
     override fun onPause() {
@@ -92,6 +125,7 @@ class PlayerFragment : Fragment() {
         binding.countryValue.text = track.country
         binding.trackNamePlayerActivity.text = track.trackName
         binding.artistNamePlayerActivity.text = track.artistName
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         updateFavorite(inFavorite)
 
         Glide.with(requireContext())
