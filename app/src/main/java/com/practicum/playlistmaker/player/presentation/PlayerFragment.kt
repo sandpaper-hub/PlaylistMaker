@@ -1,12 +1,12 @@
 package com.practicum.playlistmaker.player.presentation
 
 import android.annotation.SuppressLint
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -17,6 +17,10 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
+import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
+import com.practicum.playlistmaker.mediaLibrary.presentation.model.PlaylistsState
+import com.practicum.playlistmaker.mediaLibrary.presentation.playlists.PlaylistsAdapter
+import com.practicum.playlistmaker.mediaLibrary.presentation.playlists.PlaylistsViewModel
 import com.practicum.playlistmaker.player.presentation.model.PlayerState
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.convertLongToTimeMillis
@@ -35,6 +39,8 @@ class PlayerFragment : Fragment() {
     private lateinit var binding: FragmentPlayerBinding
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private val mediaPlayerViewModel by viewModel<MediaPlayerViewModel>()
+    private val playlistsViewModel by viewModel<PlaylistsViewModel>()
+    private lateinit var playlistsAdapter: PlaylistsAdapterListView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,20 +56,26 @@ class PlayerFragment : Fragment() {
         binding.backButtonPlayerActivity.setOnClickListener {
             findNavController().navigateUp()
         }
-        mediaPlayerViewModel.observeState().observe(requireActivity()) { render(it) }
+        mediaPlayerViewModel.observeState().observe(viewLifecycleOwner) { renderPlayer(it) }
+        playlistsViewModel.observeState().observe(viewLifecycleOwner) {
+            renderBottomSheet(it)
+        }
+
+        playlistsViewModel.fillData()
 
         track = requireArguments().getSerializableTrack<Track>(TRACK)!!
         mediaPlayerViewModel.createPlayer(track.trackId)
         mediaPlayerViewModel.preparePlayer(track.previewUrl)
 
-
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetContainer)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
         binding.addToCollectionButton.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
+            @SuppressLint("SwitchIntDef")
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_EXPANDED, BottomSheetBehavior.STATE_DRAGGING, BottomSheetBehavior.STATE_COLLAPSED -> {
@@ -85,6 +97,24 @@ class PlayerFragment : Fragment() {
                 }
             }
         })
+
+        playlistsAdapter = PlaylistsAdapterListView()
+        binding.playlistsRecyclerView.adapter = playlistsAdapter
+
+        binding.newPlaylistButton.setOnClickListener {
+            findNavController().navigate(R.id.action_playerFragment_to_createPlaylistFragment)
+        }
+
+        binding.playButton.setOnClickListener {
+            mediaPlayerViewModel.playbackControl()
+        }
+        binding.favoriteButton.setOnClickListener {
+            mediaPlayerViewModel.updateFavorite(track)
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback {
+            findNavController().navigateUp()
+        }
     }
 
     override fun onPause() {
@@ -92,7 +122,7 @@ class PlayerFragment : Fragment() {
         mediaPlayerViewModel.pausePlayer()
     }
 
-    private fun render(state: PlayerState) {
+    private fun renderPlayer(state: PlayerState) {
         when (state) {
             is PlayerState.Created -> onPlayerCreate(state.inFavorite)
             is PlayerState.Prepared -> onPlayerPrepared(state.position)
@@ -102,6 +132,30 @@ class PlayerFragment : Fragment() {
             is PlayerState.ChangePosition -> onTrackPositionChanged(state.position)
             is PlayerState.Favorite -> updateFavorite(state.inFavorite)
         }
+    }
+
+    private fun renderBottomSheet(state: PlaylistsState) {
+        when (state) {
+            is PlaylistsState.Content -> showContent(state.playlists)
+            is PlaylistsState.Empty -> showEmpty()
+        }
+    }
+
+    private fun showEmpty() {
+        binding.emptyLibraryImageView.visibility = View.VISIBLE
+        binding.emptyFavoriteTextView.visibility = View.VISIBLE
+        binding.playlistsRecyclerView.visibility = View.GONE
+        binding.emptyFavoriteTextView.setText(R.string.noPlaylist)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showContent(playlists: List<Playlist>) {
+        binding.emptyLibraryImageView.visibility = View.GONE
+        binding.emptyFavoriteTextView.visibility = View.GONE
+        binding.playlistsRecyclerView.visibility = View.VISIBLE
+        playlistsAdapter.playlists.clear()
+        playlistsAdapter.playlists.addAll(playlists)
+        playlistsAdapter.notifyDataSetChanged()
     }
 
     private fun updateFavorite(inFavorite: Boolean) {
@@ -125,7 +179,6 @@ class PlayerFragment : Fragment() {
         binding.countryValue.text = track.country
         binding.trackNamePlayerActivity.text = track.trackName
         binding.artistNamePlayerActivity.text = track.artistName
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         updateFavorite(inFavorite)
 
         Glide.with(requireContext())
@@ -143,12 +196,6 @@ class PlayerFragment : Fragment() {
     private fun onPlayerPrepared(position: String) {
         binding.playButton.isClickable = true
         binding.durationCurrentValue.text = position
-        binding.playButton.setOnClickListener {
-            mediaPlayerViewModel.playbackControl()
-        }
-        binding.favoriteButton.setOnClickListener {
-            mediaPlayerViewModel.updateFavorite(track)
-        }
     }
 
     private fun onPlayerStart() {
@@ -168,3 +215,5 @@ class PlayerFragment : Fragment() {
         binding.durationCurrentValue.setText(R.string.durationSample)
     }
 }
+
+//TODO добавление трека в БД

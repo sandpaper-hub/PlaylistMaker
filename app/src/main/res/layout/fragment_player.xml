@@ -296,7 +296,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/indent_24dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@+id/newPlaylistButton" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/emptyLibraryImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/indent_46dp"
+            android:src="@drawable/nothing_found_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newPlaylistButton"
+            app:layout_goneMarginTop="118dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/emptyFavoriteTextView"
+            style="@style/badResultTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emptyLibraryImageView"
+            tools:text="@string/noPlaylist" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

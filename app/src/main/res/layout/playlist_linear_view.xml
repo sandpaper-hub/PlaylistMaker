@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/playlistContainer">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/playlistCoverImageView"
+        android:layout_width="@dimen/coverSize_dp"
+        android:layout_height="@dimen/coverSize_dp"
+        android:layout_marginVertical="@dimen/indent_8dp"
+        android:layout_marginStart="@dimen/indent_12dp"
+        android:contentDescription="@string/cover_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/placeholder" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/playlistNameTextView"
+        style="@style/track_text_style_songName"
+        android:layout_marginTop="13dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/playlistCoverImageView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ut lorem sit amet nisl tempor commodo. Suspendisse sed vehicula tortor. Maecenas lobortis est at dolor condimentum, nec venenatis metus condimentum. Cras aliquet tellus vel nisl auctor ornare. Ut ultricies facilisis mi, sed maximus ex vestibulum non. In a ex vel enim pellentesque ultricies at id turpis. Integer sollicitudin euismod varius. Praesent elementum non velit efficitur cursus. Fusce fringilla risus nisi, ut hendrerit tortor rutrum ut. Pellentesque facilisis mattis rhoncus." />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tracksCountTextView"
+        style="@style/track_text_style_artist"
+        android:layout_marginTop="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/playlistCoverImageView"
+        app:layout_constraintTop_toBottomOf="@+id/playlistNameTextView"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ut lorem sit amet nisl tempor commodo. Suspendisse sed vehicula tortor. Maecenas lobortis est at dolor condimentum, nec venenatis metus condimentum. Cras aliquet tellus vel nisl auctor ornare. Ut ultricies facilisis mi, sed maximus ex vestibulum non. In a ex vel enim pellentesque ultricies at id turpis. Integer sollicitudin euismod varius. Praesent elementum non velit efficitur cursus. Fusce fringilla risus nisi, ut hendrerit tortor rutrum ut. Pellentesque facilisis mattis rhoncus." />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
