@@ -13,7 +13,6 @@ import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
 import com.practicum.playlistmaker.mediaLibrary.presentation.model.PlaylistsState
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 class PlaylistsFragment : Fragment() {
     companion object {
@@ -28,7 +27,7 @@ class PlaylistsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -52,6 +51,7 @@ class PlaylistsFragment : Fragment() {
         when (state) {
             is PlaylistsState.Empty -> showEmpty()
             is PlaylistsState.Content -> showContent(state.playlists)
+            else -> Unit
         }
     }
 

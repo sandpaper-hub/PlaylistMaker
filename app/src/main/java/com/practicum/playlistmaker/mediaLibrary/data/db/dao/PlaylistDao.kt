@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.practicum.playlistmaker.mediaLibrary.data.db.entity.PlaylistEntity
 
 @Dao
@@ -17,4 +18,7 @@ interface PlaylistDao {
 
     @Query("SELECT * FROM album_table")
     suspend fun getPlaylists(): List<PlaylistEntity>
+
+    @Update(entity = PlaylistEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateTracksId(playlistEntity: PlaylistEntity)
 }

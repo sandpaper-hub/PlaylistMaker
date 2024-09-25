@@ -2,10 +2,10 @@ package com.practicum.playlistmaker.player.presentation
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
@@ -19,7 +19,6 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
 import com.practicum.playlistmaker.mediaLibrary.presentation.model.PlaylistsState
-import com.practicum.playlistmaker.mediaLibrary.presentation.playlists.PlaylistsAdapter
 import com.practicum.playlistmaker.mediaLibrary.presentation.playlists.PlaylistsViewModel
 import com.practicum.playlistmaker.player.presentation.model.PlayerState
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -46,7 +45,7 @@ class PlayerFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentPlayerBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -80,6 +79,7 @@ class PlayerFragment : Fragment() {
                 when (newState) {
                     BottomSheetBehavior.STATE_EXPANDED, BottomSheetBehavior.STATE_DRAGGING, BottomSheetBehavior.STATE_COLLAPSED -> {
                         binding.dimView.visibility = View.VISIBLE
+                        playlistsViewModel.fillData()
                         if (newState == BottomSheetBehavior.STATE_EXPANDED) {
                             binding.dimView.alpha = 1f
                         }
@@ -98,7 +98,12 @@ class PlayerFragment : Fragment() {
             }
         })
 
-        playlistsAdapter = PlaylistsAdapterListView()
+        playlistsAdapter =
+            PlaylistsAdapterListView(object : PlaylistsAdapterListView.OnPlaylistListener {
+                override fun onItemClick(playlist: Playlist) {
+                    playlistsViewModel.updatePlaylist(playlist, track)
+                }
+            })
         binding.playlistsRecyclerView.adapter = playlistsAdapter
 
         binding.newPlaylistButton.setOnClickListener {
@@ -138,8 +143,27 @@ class PlayerFragment : Fragment() {
         when (state) {
             is PlaylistsState.Content -> showContent(state.playlists)
             is PlaylistsState.Empty -> showEmpty()
+            is PlaylistsState.AddingResult -> showSuccessfull(state.playlist, state.result)
         }
     }
+
+    private fun showSuccessfull(playlist: Playlist, result: Boolean) {
+        if (result) {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            Toast.makeText(
+                requireContext(),
+                "${getString(R.string.successfullyAdd)} ${playlist.playlistName}",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "${getString(R.string.notAddedToPlaylist)} ${playlist.playlistName}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
 
     private fun showEmpty() {
         binding.emptyLibraryImageView.visibility = View.VISIBLE
@@ -216,4 +240,4 @@ class PlayerFragment : Fragment() {
     }
 }
 
-//TODO добавление трека в БД
+//TODO DARK THEME

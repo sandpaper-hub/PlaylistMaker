@@ -39,6 +39,8 @@
     <string name="photoPickerIcon">Иконка для PhotoPicker</string>
     <string name="albumCover">Обложка альбома</string>
     <string name="addToPlaylist">Добавить в плейлист</string>
+    <string name="successfullyAdd">Добавлено в плейлист</string>
+    <string name="notAddedToPlaylist">Трек уже добавлен в плейлист</string>
 
     <string name="sampleEmail">electro.passion92@gmail.com</string>
     <string name="sampleSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>

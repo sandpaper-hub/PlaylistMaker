@@ -53,8 +53,13 @@ fun Float.dpToPx(context: Context): Int {
     ).toInt()
 }
 
-fun String.createArrayListFromJson(): ArrayList<Track> {
+fun String.createTrackArrayListFromJson(): ArrayList<Track> {
     val array = Gson().fromJson(this, Array<Track>::class.java)
+    return ArrayList(array.toList())
+}
+
+fun String.createPlaylistIdsArrayListFromJson(): ArrayList<String> {
+    val array = Gson().fromJson(this, Array<String>::class.java)
     return ArrayList(array.toList())
 }
 

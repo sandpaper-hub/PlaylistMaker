@@ -40,6 +40,7 @@ val repositoryModule = module {
     factory<PlaylistDbConverter> {
         PlaylistDbConverter()
     }
+
     single<MediaPlayerRepository> {
         PlayerRepositoryImpl(get(), get())
     }
@@ -53,6 +54,6 @@ val repositoryModule = module {
     }
 
     single<PlaylistsRepository> {
-        PlaylistsRepositoryImpl(get(), get())
+        PlaylistsRepositoryImpl(get(), get(), get())
     }
 }

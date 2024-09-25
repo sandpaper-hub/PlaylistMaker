@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.Gson
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
@@ -36,7 +37,7 @@ class CreatePlaylistFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCreatePlaylistBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -103,7 +104,7 @@ class CreatePlaylistFragment : Fragment() {
                     binding.albumNameEditText.text.toString(),
                     binding.albumDescriptionEditText.text.toString(),
                     null,
-                    "", 0
+                    Gson().toJson(ArrayList<String>()), 0
                 )
             )
             Toast.makeText(
