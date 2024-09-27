@@ -3,7 +3,6 @@ package com.practicum.playlistmaker.mediaLibrary.domain.impl
 import com.practicum.playlistmaker.mediaLibrary.domain.db.CreatePlaylistInteractor
 import com.practicum.playlistmaker.mediaLibrary.domain.db.CreatePlaylistRepository
 import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
-import kotlinx.coroutines.flow.Flow
 
 class CreatePlaylistInteractorImpl(
     private val createPlaylistRepository: CreatePlaylistRepository,

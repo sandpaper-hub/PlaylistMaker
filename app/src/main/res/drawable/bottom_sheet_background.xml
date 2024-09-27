@@ -3,10 +3,10 @@
     android:shape="rectangle">
 
     <size
-        android:width="200dp"
-        android:height="100dp" />
+        android:width="@dimen/bottomSheetWidth"
+        android:height="@dimen/bottomSheetHeight" />
 
-    <solid android:color="@color/YP_White" />
+    <solid android:color="@color/text_color" />
 
     <corners
         android:topLeftRadius="@dimen/radius_16dp"

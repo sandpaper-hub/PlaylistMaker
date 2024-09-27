@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="textSize_11sp">11sp</dimen>
+    <dimen name="textSize_12sp">12sp</dimen>
     <dimen name="textSize_14sp">14sp</dimen>
     <dimen name="textSize_16sp">16sp</dimen>
     <dimen name="textSize_19sp">19sp</dimen>
     <dimen name="textSize_22sp">22sp</dimen>
+    <dimen name="indent_1dp">1dp</dimen>
     <dimen name="indent_4dp">4dp</dimen>
     <dimen name="indent_8dp">8dp</dimen>
     <dimen name="indent_10dp">10dp</dimen>
     <dimen name="indent_12dp">12dp</dimen>
+    <dimen name="indent_13dp">13dp</dimen>
     <dimen name="indent_16dp">16dp</dimen>
     <dimen name="indent_17dp">17dp</dimen>
     <dimen name="indent_18dp">18dp</dimen>
@@ -22,4 +25,10 @@
     <dimen name="radius_54dp">54dp</dimen>
     <dimen name="coverSize_dp">45dp</dimen>
     <dimen name="button_back_size">48dp</dimen>
+
+    <dimen name="viewWidth">50dp</dimen>
+    <dimen name="bottomSheetHeight">100dp</dimen>
+    <dimen name="coverDimension">160dp</dimen>
+    <dimen name="bottomSheetWidth">200dp</dimen>
+    <dimen name="bottomSheetPeekHeight">505dp</dimen>
 </resources>

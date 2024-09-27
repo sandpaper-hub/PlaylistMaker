@@ -143,11 +143,11 @@ class PlayerFragment : Fragment() {
         when (state) {
             is PlaylistsState.Content -> showContent(state.playlists)
             is PlaylistsState.Empty -> showEmpty()
-            is PlaylistsState.AddingResult -> showSuccessfull(state.playlist, state.result)
+            is PlaylistsState.AddingResult -> showSuccessful(state.playlist, state.result)
         }
     }
 
-    private fun showSuccessfull(playlist: Playlist, result: Boolean) {
+    private fun showSuccessful(playlist: Playlist, result: Boolean) {
         if (result) {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             Toast.makeText(

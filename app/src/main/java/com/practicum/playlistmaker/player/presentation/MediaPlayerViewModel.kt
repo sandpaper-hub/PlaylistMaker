@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.player.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -89,7 +88,7 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
         }
     }
 
-    fun completeMediaPlayer() {
+    private fun completeMediaPlayer() {
         if (mediaPlayerInteractor.isMediaPlayerComplete) {
             timerJob?.cancel()
             renderState(PlayerState.Complete)

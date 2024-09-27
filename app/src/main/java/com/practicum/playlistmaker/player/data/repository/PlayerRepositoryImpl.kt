@@ -3,7 +3,6 @@ package com.practicum.playlistmaker.player.data.repository
 import com.practicum.playlistmaker.mediaLibrary.data.converters.TrackDbConverter
 import com.practicum.playlistmaker.mediaLibrary.data.db.AppDatabase
 import com.practicum.playlistmaker.player.domain.repository.MediaPlayerRepository
-import com.practicum.playlistmaker.search.data.dto.TrackDto
 import com.practicum.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

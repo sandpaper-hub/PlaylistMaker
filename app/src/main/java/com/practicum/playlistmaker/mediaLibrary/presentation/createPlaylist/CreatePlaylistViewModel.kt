@@ -15,28 +15,25 @@ class CreatePlaylistViewModel(private val createPlaylistInteractor: CreatePlayli
     private val stateLiveData = MutableLiveData<CreatePlaylistState>()
 
     fun observeState(): LiveData<CreatePlaylistState> {
-        return  stateLiveData
+        return stateLiveData
     }
 
     fun checkCreateButton(nameIsEmpty: Boolean) {
-        if (nameIsEmpty) {
-            renderState(CreatePlaylistState.EnableCreateButton(nameIsEmpty))
-        } else {
-            renderState(CreatePlaylistState.EnableCreateButton(!nameIsEmpty))
-        }
+        renderState(CreatePlaylistState.EnableCreateButton(!nameIsEmpty))
     }
 
     fun showDialog() {
         renderState(CreatePlaylistState.Dialog)
     }
 
-    fun renderState(state: CreatePlaylistState) {
+    private fun renderState(state: CreatePlaylistState) {
         stateLiveData.postValue(state)
     }
 
     fun savePlaylist(uriCoverString: String?, fileCoverName: String, playlist: Playlist) {
         if (uriCoverString != null) {
-            playlist.playlistCover = createPlaylistInteractor.saveCover(uriCoverString, fileCoverName)
+            playlist.playlistCover =
+                createPlaylistInteractor.saveCover(uriCoverString, fileCoverName)
         }
         viewModelScope.launch {
             createPlaylistInteractor.addNewPlaylist(playlist)

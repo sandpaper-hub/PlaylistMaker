@@ -254,12 +254,12 @@
         android:layout_height="match_parent"
         android:background="@drawable/bottom_sheet_background"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="505dp"
+        app:behavior_peekHeight="@dimen/bottomSheetPeekHeight"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
-            android:layout_width="50dp"
-            android:layout_height="4dp"
+            android:layout_width="@dimen/viewWidth"
+            android:layout_height="@dimen/indent_4dp"
             android:layout_marginTop="@dimen/indent_8dp"
             android:background="@drawable/view_background"
             app:layout_constraintEnd_toEndOf="parent"
