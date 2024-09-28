@@ -12,6 +12,11 @@ import kotlinx.coroutines.launch
 class CreatePlaylistViewModel(private val createPlaylistInteractor: CreatePlaylistInteractor) :
     ViewModel() {
 
+    companion object {
+        private const val CREATE_BUTTON_ENABLED = true
+        private const val CREATE_BUTTON_DISABLED = false
+    }
+
     private val stateLiveData = MutableLiveData<CreatePlaylistState>()
 
     fun observeState(): LiveData<CreatePlaylistState> {
@@ -19,7 +24,11 @@ class CreatePlaylistViewModel(private val createPlaylistInteractor: CreatePlayli
     }
 
     fun checkCreateButton(nameIsEmpty: Boolean) {
-        renderState(CreatePlaylistState.EnableCreateButton(!nameIsEmpty))
+        if (nameIsEmpty) {
+            renderState(CreatePlaylistState.EnableCreateButton(CREATE_BUTTON_ENABLED))
+        } else {
+            renderState(CreatePlaylistState.EnableCreateButton(CREATE_BUTTON_DISABLED))
+        }
     }
 
     fun showDialog() {

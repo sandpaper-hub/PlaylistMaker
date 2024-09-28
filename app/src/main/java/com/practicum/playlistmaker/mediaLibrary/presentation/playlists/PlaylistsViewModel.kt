@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.mediaLibrary.presentation.playlists
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +13,9 @@ import kotlinx.coroutines.launch
 
 class PlaylistsViewModel(private val playlistsInteractor: PlaylistsInteractor) : ViewModel() {
     private val liveData = MutableLiveData<PlaylistsState>()
-    fun observeState() = liveData
+    fun observeState(): LiveData<PlaylistsState> {
+        return liveData
+    }
 
     fun fillData() {
         viewModelScope.launch {

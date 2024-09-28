@@ -22,7 +22,9 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
     private var isCreated = false
     private var isFavorite = false
     private val stateLiveData = MutableLiveData<PlayerState>()
-    fun observeState(): LiveData<PlayerState> = stateLiveData
+    fun observeState(): LiveData<PlayerState>{
+        return stateLiveData
+    }
 
     private var timerJob: Job? = null
     private var prepareJob: Job? = null

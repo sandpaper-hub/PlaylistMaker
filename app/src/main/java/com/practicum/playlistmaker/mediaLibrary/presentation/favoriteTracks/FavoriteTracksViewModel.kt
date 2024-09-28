@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.mediaLibrary.presentation.favoriteTracks
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +11,9 @@ import kotlinx.coroutines.launch
 
 class FavoriteTracksViewModel(private val favoriteTracksInteractor: FavoriteTracksInteractor) : ViewModel() {
     private val stateLiveData = MutableLiveData<FavoriteTracksState>()
-    fun observeState() = stateLiveData
+    fun observeState():LiveData<FavoriteTracksState>{
+        return stateLiveData
+    }
 
     fun fillData() {
         viewModelScope.launch {
