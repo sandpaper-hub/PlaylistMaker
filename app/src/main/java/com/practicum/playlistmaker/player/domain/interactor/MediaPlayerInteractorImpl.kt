@@ -60,7 +60,7 @@ class MediaPlayerInteractorImpl(
         mediaPlayerRepository.removeTrackFromFavorite(track)
     }
 
-    override fun getFavoriteTracksId(): Flow<List<String>> {
+    override suspend fun getFavoriteTracksId(): Flow<List<String>> {
         return mediaPlayerRepository.getFavoriteTracksId()
     }
 }

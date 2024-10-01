@@ -13,5 +13,5 @@ interface MediaPlayerInteractor {
     fun getTrackPosition(): String
     suspend fun addTrackToFavorite(track: Track)
     suspend fun removeTrackFromFavorite(track: Track)
-    fun getFavoriteTracksId():Flow<List<String>>
+    suspend fun getFavoriteTracksId():Flow<List<String>>
 }

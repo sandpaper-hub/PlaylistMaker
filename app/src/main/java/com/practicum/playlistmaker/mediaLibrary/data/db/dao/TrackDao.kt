@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.practicum.playlistmaker.mediaLibrary.data.db.entity.TrackEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TrackDao {
@@ -16,8 +17,8 @@ interface TrackDao {
     suspend fun deleteTrack(track: TrackEntity)
 
     @Query("SELECT * FROM track_table")
-    suspend fun getFavoriteTracks(): List<TrackEntity>
+    fun getFavoriteTracks():Flow<List<TrackEntity>>
 
     @Query("SELECT id FROM track_table")
-    suspend fun getTracksId(): List<String>
+    fun getTracksId(): Flow<List<String>>
 }

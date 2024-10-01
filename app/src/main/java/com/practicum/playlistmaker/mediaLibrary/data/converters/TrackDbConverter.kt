@@ -37,7 +37,7 @@ class TrackDbConverter {
         )
     }
 
-    private fun map(track: TrackEntity): Track {
+    fun map(track: TrackEntity): Track {
         return Track(
             track.id,
             track.trackName,
@@ -50,9 +50,5 @@ class TrackDbConverter {
             track.country,
             track.trackUrl
         )
-    }
-
-    fun convertFromTracksEntity(tracks: List<TrackEntity>): List<Track> {
-        return tracks.map { track -> map(track) }
     }
 }

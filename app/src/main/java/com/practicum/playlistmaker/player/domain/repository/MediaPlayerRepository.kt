@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface MediaPlayerRepository {
     suspend fun addTrackToFavorite(track: Track)
     suspend fun removeTrackFromFavorite(track: Track)
-    fun getFavoriteTracksId():Flow<List<String>>
+    suspend fun getFavoriteTracksId(): Flow<List<String>>
 }

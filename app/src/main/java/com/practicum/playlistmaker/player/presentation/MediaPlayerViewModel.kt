@@ -35,8 +35,8 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
                 if (ids.contains(trackId)) {
                     isFavorite = true
                 }
+                renderState(PlayerState.Created(isFavorite))
             }
-            renderState(PlayerState.Created(isFavorite))
         }
     }
 

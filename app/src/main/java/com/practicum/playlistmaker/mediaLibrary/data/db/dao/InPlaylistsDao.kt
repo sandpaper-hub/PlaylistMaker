@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.practicum.playlistmaker.mediaLibrary.data.db.entity.TrackInPlaylistsEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface InPlaylistsDao {
@@ -12,5 +13,5 @@ interface InPlaylistsDao {
     suspend fun addTrack(track: TrackInPlaylistsEntity)
 
     @Query("SELECT * FROM in_playlists_table")
-    suspend fun getAllTracks(): List<TrackInPlaylistsEntity>
+    fun getAllTracks(): Flow<List<TrackInPlaylistsEntity>>
 }

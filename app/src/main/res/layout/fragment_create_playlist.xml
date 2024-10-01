@@ -57,6 +57,7 @@
         android:paddingHorizontal="@dimen/indent_16dp"
         android:paddingVertical="@dimen/indent_19dp"
         android:textColorHint="@color/element_color"
+        android:textColor="@color/element_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/albumCoverImageView" />
@@ -69,6 +70,7 @@
         android:hint="@string/description"
         android:paddingHorizontal="@dimen/indent_16dp"
         android:paddingVertical="@dimen/indent_19dp"
+        android:textColor="@color/element_color"
         android:textColorHint="@color/element_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
