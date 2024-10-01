@@ -20,7 +20,6 @@ import com.practicum.playlistmaker.player.presentation.PlayerFragment
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.presentation.model.TracksState
 import com.practicum.playlistmaker.util.hasNullableData
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -47,7 +46,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -135,14 +134,6 @@ class SearchFragment : Fragment() {
         binding.refreshSearchButton.setOnClickListener {
             viewModel.searchDebounce(viewModel.lastSearchText)
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     private fun render(state: TracksState) { //ok
