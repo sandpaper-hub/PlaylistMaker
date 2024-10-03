@@ -23,10 +23,18 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.playerFragment -> binding.bottomNavigationView.visibility = View.GONE
-                R.id.createPlaylistFragment -> binding.bottomNavigationView.visibility = View.GONE
-                else -> binding.bottomNavigationView.visibility = View.VISIBLE
+                R.id.playerFragment -> hideBottomNavigation()
+                R.id.createPlaylistFragment -> hideBottomNavigation()
+                else -> {
+                    binding.bottomNavigationView.visibility = View.VISIBLE
+                    binding.bottomNavigationSeparator.visibility = View.VISIBLE
+                }
             }
         }
+    }
+
+    private fun hideBottomNavigation() = with(binding) {
+        bottomNavigationView.visibility = View.GONE
+        bottomNavigationSeparator.visibility = View.GONE
     }
 }
