@@ -48,39 +48,54 @@
         app:layout_constraintStart_toStartOf="@id/albumCoverImageView"
         app:layout_constraintTop_toTopOf="@id/albumCoverImageView" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/albumNameEditText"
-        style="@style/edit_text_style"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/albumNameTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/edit_text_create"
         android:layout_marginTop="@dimen/indent_32dp"
-        android:background="@drawable/album_edit_text"
         android:hint="@string/albumName"
-        android:imeOptions="actionNext"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingHorizontal="@dimen/indent_16dp"
-        android:paddingVertical="@dimen/indent_19dp"
-        android:textColor="@color/element_color"
-        android:textColorHint="@color/element_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/albumCoverImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/albumCoverImageView">
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/albumDescriptionEditText"
-        style="@style/edit_text_style"
-        android:layout_marginTop="@dimen/indent_16dp"
-        android:background="@drawable/album_edit_text"
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/albumNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/ys_text_regular"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingVertical="@dimen/indent_18dp"
+            android:textColor="@color/element_color"
+            android:textColorHint="@color/element_color"
+            android:textSize="@dimen/textSize_16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/edit_text_create"
+        android:layout_marginTop="@dimen/indent_17dp"
         android:hint="@string/description"
-        android:imeOptions="actionDone"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingHorizontal="@dimen/indent_16dp"
-        android:paddingVertical="@dimen/indent_19dp"
-        android:textColor="@color/element_color"
-        android:textColorHint="@color/element_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/albumNameEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/albumNameTextInputLayout">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/albumDescriptionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/ys_text_regular"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingVertical="@dimen/indent_18dp"
+            android:textColor="@color/element_color"
+            android:textColorHint="@color/element_color"
+            android:textSize="@dimen/textSize_16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/createButton"
