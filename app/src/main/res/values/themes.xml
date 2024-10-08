@@ -3,6 +3,7 @@
         <item name="colorSecondary">@color/Yp_Blue</item>
         <item name="android:textColor">@color/YP_Black</item>
         <item name="colorPrimary">@color/YP_Black</item>
+        <item name="materialAlertDialogTheme">@style/CustomAlertDialogTheme</item>
 
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
     </style>

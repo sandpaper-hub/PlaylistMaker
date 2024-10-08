@@ -105,6 +105,7 @@
         android:layout_marginBottom="@dimen/indent_32dp"
         android:background="@drawable/create_button_selector"
         android:enabled="false"
+        android:textColor="@color/YP_White"
         android:text="@string/create"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

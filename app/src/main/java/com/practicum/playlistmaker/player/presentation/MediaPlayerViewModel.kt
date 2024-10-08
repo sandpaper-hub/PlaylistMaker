@@ -90,7 +90,7 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
         }
     }
 
-    private fun completeMediaPlayer() {
+    fun completeMediaPlayer() {
         if (mediaPlayerInteractor.isMediaPlayerComplete) {
             timerJob?.cancel()
             renderState(PlayerState.Complete)

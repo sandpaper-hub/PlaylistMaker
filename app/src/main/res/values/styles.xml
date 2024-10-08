@@ -172,4 +172,13 @@
         <item name="boxStrokeWidth">@dimen/indent_1dp</item>
         <item name="hintTextColor">@color/Yp_Blue</item>
     </style>
+
+    <style name="CustomAlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="buttonBarButtonStyle">@style/CustomButtonStyle</item>
+    </style>
+
+    <style name="CustomButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/Yp_Blue</item>
+    </style>
+
 </resources>

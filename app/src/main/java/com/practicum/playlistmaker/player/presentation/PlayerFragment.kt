@@ -239,5 +239,3 @@ class PlayerFragment : Fragment() {
         binding.durationCurrentValue.setText(R.string.durationSample)
     }
 }
-
-//TODO DARK THEME

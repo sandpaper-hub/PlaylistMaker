@@ -36,11 +36,12 @@
         tools:text="@string/noPlaylist" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="@dimen/indent_16dp"
-        android:layout_marginHorizontal="@dimen/indent_16dp"
         android:id="@+id/playlistsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:paddingBottom="76dp"
+        android:layout_marginHorizontal="@dimen/indent_12dp"
+        android:layout_marginTop="@dimen/indent_8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newPlaylistButton" />

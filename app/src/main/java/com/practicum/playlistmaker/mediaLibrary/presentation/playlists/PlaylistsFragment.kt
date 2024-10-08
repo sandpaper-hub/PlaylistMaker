@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.mediaLibrary.presentation.playlists
 
 import android.annotation.SuppressLint
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
 import com.practicum.playlistmaker.mediaLibrary.presentation.model.PlaylistsState
+import com.practicum.playlistmaker.util.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -34,6 +37,12 @@ class PlaylistsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val itemDecoration = object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                outRect.set(4f.dpToPx(requireContext()), 8f.dpToPx(requireContext()), 4f.dpToPx(requireContext()), 8f.dpToPx(requireContext()   )) // Задаем отступы в пикселях (left, top, right, bottom)
+            }
+        }
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
@@ -41,6 +50,7 @@ class PlaylistsFragment : Fragment() {
             findNavController().navigate(R.id.action_mediaLibraryFragment_to_createPlaylistFragment)
         }
 
+        binding.playlistsRecyclerView.addItemDecoration(itemDecoration)
         binding.playlistsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         playlistsAdapter = PlaylistsAdapter()
         binding.playlistsRecyclerView.adapter = playlistsAdapter
