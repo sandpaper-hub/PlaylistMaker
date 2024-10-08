@@ -92,7 +92,7 @@ class CreatePlaylistFragment : Fragment() {
         }
 
         binding.backButtonFragmentCreate.setOnClickListener {
-            viewModel.showDialog()
+            showDialog()
         }
 
         binding.createButton.setOnClickListener {
@@ -116,7 +116,7 @@ class CreatePlaylistFragment : Fragment() {
         }
 
         requireActivity().onBackPressedDispatcher.addCallback {
-            viewModel.showDialog()
+            showDialog()
         }
     }
 
@@ -134,5 +134,16 @@ class CreatePlaylistFragment : Fragment() {
 
     private fun enableCreateButton(enable: Boolean) {
         binding.createButton.isEnabled = enable
+    }
+
+    private fun showDialog() {
+        val isNameEmpty = binding.albumNameEditText.text.isNullOrEmpty()
+        val isDescriptionEmpty = binding.albumDescriptionEditText.text.isNullOrEmpty()
+        val isAlbumCoverEmpty = binding.albumCoverImageView.drawable == null
+        if (isNameEmpty && isDescriptionEmpty && isAlbumCoverEmpty) {
+            findNavController().navigateUp()
+        } else {
+            viewModel.showDialog()
+        }
     }
 }
