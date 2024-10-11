@@ -53,11 +53,24 @@ fun Float.dpToPx(context: Context): Int {
     ).toInt()
 }
 
-fun String.createArrayListFromJson(): ArrayList<Track> {
+fun String.createTrackArrayListFromJson(): ArrayList<Track> {
     val array = Gson().fromJson(this, Array<Track>::class.java)
+    return ArrayList(array.toList())
+}
+
+fun String.createPlaylistIdsArrayListFromJson(): ArrayList<String> {
+    val array = Gson().fromJson(this, Array<String>::class.java)
     return ArrayList(array.toList())
 }
 
 fun Track.hasNullableData(): Boolean {
     return this.trackDuration == null || this.previewUrl == null
+}
+
+fun Int.declineTracksCount(): String {
+    return when {
+        this % 10 == 1 && this % 100 != 11 -> "трек"
+        this % 10 in 2..4 && (this % 100 !in 12..14) -> "трека"
+        else -> "треков"
+    }
 }

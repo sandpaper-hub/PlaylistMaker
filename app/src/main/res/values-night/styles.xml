@@ -95,4 +95,17 @@
         <item name="android:textSize">@dimen/textSize_11sp</item>
     </style>
 
+    <style name="edit_text_create">
+        <item name="android:layout_marginHorizontal">@dimen/indent_16dp</item>
+        <item name="boxBackgroundColor">@color/transparent</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/indent_8dp</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/indent_8dp</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/indent_8dp</item>
+        <item name="boxCornerRadiusTopStart">@dimen/indent_8dp</item>
+        <item name="boxStrokeColor">@color/text_input_border_color</item>
+        <item name="boxStrokeWidth">@dimen/indent_1dp</item>
+        <item name="hintTextColor">@color/Yp_Blue</item>
+    </style>
+
 </resources>

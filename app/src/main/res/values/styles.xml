@@ -60,9 +60,9 @@
         <item name="android:layout_marginHorizontal">@dimen/indent_16dp</item>
         <item name="android:layout_marginTop">@dimen/indent_8dp</item>
         <item name="android:background">@drawable/rounded_edit_text</item>
+        <item name="android:fontFamily">@font/ys_text_regular</item>
         <item name="android:drawablePadding">@dimen/indent_8dp</item>
         <item name="android:drawableTint">@color/YP_Text_Gray</item>
-        <item name="android:fontFamily">@font/ys_text_regular</item>
         <item name="android:paddingVertical">@dimen/indent_10dp</item>
         <item name="android:textColor">@color/YP_Black</item>
         <item name="android:textColorHint">@color/YP_Text_Gray</item>
@@ -90,7 +90,7 @@
         <item name="android:textColor">@color/YP_Text_Gray</item>
         <item name="android:textSize">@dimen/textSize_11sp</item>
     </style>
-    
+
     <style name="trackNameArtisStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -148,4 +148,37 @@
         <item name="android:textSize">@dimen/textSize_14sp</item>
         <item name="cornerRadius">@dimen/radius_54dp</item>
     </style>
+    
+    <style name="playlistText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:lines">1</item>
+        <item name="android:textSize">@dimen/textSize_12sp</item>
+        <item name="layout_constrainedWidth">true</item>
+        <item name="layout_constraintHorizontal_bias">0</item>
+    </style>
+
+    <style name="edit_text_create">
+        <item name="android:layout_marginHorizontal">@dimen/indent_16dp</item>
+        <item name="boxBackgroundColor">@color/transparent</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/indent_8dp</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/indent_8dp</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/indent_8dp</item>
+        <item name="boxCornerRadiusTopStart">@dimen/indent_8dp</item>
+        <item name="boxStrokeColor">@color/text_input_border_color</item>
+        <item name="boxStrokeWidth">@dimen/indent_1dp</item>
+        <item name="hintTextColor">@color/Yp_Blue</item>
+    </style>
+
+    <style name="CustomAlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="buttonBarButtonStyle">@style/CustomButtonStyle</item>
+    </style>
+
+    <style name="CustomButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/Yp_Blue</item>
+    </style>
+
 </resources>

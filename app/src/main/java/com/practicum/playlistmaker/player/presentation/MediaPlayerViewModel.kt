@@ -22,7 +22,9 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
     private var isCreated = false
     private var isFavorite = false
     private val stateLiveData = MutableLiveData<PlayerState>()
-    fun observeState(): LiveData<PlayerState> = stateLiveData
+    fun observeState(): LiveData<PlayerState>{
+        return stateLiveData
+    }
 
     private var timerJob: Job? = null
     private var prepareJob: Job? = null
@@ -33,8 +35,8 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
                 if (ids.contains(trackId)) {
                     isFavorite = true
                 }
+                renderState(PlayerState.Created(isFavorite))
             }
-            renderState(PlayerState.Created(isFavorite))
         }
     }
 
@@ -58,6 +60,7 @@ class MediaPlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInterac
             ), PlayerState.Favorite(false) -> {
                 mediaPlayerInteractor.startPlayer()
                 renderState(PlayerState.Playing)
+                timerJob?.cancel()
                 timerJob = viewModelScope.launch {
                     while (!mediaPlayerInteractor.isMediaPlayerComplete) {
                         delay(UPDATE_POSITION_DELAY)

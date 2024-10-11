@@ -20,8 +20,8 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(track: Track) {
         Glide.with(itemView.context)
             .load(track.artworkUrl100)
-            .transform(RoundedCorners(2f.dpToPx(itemView.context)))
             .fitCenter()
+            .transform(RoundedCorners(2f.dpToPx(itemView.context)))
             .placeholder(R.drawable.placeholder)
             .into(coverImageView)
         trackNameTextView.text = track.trackName

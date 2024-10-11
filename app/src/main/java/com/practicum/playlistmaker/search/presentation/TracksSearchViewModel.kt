@@ -99,10 +99,6 @@ class TracksSearchViewModel(private val tracksInteractor: TracksInteractor) : Vi
         }
     }
 
-    fun getHistory(): ArrayList<Track> {
-        return tracksInteractor.getHistory()
-    }
-
     fun renderState(state: TracksState) {
         stateLiveData.postValue(state)
     }

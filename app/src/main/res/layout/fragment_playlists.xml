@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mediaLibrary.presentation.favorite.FavoriteTracksFragment">
+    tools:context=".mediaLibrary.presentation.favoriteTracks.FavoriteTracksFragment">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/newPlaylistButton"
@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/emptyLibrary"
+        android:id="@+id/emptyLibraryImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/indent_46dp"
@@ -32,7 +32,18 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emptyLibrary"
+        app:layout_constraintTop_toBottomOf="@+id/emptyLibraryImageView"
         tools:text="@string/noPlaylist" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playlistsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingBottom="76dp"
+        android:layout_marginHorizontal="@dimen/indent_12dp"
+        android:layout_marginTop="@dimen/indent_8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newPlaylistButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

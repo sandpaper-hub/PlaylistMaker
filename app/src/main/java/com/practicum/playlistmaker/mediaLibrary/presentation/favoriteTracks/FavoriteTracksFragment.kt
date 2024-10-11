@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.mediaLibrary.presentation.favorite
+package com.practicum.playlistmaker.mediaLibrary.presentation.favoriteTracks
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.FragmentCollectionBinding
 import com.practicum.playlistmaker.databinding.FragmentFavoriteTracksBinding
 import com.practicum.playlistmaker.mediaLibrary.presentation.model.FavoriteTracksState
 import com.practicum.playlistmaker.player.presentation.PlayerFragment
@@ -29,7 +28,7 @@ class FavoriteTracksFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentFavoriteTracksBinding.inflate(inflater, container, false)
         return binding.root
     }
