@@ -22,7 +22,7 @@ class PlaylistsViewHolder(private val binding: PlaylistGridViewBinding) :
             .into(binding.albumCoverImageView)
         binding.albumNameTextView.text = playlist.playlistName
         binding.albumCountTextView.text =
-            "${playlist.tracksCount} ${playlist.tracksCount.declineTracksCount()}"
+            playlist.tracksCount.declineTracksCount()
     }
 
     companion object {

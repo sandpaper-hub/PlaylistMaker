@@ -13,6 +13,7 @@ import com.practicum.playlistmaker.mediaLibrary.presentation.model.FavoriteTrack
 import com.practicum.playlistmaker.player.presentation.PlayerFragment
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.presentation.TrackListAdapter
+import com.practicum.playlistmaker.util.clickDebounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteTracksFragment : Fragment() {
@@ -23,6 +24,7 @@ class FavoriteTracksFragment : Fragment() {
     private lateinit var binding: FragmentFavoriteTracksBinding
     private lateinit var adapter: TrackListAdapter
     private val viewModel by viewModel<FavoriteTracksViewModel>()
+    private var isClickAllowed = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,10 +42,14 @@ class FavoriteTracksFragment : Fragment() {
         }
         adapter = TrackListAdapter(object : TrackListAdapter.OnTrackClickListener {
             override fun onItemClick(track: Track) {
-                findNavController().navigate(
-                    R.id.action_mediaLibraryFragment_to_playerFragment,
-                    PlayerFragment.createArgs(track)
-                )
+                if (clickDebounce(isClickAllowedProvider = { isClickAllowed },
+                        onUpdateClickAllowed = { newValue -> isClickAllowed = newValue })
+                ) {
+                    findNavController().navigate(
+                        R.id.action_mediaLibraryFragment_to_playerFragment,
+                        PlayerFragment.createArgs(track)
+                    )
+                }
             }
         })
         binding.favoriteRecyclerView.adapter = adapter

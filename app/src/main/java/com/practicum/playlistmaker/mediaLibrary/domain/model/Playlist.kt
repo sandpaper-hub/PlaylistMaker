@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.mediaLibrary.domain.model
 
+import java.io.Serializable
+
 data class Playlist (
     val id: Int,
     val playlistName: String,
@@ -7,4 +9,4 @@ data class Playlist (
     var playlistCover: String?,
     var tracksId: String?,
     val tracksCount: Int
-)
+): Serializable

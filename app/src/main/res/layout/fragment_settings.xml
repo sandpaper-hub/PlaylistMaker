@@ -43,7 +43,7 @@
         android:id="@+id/shareImageView"
         style="@style/settings_activity_small_icon_style"
         android:contentDescription="@string/share_app_title"
-        android:src="@drawable/share"
+        android:src="@drawable/share_ic_gray"
         app:layout_constraintBottom_toBottomOf="@+id/shareTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/shareTextView" />

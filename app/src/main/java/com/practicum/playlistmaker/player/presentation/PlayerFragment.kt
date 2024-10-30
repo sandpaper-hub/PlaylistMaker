@@ -22,9 +22,10 @@ import com.practicum.playlistmaker.mediaLibrary.presentation.model.PlaylistsStat
 import com.practicum.playlistmaker.mediaLibrary.presentation.playlists.PlaylistsViewModel
 import com.practicum.playlistmaker.player.presentation.model.PlayerState
 import com.practicum.playlistmaker.search.domain.models.Track
+import com.practicum.playlistmaker.util.clickDebounce
 import com.practicum.playlistmaker.util.convertLongToTimeMillis
 import com.practicum.playlistmaker.util.dpToPx
-import com.practicum.playlistmaker.util.getSerializableTrack
+import com.practicum.playlistmaker.util.getSerializableData
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerFragment : Fragment() {
@@ -40,6 +41,7 @@ class PlayerFragment : Fragment() {
     private val mediaPlayerViewModel by viewModel<MediaPlayerViewModel>()
     private val playlistsViewModel by viewModel<PlaylistsViewModel>()
     private lateinit var playlistsAdapter: PlaylistsAdapterListView
+    private var isClickAllowed = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,7 +64,7 @@ class PlayerFragment : Fragment() {
 
         playlistsViewModel.fillData()
 
-        track = requireArguments().getSerializableTrack<Track>(TRACK)!!
+        track = requireArguments().getSerializableData<Track>(TRACK)!!
         mediaPlayerViewModel.createPlayer(track.trackId)
         mediaPlayerViewModel.preparePlayer(track.previewUrl)
 
@@ -101,7 +103,11 @@ class PlayerFragment : Fragment() {
         playlistsAdapter =
             PlaylistsAdapterListView(object : PlaylistsAdapterListView.OnPlaylistListener {
                 override fun onItemClick(playlist: Playlist) {
-                    playlistsViewModel.updatePlaylist(playlist, track)
+                    if (clickDebounce(isClickAllowedProvider = { isClickAllowed },
+                            onUpdateClickAllowed = { newValue -> isClickAllowed = newValue })
+                    ) {
+                        playlistsViewModel.updatePlaylist(playlist, track)
+                    }
                 }
             })
         binding.playlistsRecyclerView.adapter = playlistsAdapter

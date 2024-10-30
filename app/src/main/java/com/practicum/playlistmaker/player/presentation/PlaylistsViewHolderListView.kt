@@ -24,7 +24,7 @@ class PlaylistsViewHolderListView(private val playlistLinearViewBinding: Playlis
             .placeholder(R.drawable.placeholder)
             .into(playlistLinearViewBinding.playlistCoverImageView)
         playlistLinearViewBinding.playlistNameTextView.text = playlist.playlistName
-        playlistLinearViewBinding.tracksCountTextView.text = "${playlist.tracksCount} ${playlist.tracksCount.declineTracksCount()}"
+        playlistLinearViewBinding.tracksCountTextView.text = playlist.tracksCount.declineTracksCount()
     }
 
     companion object {

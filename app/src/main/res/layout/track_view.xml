@@ -37,14 +37,14 @@
         app:layout_constraintEnd_toEndOf="@id/dot_point"
         app:layout_constraintStart_toEndOf="@+id/cover"
         app:layout_constraintTop_toBottomOf="@+id/trackName"
-        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ut lorem sit amet nisl tempor commodo. Suspendisse sed vehicula tortor. Maecenas lobortis est at dolor condimentum, nec venenatis metus condimentum. Cras aliquet tellus vel nisl auctor ornare. Ut ultricies facilisis mi, sed maximus ex vestibulum non. In a ex vel enim pellentesque ultricies at id turpis. Integer sollicitudin euismod varius. Praesent elementum non velit efficitur cursus. Fusce fringilla risus nisi, ut hendrerit tortor rutrum ut. Pellentesque facilisis mattis rhoncus." />
+        tools:text="@tools:sample/lorem/random" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/dot_point"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/dot_separator"
-        android:src="@drawable/dot_ic"
+        android:src="@drawable/dot_ic_gray"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintBottom_toBottomOf="@+id/artistName"
         app:layout_constraintStart_toEndOf="@+id/artistName"
