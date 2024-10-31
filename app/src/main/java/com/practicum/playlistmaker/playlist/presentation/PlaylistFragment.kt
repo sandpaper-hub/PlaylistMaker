@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.playlist.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +29,7 @@ class PlaylistFragment : Fragment() {
     private lateinit var binding: FragmentPlaylistBinding
     private lateinit var bottomSheet: BottomSheetBehavior<ConstraintLayout>
     private lateinit var playlist: Playlist
-    private lateinit var confirmDialog: MaterialAlertDialogBuilder
+    private lateinit var deleteTrackconfirmDialog: MaterialAlertDialogBuilder
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,14 +51,21 @@ class PlaylistFragment : Fragment() {
 //        val screenHeight = Resources.getSystem().displayMetrics.heightPixels
 //        val bottomSheetAdaptivePeekHeight = (screenHeight * 0.25).toInt()
 //        bottomSheet.peekHeight = bottomSheetAdaptivePeekHeight
-        confirmDialog = MaterialAlertDialogBuilder(requireContext())
-            .setMessage("Хотите удалить трек?")
-            .setNegativeButton("Нет"){_, _ ->
+        deleteTrackconfirmDialog = MaterialAlertDialogBuilder(requireContext())
+            .setMessage(R.string.deleteTrack)
+            .setNegativeButton(R.string.no) { _, _ ->
 
             }
-            .setPositiveButton("Да"){_, _ ->
+            .setPositiveButton(R.string.yes) { _, _ ->
                 //TODO удаление трека из плейлиста
             }
+        binding.shareImageView.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.putExtra(Intent.EXTRA_TEXT, R.string.sampleMessageForShare)   //TODO передаваемый контент
+            shareIntent.setType("text/plain")
+            val intentChooser = Intent.createChooser(shareIntent, "")
+            startActivity(intentChooser)
+        }
     }
 
     private fun initialize() = with(binding) {
