@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
 import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
@@ -27,6 +28,7 @@ class PlaylistFragment : Fragment() {
     private lateinit var binding: FragmentPlaylistBinding
     private lateinit var bottomSheet: BottomSheetBehavior<ConstraintLayout>
     private lateinit var playlist: Playlist
+    private lateinit var confirmDialog: MaterialAlertDialogBuilder
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +50,14 @@ class PlaylistFragment : Fragment() {
 //        val screenHeight = Resources.getSystem().displayMetrics.heightPixels
 //        val bottomSheetAdaptivePeekHeight = (screenHeight * 0.25).toInt()
 //        bottomSheet.peekHeight = bottomSheetAdaptivePeekHeight
+        confirmDialog = MaterialAlertDialogBuilder(requireContext())
+            .setMessage("Хотите удалить трек?")
+            .setNegativeButton("Нет"){_, _ ->
+
+            }
+            .setPositiveButton("Да"){_, _ ->
+                //TODO удаление трека из плейлиста
+            }
     }
 
     private fun initialize() = with(binding) {
