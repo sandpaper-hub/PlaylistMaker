@@ -65,12 +65,12 @@ class CreatePlaylistFragment : Fragment() {
         textWatcher.let { binding.albumNameEditText.addTextChangedListener(it) }
 
         confirmDialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Завершить создание плейлиста?")
-            .setMessage("Все несохраненные данные будут потеряны")
-            .setNegativeButton("Отмена") { _, _ ->
+            .setTitle(R.string.completePlaylistCreation)
+            .setMessage(R.string.dataWillLost)
+            .setNegativeButton(R.string.cancel) { _, _ ->
 
             }
-            .setPositiveButton("Завершить") { _, _ ->
+            .setPositiveButton(R.string.complete) { _, _ ->
                 findNavController().navigateUp()
             }
 

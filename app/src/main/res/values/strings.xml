@@ -41,6 +41,13 @@
     <string name="addToPlaylist">Добавить в плейлист</string>
     <string name="successfullyAdd">Добавлено в плейлист</string>
     <string name="notAddedToPlaylist">Трек уже добавлен в плейлист</string>
+    <string name="completePlaylistCreation">Завершить создание плейлиста?</string>
+    <string name="dataWillLost">Все несохраненные данные будут потеряны</string>
+    <string name="cancel">Отмена</string>
+    <string name="complete">Завершить</string>
+    <string name="deleteTrack">Хотите удалить трек?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 
     <string name="sampleEmail">electro.passion92@gmail.com</string>
     <string name="sampleSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
