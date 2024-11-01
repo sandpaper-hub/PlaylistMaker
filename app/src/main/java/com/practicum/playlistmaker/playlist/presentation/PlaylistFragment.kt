@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.playlist.presentation
 
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
 import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
 import com.practicum.playlistmaker.util.declineTracksCount
+import com.practicum.playlistmaker.util.dpToPx
 import com.practicum.playlistmaker.util.getSerializableData
 
 class PlaylistFragment : Fragment() {
@@ -27,9 +29,10 @@ class PlaylistFragment : Fragment() {
     }
 
     private lateinit var binding: FragmentPlaylistBinding
-    private lateinit var bottomSheet: BottomSheetBehavior<ConstraintLayout>
+    private lateinit var playlistBottomSheet: BottomSheetBehavior<ConstraintLayout>
+    private lateinit var menuBottomSheet: BottomSheetBehavior<ConstraintLayout>
     private lateinit var playlist: Playlist
-    private lateinit var deleteTrackconfirmDialog: MaterialAlertDialogBuilder
+    private lateinit var confirmDialog: MaterialAlertDialogBuilder
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,24 +50,27 @@ class PlaylistFragment : Fragment() {
         binding.panelHeader.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
-//        bottomSheet = BottomSheetBehavior.from(binding.bottomSheetContainer) TODO bottomSheet
+
+        menuBottomSheet = BottomSheetBehavior.from(binding.menuBottomSheetContainer)
+        menuBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
+//        playlistBottomSheet = BottomSheetBehavior.from(binding.tracksBottomSheetContainer) TODO bottomSheet
 //        val screenHeight = Resources.getSystem().displayMetrics.heightPixels
 //        val bottomSheetAdaptivePeekHeight = (screenHeight * 0.25).toInt()
-//        bottomSheet.peekHeight = bottomSheetAdaptivePeekHeight
-        deleteTrackconfirmDialog = MaterialAlertDialogBuilder(requireContext())
-            .setMessage(R.string.deleteTrack)
-            .setNegativeButton(R.string.no) { _, _ ->
-
-            }
-            .setPositiveButton(R.string.yes) { _, _ ->
-                //TODO удаление трека из плейлиста
-            }
+//        playlistBottomSheet.peekHeight = bottomSheetAdaptivePeekHeight
         binding.shareImageView.setOnClickListener {
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.putExtra(Intent.EXTRA_TEXT, R.string.sampleMessageForShare)   //TODO передаваемый контент
-            shareIntent.setType("text/plain")
-            val intentChooser = Intent.createChooser(shareIntent, "")
-            startActivity(intentChooser)
+           startShareIntent()
+        }
+
+        binding.contextMenuImageView.setOnClickListener {
+            menuBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        binding.shareTextView.setOnClickListener {
+            startShareIntent()
+        }
+
+        binding.deleteTextView.setOnClickListener {
+            confirmDialog.setMessage("${resources.getString(R.string.deletePlaylist)} «${playlist.playlistName}»")
+            confirmDialog.show()
         }
     }
 
@@ -76,6 +82,31 @@ class PlaylistFragment : Fragment() {
             .load(playlist.playlistCover)
             .transform(CenterCrop())
             .placeholder(R.drawable.placeholder)
-            .into(coverImageView)
+            .into(coverBigImageView)
+        Glide.with(requireContext())
+            .load(playlist.playlistCover)
+            .transform(CenterCrop())
+            .placeholder(R.drawable.placeholder)
+            .into(coverSmallImageView)
+        albumNameBottomSheetTextView.text = playlist.playlistName
+        tracksCountBottomSheetTextView.text = playlist.tracksCount.declineTracksCount()
+        confirmDialog = MaterialAlertDialogBuilder(requireContext())
+            .setNegativeButton(R.string.no) { _, _ ->
+
+            }
+            .setPositiveButton(R.string.yes) { _, _ ->
+                //TODO удаление трека из плейлиста
+            }
+    }
+
+    private fun startShareIntent() {
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.putExtra(
+            Intent.EXTRA_TEXT,
+            R.string.sampleMessageForShare
+        )   //TODO передаваемый контент
+        shareIntent.setType("text/plain")
+        val intentChooser = Intent.createChooser(shareIntent, "")
+        startActivity(intentChooser)
     }
 }

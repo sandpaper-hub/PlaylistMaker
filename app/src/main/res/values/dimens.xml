@@ -16,6 +16,7 @@
     <dimen name="indent_17dp">17dp</dimen>
     <dimen name="indent_18dp">18dp</dimen>
     <dimen name="indent_19dp">19dp</dimen>
+    <dimen name="indent_20dp">20dp</dimen>
     <dimen name="indent_24dp">24dp</dimen>
     <dimen name="indent_26dp">26dp</dimen>
     <dimen name="indent_32dp">32dp</dimen>

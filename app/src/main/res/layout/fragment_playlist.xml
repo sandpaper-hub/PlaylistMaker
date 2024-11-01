@@ -12,7 +12,7 @@
         android:background="@color/YP_Light_Gray">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/coverImageView"
+            android:id="@+id/coverBigImageView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintDimensionRatio="w, 1:1"
@@ -51,7 +51,7 @@
             app:layout_constraintEnd_toEndOf="@id/rightBorder16dp"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/leftBorder16dp"
-            app:layout_constraintTop_toBottomOf="@+id/coverImageView"
+            app:layout_constraintTop_toBottomOf="@+id/coverBigImageView"
             tools:text="@tools:sample/lorem/random" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -121,19 +121,19 @@
 
     <View
         android:id="@+id/dim_view"
-        android:background="#80000000"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"/>
+        android:background="#80000000"
+        android:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/bottomSheetContainer"
+        android:id="@+id/tracksBottomSheetContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bottom_sheet_background"
+        android:visibility="gone"
         app:behavior_hideable="false"
         app:behavior_peekHeight="266dp"
-        android:visibility="gone"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
@@ -154,4 +154,87 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rectangle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/menuBottomSheetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bottom_sheet_background"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="383dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:id="@+id/rectangle_view"
+            android:layout_width="@dimen/viewWidth"
+            android:layout_height="@dimen/indent_4dp"
+            android:layout_marginTop="@dimen/indent_8dp"
+            android:background="@drawable/view_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/coverSmallImageView"
+            android:layout_width="@dimen/coverSize_dp"
+            android:layout_height="@dimen/coverSize_dp"
+            android:layout_marginStart="@dimen/indent_13dp"
+            android:layout_marginTop="@dimen/indent_20dp"
+            android:src="@drawable/placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rectangle_view" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/albumNameBottomSheetTextView"
+            style="@style/track_text_style_songName"
+            android:layout_marginTop="@dimen/indent_26dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/coverSmallImageView"
+            app:layout_constraintTop_toBottomOf="@+id/rectangle_view"
+            tools:text="Best songs 2024" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tracksCountBottomSheetTextView"
+            style="@style/track_text_style_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/indent_1dp"
+            app:layout_constraintStart_toEndOf="@+id/coverSmallImageView"
+            app:layout_constraintTop_toBottomOf="@+id/albumNameBottomSheetTextView"
+            tools:text="123 трека" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/shareTextView"
+            style="@style/settings_text_style"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/indent_16dp"
+            android:paddingVertical="21dp"
+            android:text="@string/share"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coverSmallImageView" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/editInfoTextView"
+            style="@style/settings_text_style"
+            android:layout_width="match_parent"
+            android:paddingVertical="21dp"
+            android:text="@string/editInfo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shareTextView" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/deleteTextView"
+            style="@style/settings_text_style"
+            android:layout_width="match_parent"
+            android:paddingVertical="21dp"
+            android:text="@string/deletePlaylist"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editInfoTextView" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

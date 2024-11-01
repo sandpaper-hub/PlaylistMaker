@@ -48,6 +48,10 @@
     <string name="deleteTrack">Хотите удалить трек?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="share">Поделиться</string>
+    <string name="editInfo">Редактировать информацию</string>
+    <string name="deletePlaylist">Хотите удалить плейлист</string>
+    <string name="deletePlaylistAnswer">Хотите удалить плейлист</string>
 
     <string name="sampleEmail">electro.passion92@gmail.com</string>
     <string name="sampleSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>

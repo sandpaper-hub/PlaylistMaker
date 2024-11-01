@@ -68,7 +68,7 @@ class PlayerFragment : Fragment() {
         mediaPlayerViewModel.createPlayer(track.trackId)
         mediaPlayerViewModel.preparePlayer(track.previewUrl)
 
-        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetContainer)
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.tracksBottomSheetContainer)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
         binding.addToCollectionButton.setOnClickListener {
