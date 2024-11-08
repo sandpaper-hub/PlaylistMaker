@@ -83,7 +83,6 @@ class CreatePlaylistFragment : Fragment() {
                     .transform(CenterCrop(), RoundedCorners(8f.dpToPx(requireContext())))
                     .into(binding.albumCoverImageView)
                 binding.albumCoverImageView.background = null
-                binding.addPhotoIconImageView.visibility = View.GONE
             }
         }
 
