@@ -131,9 +131,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bottom_sheet_background"
-        android:visibility="gone"
+        android:visibility="visible"
         app:behavior_hideable="false"
-        app:behavior_peekHeight="266dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
@@ -161,6 +160,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/bottom_sheet_background"
         app:behavior_hideable="true"
+        android:visibility="gone"
         app:behavior_peekHeight="383dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 

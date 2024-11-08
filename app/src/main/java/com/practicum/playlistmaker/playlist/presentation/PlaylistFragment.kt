@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.playlist.presentation
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ class PlaylistFragment : Fragment() {
         fun createArgs(playlist: Playlist): Bundle = bundleOf(PLAYLIST to playlist)
     }
 
+    private var contextMenuImageViewBottomPoint: Int = 0
     private lateinit var binding: FragmentPlaylistBinding
     private lateinit var playlistBottomSheet: BottomSheetBehavior<ConstraintLayout>
     private lateinit var menuBottomSheet: BottomSheetBehavior<ConstraintLayout>
@@ -53,10 +55,12 @@ class PlaylistFragment : Fragment() {
 
         menuBottomSheet = BottomSheetBehavior.from(binding.menuBottomSheetContainer)
         menuBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
-//        playlistBottomSheet = BottomSheetBehavior.from(binding.tracksBottomSheetContainer) TODO bottomSheet
-//        val screenHeight = Resources.getSystem().displayMetrics.heightPixels
-//        val bottomSheetAdaptivePeekHeight = (screenHeight * 0.25).toInt()
-//        playlistBottomSheet.peekHeight = bottomSheetAdaptivePeekHeight
+        playlistBottomSheet = BottomSheetBehavior.from(binding.tracksBottomSheetContainer)
+        binding.contextMenuImageView.post {
+            val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+            contextMenuImageViewBottomPoint = binding.contextMenuImageView.bottom
+            playlistBottomSheet.peekHeight = screenHeight - contextMenuImageViewBottomPoint - 24f.dpToPx(requireContext())
+        }
         binding.shareImageView.setOnClickListener {
            startShareIntent()
         }
