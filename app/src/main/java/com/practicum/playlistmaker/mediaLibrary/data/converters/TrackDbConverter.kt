@@ -17,7 +17,7 @@ class TrackDbConverter {
             track.releaseDate ?: "",
             track.primaryGenreName ?: "",
             track.country ?: "",
-            track.trackDuration?.convertLongToTimeMillis() ?: "",
+            track.trackDuration?.convertLongToTimeMillis("mm:ss") ?: "",
             track.previewUrl ?: ""
         )
     }
@@ -32,12 +32,27 @@ class TrackDbConverter {
             track.releaseDate ?: "",
             track.primaryGenreName ?: "",
             track.country ?: "",
-            track.trackDuration?.convertLongToTimeMillis() ?: "",
+            track.trackDuration?.convertLongToTimeMillis("mm:ss") ?: "",
             track.previewUrl ?: ""
         )
     }
 
     fun map(track: TrackEntity): Track {
+        return Track(
+            track.id,
+            track.trackName,
+            track.artist,
+            track.duration.convertStringToLongMillis(),
+            track.coverUrl,
+            track.album,
+            track.releaseYear,
+            track.genre,
+            track.country,
+            track.trackUrl
+        )
+    }
+
+    fun map(track: TrackInPlaylistsEntity): Track{
         return Track(
             track.id,
             track.trackName,

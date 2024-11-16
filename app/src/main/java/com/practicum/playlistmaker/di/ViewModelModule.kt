@@ -4,6 +4,7 @@ import com.practicum.playlistmaker.mediaLibrary.presentation.createPlaylist.Crea
 import com.practicum.playlistmaker.mediaLibrary.presentation.favoriteTracks.FavoriteTracksViewModel
 import com.practicum.playlistmaker.mediaLibrary.presentation.playlists.PlaylistsViewModel
 import com.practicum.playlistmaker.player.presentation.MediaPlayerViewModel
+import com.practicum.playlistmaker.playlist.presentation.PlaylistViewModel
 import com.practicum.playlistmaker.search.presentation.TracksSearchViewModel
 import com.practicum.playlistmaker.settings.presentation.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -34,5 +35,9 @@ val viewModelModule = module {
 
     viewModel<CreatePlaylistViewModel>{
         CreatePlaylistViewModel(get())
+    }
+
+    viewModel<PlaylistViewModel>{
+        PlaylistViewModel(get())
     }
 }

@@ -198,7 +198,7 @@ class PlayerFragment : Fragment() {
 
     private fun onPlayerCreate(inFavorite: Boolean) {
         binding.durationValue.text =
-            track.trackDuration!!.convertLongToTimeMillis()
+            track.trackDuration!!.convertLongToTimeMillis("mm:ss")
         if (track.collectionName!!.isEmpty()) {
             binding.collectionGroup.isVisible = track.collectionName!!.isNotEmpty()
         } else {

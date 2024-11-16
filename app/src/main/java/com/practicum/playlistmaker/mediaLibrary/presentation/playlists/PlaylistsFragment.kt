@@ -70,7 +70,7 @@ class PlaylistsFragment : Fragment() {
                 if (clickDebounce(isClickAllowedProvider = { isClickAllowed },
                         onUpdateClickAllowed = { newValue -> isClickAllowed = newValue })
                 ) {
-                    findNavController().navigate(R.id.action_mediaLibraryFragment_to_playlistFragment, PlaylistFragment.createArgs(playlist))
+                    findNavController().navigate(R.id.action_mediaLibraryFragment_to_playlistFragment, PlaylistFragment.createArgs(playlist.id))
                 }
             }
         })

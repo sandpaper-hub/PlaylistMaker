@@ -4,9 +4,13 @@ import android.content.Context
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.TypedValue
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.gson.Gson
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.data.dto.TrackDto
 import com.practicum.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.delay
@@ -21,7 +25,6 @@ inline fun <reified T : Serializable> Bundle.getSerializableData(key: String): T
     SDK_INT >= 33 -> getSerializable(key, T::class.java)
     else -> @Suppress("DEPRECATION") getSerializable(key) as? T
 }
-
 
 
 fun ArrayList<Track>.toDto(): ArrayList<TrackDto> {
@@ -44,8 +47,8 @@ fun ArrayList<Track>.toDto(): ArrayList<TrackDto> {
     return resultList
 }
 
-fun Long.convertLongToTimeMillis(): String {
-    return SimpleDateFormat("mm:ss", Locale.getDefault()).format(this)
+fun Long.convertLongToTimeMillis(timeFormat: String): String {
+    return SimpleDateFormat(timeFormat, Locale.getDefault()).format(this)
 }
 
 fun String.convertStringToLongMillis(): Long {
@@ -75,12 +78,17 @@ fun Track.hasNullableData(): Boolean {
     return this.trackDuration == null || this.previewUrl == null
 }
 
-fun Int.declineTracksCount(): String {
+fun Int.reformatCount(one: String, some: String, many: String): String {
     return when {
-        this % 10 == 1 && this % 100 != 11 -> "$this трек"
-        this % 10 in 2..4 && (this % 100 !in 12..14) -> "$this трека"
-        else -> "$this треков"
+        this % 10 == 1 && this % 100 != 11 -> "$this $one"
+        this % 10 in 2..4 && (this % 100 !in 12..14) -> "$this $some"
+        else -> "$this $many"
     }
+}
+
+fun Long.reformatTimeMinutes(): String {
+    return this.convertLongToTimeMillis("mm").toInt()
+        .reformatCount("минута", "минуты", "минут")
 }
 
 fun Fragment.clickDebounce(
@@ -96,4 +104,12 @@ fun Fragment.clickDebounce(
         }
     }
     return current
+}
+
+fun AppCompatImageView.setImage(context: Context, cover: String?) {
+    Glide.with(context)
+        .load(cover)
+        .transform(CenterCrop())
+        .placeholder(R.drawable.placeholder)
+        .into(this)
 }

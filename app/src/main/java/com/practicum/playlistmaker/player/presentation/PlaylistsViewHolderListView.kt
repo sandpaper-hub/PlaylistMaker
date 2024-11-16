@@ -9,7 +9,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistLinearViewBinding
 import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
-import com.practicum.playlistmaker.util.declineTracksCount
+import com.practicum.playlistmaker.util.reformatCount
 import com.practicum.playlistmaker.util.dpToPx
 
 class PlaylistsViewHolderListView(private val playlistLinearViewBinding: PlaylistLinearViewBinding) :
@@ -24,7 +24,7 @@ class PlaylistsViewHolderListView(private val playlistLinearViewBinding: Playlis
             .placeholder(R.drawable.placeholder)
             .into(playlistLinearViewBinding.playlistCoverImageView)
         playlistLinearViewBinding.playlistNameTextView.text = playlist.playlistName
-        playlistLinearViewBinding.tracksCountTextView.text = playlist.tracksCount.declineTracksCount()
+        playlistLinearViewBinding.tracksCountTextView.text = playlist.tracksCount.reformatCount("трек", "трека", "треков")
     }
 
     companion object {

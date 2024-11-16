@@ -7,7 +7,7 @@ data class Track(
     val trackId: String?,
     val trackName: String?,
     val artistName: String?,
-    @SerializedName("trackTimeMillis") val trackDuration: Long?,
+    @SerializedName("trackTimeMillis") var trackDuration: Long?,
     val artworkUrl100: String?,
     val collectionName: String?,
     val releaseDate: String?,

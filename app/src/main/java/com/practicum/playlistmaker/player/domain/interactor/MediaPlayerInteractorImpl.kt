@@ -49,7 +49,7 @@ class MediaPlayerInteractorImpl(
         if (isMediaPlayerComplete) {
             return EMPTY_STRING
         }
-        return mediaPlayerWrapper.getTrackPosition().toLong().convertLongToTimeMillis()
+        return mediaPlayerWrapper.getTrackPosition().toLong().convertLongToTimeMillis("mm:ss")
     }
 
     override suspend fun addTrackToFavorite(track: Track) {
