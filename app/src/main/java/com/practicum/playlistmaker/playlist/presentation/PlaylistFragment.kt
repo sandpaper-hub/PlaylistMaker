@@ -60,7 +60,8 @@ class PlaylistFragment : Fragment() {
         }
         menuBottomSheet = BottomSheetBehavior.from(binding.menuBottomSheetContainer)
         menuBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
-        confirmDialog = MaterialAlertDialogBuilder(requireContext()).setNegativeButton(resources.getString(R.string.no)) { _, _ -> }
+        confirmDialog =
+            MaterialAlertDialogBuilder(requireContext()).setNegativeButton(resources.getString(R.string.no)) { _, _ -> }
         trackListAdapter = TrackListAdapter(object : TrackListAdapter.OnTrackClickListener {
             override fun onItemClick(track: Track) {
                 if (clickDebounce({ isClickAllowed }, { newValue -> isClickAllowed = newValue })) {
@@ -70,9 +71,8 @@ class PlaylistFragment : Fragment() {
                     )
                 }
             }
-        }, object : TrackListAdapter.OnTrackLongClickListener{
+        }, object : TrackListAdapter.OnTrackLongClickListener {
             override fun onItemLongClick(track: Track): Boolean {
-                Log.d("EXAMPLE_TEST", "ON LONG CLICK")
                 confirmDialog.setMessage(resources.getString(R.string.deleteTrack))
                     .setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
                         //TODO удаление трека из DB
@@ -87,7 +87,11 @@ class PlaylistFragment : Fragment() {
 
     private fun render(state: PlaylistState) {
         when (state) {
-            is PlaylistState.Initialized -> initialize(state.playlist, state.totalTime, state.tracks)
+            is PlaylistState.Initialized -> initialize(
+                state.playlist,
+                state.totalTime,
+                state.tracks
+            )
         }
     }
 
@@ -136,12 +140,14 @@ class PlaylistFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                findNavController().navigateUp()
-            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigateUp()
+                }
 
-        })
+            })
 
         shareImageView.setOnClickListener {
             startShareIntent()
@@ -155,10 +161,13 @@ class PlaylistFragment : Fragment() {
         }
 
         deleteTextView.setOnClickListener {
-            confirmDialog.setMessage("${resources.getString(R.string.deletePlaylist)} «${playlist.playlistName}»")
+            confirmDialog.setMessage(
+                "${resources.getString(R.string.deletePlaylist)} «${playlist.playlistName}»"
+            )
             confirmDialog.show()
         }
     }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun setRecyclerViewData(tracks: List<Track>) {
         trackListAdapter.trackList.clear()
