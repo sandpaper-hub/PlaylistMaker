@@ -75,7 +75,7 @@ class PlaylistFragment : Fragment() {
             override fun onItemLongClick(track: Track): Boolean {
                 confirmDialog.setMessage(resources.getString(R.string.deleteTrack))
                     .setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
-                        //TODO удаление трека из DB
+                        viewModel.deleteTrack(track.trackId.toString())
                     }.show()
                 return true
             }
@@ -92,6 +92,8 @@ class PlaylistFragment : Fragment() {
                 state.totalTime,
                 state.tracks
             )
+
+            is PlaylistState.Updated -> updatePlaylist(state.tracks, state.totalTime)
         }
     }
 
@@ -156,6 +158,7 @@ class PlaylistFragment : Fragment() {
         contextMenuImageView.setOnClickListener {
             menuBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
         }
+
         shareTextView.setOnClickListener {
             startShareIntent()
         }
@@ -166,6 +169,13 @@ class PlaylistFragment : Fragment() {
             )
             confirmDialog.show()
         }
+    }
+
+    private fun updatePlaylist(tracks: List<Track>, totalTime: String) {
+        val count = tracks.count()
+        setRecyclerViewData(tracks)
+        binding.tracksCountTextView.text = count.reformatCount("трек", "трека", "треков")
+        binding.albumTotalTimeTextView.text = totalTime
     }
 
     @SuppressLint("NotifyDataSetChanged")

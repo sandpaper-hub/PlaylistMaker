@@ -23,7 +23,7 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     /* создание AppThemeRepository */
-    single <AppThemeRepository> {
+    single<AppThemeRepository> {
         AppThemeRepositoryImpl(get(themeQualifier))
     }
 
@@ -60,6 +60,6 @@ val repositoryModule = module {
     }
 
     single<PlaylistRepository> {
-        PlaylistRepositoryImpl(get(), get())
+        PlaylistRepositoryImpl(get(), get(), get())
     }
 }

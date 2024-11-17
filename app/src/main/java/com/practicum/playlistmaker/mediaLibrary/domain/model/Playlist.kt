@@ -8,5 +8,5 @@ data class Playlist (
     val playlistDescription: String,
     var playlistCover: String?,
     var tracksId: String?,
-    val tracksCount: Int
+    var tracksCount: Int
 ): Serializable

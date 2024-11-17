@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.playlist.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,6 +32,14 @@ class PlaylistViewModel(private val playlistInteractor: PlaylistInteractor) : Vi
                             )
                         )
                     }
+            }
+        }
+    }
+
+    fun deleteTrack(trackId: String) {
+        viewModelScope.launch {
+            playlistInteractor.deleteTrackFromPlaylist(trackId).collect { tracks ->
+                renderState(PlaylistState.Updated(tracks, calculateTotalTime(tracks)))
             }
         }
     }

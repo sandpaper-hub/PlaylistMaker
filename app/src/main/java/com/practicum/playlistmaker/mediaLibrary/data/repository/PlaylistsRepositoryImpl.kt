@@ -9,16 +9,27 @@ import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.createPlaylistIdsArrayListFromJson
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class PlaylistsRepositoryImpl(
     private val playlistDbConverter: PlaylistDbConverter,
     private val trackDbConverter: TrackDbConverter,
     private val appDatabase: AppDatabase
 ) : PlaylistsRepository {
-    override fun getPlaylists(): Flow<List<Playlist>> = flow {
-        val playlists = appDatabase.playlistDao().getPlaylists()
-        emit(playlistDbConverter.convertFromPlaylistEntity(playlists))
+
+    override suspend fun getPlaylists(): Flow<List<Playlist>> {
+        return appDatabase.playlistDao().getPlaylists().map { entities ->
+            entities.map { entity ->
+                Playlist(
+                    entity.id,
+                    entity.playlistName,
+                    entity.playlistDescription,
+                    entity.playlistCover,
+                    entity.tracksId,
+                    entity.tracksCount
+                )
+            }
+        }
     }
 
     override suspend fun updatePlaylistTracksId(playlist: Playlist, track: Track) {
