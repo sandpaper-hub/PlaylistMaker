@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
@@ -43,6 +44,7 @@ class PlaylistFragment : Fragment() {
     private lateinit var playlistBottomSheet: BottomSheetBehavior<ConstraintLayout>
     private lateinit var menuBottomSheet: BottomSheetBehavior<ConstraintLayout>
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
+    private lateinit var tracksList: List<Track>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -102,17 +104,24 @@ class PlaylistFragment : Fragment() {
         setBottomSheet()
         setRecyclerViewData(tracks)
         setListeners(playlist)
+        if (tracks.isEmpty()) {
+            showToast(resources.getString(R.string.noTracksForSharing))
+        }
     }
 
     private fun startShareIntent() {
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.putExtra(
-            Intent.EXTRA_TEXT,
-            R.string.sampleMessageForShare
-        )   //TODO передаваемый контент
-        shareIntent.setType("text/plain")
-        val intentChooser = Intent.createChooser(shareIntent, "")
-        startActivity(intentChooser)
+        if (tracksList.isEmpty()) {
+            showToast(resources.getString(R.string.emptyPlaylist))
+        } else {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.putExtra(
+                Intent.EXTRA_TEXT,
+                R.string.sampleMessageForShare
+            )
+            shareIntent.setType("text/plain")
+            val intentChooser = Intent.createChooser(shareIntent, "")
+            startActivity(intentChooser)
+        }
     }
 
     private fun setPlaylistInfo(playlist: Playlist, totalTime: String) = with(binding) {
@@ -171,17 +180,21 @@ class PlaylistFragment : Fragment() {
         }
     }
 
-    private fun updatePlaylist(tracks: List<Track>, totalTime: String) {
-        val count = tracks.count()
-        setRecyclerViewData(tracks)
-        binding.tracksCountTextView.text = count.reformatCount("трек", "трека", "треков")
-        binding.albumTotalTimeTextView.text = totalTime
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     private fun setRecyclerViewData(tracks: List<Track>) {
+        tracksList = tracks
         trackListAdapter.trackList.clear()
         trackListAdapter.trackList.addAll(tracks)
         trackListAdapter.notifyDataSetChanged()
+    }
+
+    private fun updatePlaylist(tracks: List<Track>, totalTime: String) {
+        setRecyclerViewData(tracks)
+        binding.tracksCountTextView.text = tracks.size.reformatCount("трек", "трека", "треков")
+        binding.albumTotalTimeTextView.text = totalTime
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

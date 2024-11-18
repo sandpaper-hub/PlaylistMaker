@@ -52,6 +52,8 @@
     <string name="editInfo">Редактировать информацию</string>
     <string name="deletePlaylist">Хотите удалить плейлист</string>
     <string name="deletePlaylistAnswer">Хотите удалить плейлист</string>
+    <string name="emptyPlaylist">В этом плейлисте нет списка треков</string>
+    <string name="noTracksForSharing">В этом плейлисте нет списка треков, которым можно поделиться</string>
 
     <string name="sampleEmail">electro.passion92@gmail.com</string>
     <string name="sampleSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
