@@ -113,3 +113,10 @@ fun AppCompatImageView.setImage(context: Context, cover: String?) {
         .placeholder(R.drawable.placeholder)
         .into(this)
 }
+
+fun String?.deleteId(trackId: String): String? {
+    return this?.removeSurrounding("[", "]")
+        ?.split(",")
+        ?.filterNot { it.contains(trackId) }
+        ?.joinToString(prefix = "[", postfix = "]")
+}

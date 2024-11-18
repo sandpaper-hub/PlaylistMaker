@@ -7,9 +7,14 @@ import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
 import com.practicum.playlistmaker.playlist.domain.db.PlaylistRepository
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.createPlaylistIdsArrayListFromJson
+import com.practicum.playlistmaker.util.deleteId
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 class PlaylistRepositoryImpl(
     private val trackDbConverter: TrackDbConverter,
@@ -48,14 +53,16 @@ class PlaylistRepositoryImpl(
     }
 
     override suspend fun deleteTrackFromPlaylist(trackId: String): Flow<List<Track>> {
-        currentPlaylist.tracksId = currentPlaylist.tracksId
-            ?.removeSurrounding("[", "]")
-            ?.split(",")
-            ?.filterNot { it.contains(trackId) }
-            ?.joinToString(prefix = "[", postfix = "]")
+        currentPlaylist.tracksId = currentPlaylist.tracksId.deleteId(trackId)
         currentPlaylist.tracksCount -= 1
         appDatabase.playlistDao().updateTracksId(playlistDbConverter.map(currentPlaylist))
 
-        return getAllTracks(currentPlaylist.tracksId?.createPlaylistIdsArrayListFromJson()!!)
+        appDatabase.playlistDao().getPlaylists().onEach { playlists ->
+            if (playlists.none { it.tracksId?.contains(trackId) == true }) {
+                appDatabase.inPlaylistsDao().removeTrackEntity(trackId.toInt())
+            }
+        }.launchIn(CoroutineScope(Dispatchers.IO))
+
+        return getAllTracks(currentPlaylist.tracksId!!.createPlaylistIdsArrayListFromJson())
     }
 }
