@@ -24,6 +24,7 @@ import com.practicum.playlistmaker.playlist.presentation.model.PlaylistState
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.presentation.TrackListAdapter
 import com.practicum.playlistmaker.util.clickDebounce
+import com.practicum.playlistmaker.util.convertLongToTimeMillis
 import com.practicum.playlistmaker.util.reformatCount
 import com.practicum.playlistmaker.util.dpToPx
 import com.practicum.playlistmaker.util.setImage
@@ -44,7 +45,6 @@ class PlaylistFragment : Fragment() {
     private lateinit var playlistBottomSheet: BottomSheetBehavior<ConstraintLayout>
     private lateinit var menuBottomSheet: BottomSheetBehavior<ConstraintLayout>
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
-    private lateinit var tracksList: List<Track>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -96,6 +96,7 @@ class PlaylistFragment : Fragment() {
             )
 
             is PlaylistState.Updated -> updatePlaylist(state.tracks, state.totalTime)
+            is PlaylistState.ShareIntent -> startShareIntent(state.tracks, state.playlist)
         }
     }
 
@@ -103,20 +104,20 @@ class PlaylistFragment : Fragment() {
         setPlaylistInfo(playlist, totalTime)
         setBottomSheet()
         setRecyclerViewData(tracks)
-        setListeners(playlist)
+        setListeners()
         if (tracks.isEmpty()) {
             showToast(resources.getString(R.string.noTracksForSharing))
         }
     }
 
-    private fun startShareIntent() {
+    private fun startShareIntent(tracksList: List<Track>, playlist: Playlist) {
         if (tracksList.isEmpty()) {
             showToast(resources.getString(R.string.emptyPlaylist))
         } else {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.putExtra(
                 Intent.EXTRA_TEXT,
-                R.string.sampleMessageForShare
+                tracksList.formatToStringSharing(playlist)
             )
             shareIntent.setType("text/plain")
             val intentChooser = Intent.createChooser(shareIntent, "")
@@ -146,7 +147,7 @@ class PlaylistFragment : Fragment() {
         }
     }
 
-    private fun setListeners(playlist: Playlist) = with(binding) {
+    private fun setListeners() = with(binding) {
         panelHeader.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
@@ -161,7 +162,7 @@ class PlaylistFragment : Fragment() {
             })
 
         shareImageView.setOnClickListener {
-            startShareIntent()
+            viewModel.shareIntent()
         }
 
         contextMenuImageView.setOnClickListener {
@@ -169,20 +170,19 @@ class PlaylistFragment : Fragment() {
         }
 
         shareTextView.setOnClickListener {
-            startShareIntent()
+            viewModel.shareIntent()
         }
 
         deleteTextView.setOnClickListener {
-            confirmDialog.setMessage(
-                "${resources.getString(R.string.deletePlaylist)} «${playlist.playlistName}»"
-            )
-            confirmDialog.show()
+//            confirmDialog.setMessage(
+////                "${resources.getString(R.string.deletePlaylist)} «${playlist.playlistName}»"
+//            ) TODO
+//            confirmDialog.show()
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setRecyclerViewData(tracks: List<Track>) {
-        tracksList = tracks
         trackListAdapter.trackList.clear()
         trackListAdapter.trackList.addAll(tracks)
         trackListAdapter.notifyDataSetChanged()
@@ -191,10 +191,28 @@ class PlaylistFragment : Fragment() {
     private fun updatePlaylist(tracks: List<Track>, totalTime: String) {
         setRecyclerViewData(tracks)
         binding.tracksCountTextView.text = tracks.size.reformatCount("трек", "трека", "треков")
+        binding.tracksCountBottomSheetTextView.text =
+            tracks.size.reformatCount("трек", "трека", "треков")
         binding.albumTotalTimeTextView.text = totalTime
     }
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
+}
+
+fun List<Track>.formatToStringSharing(playlist: Playlist): String {
+    val sharingString =
+        StringBuilder().append(
+            "${playlist.playlistName}\n" +
+                    "${playlist.playlistDescription}\n" +
+                    this.size.reformatCount("трек", "трека", "треков")
+        )
+    this.forEachIndexed { index, track ->
+        val artist = track.artistName ?: "Неизвестный исполнитель"
+        val name = track.trackName ?: "Неизвестный трек"
+        val duration = track.trackDuration!!.convertLongToTimeMillis("mm:ss")
+        sharingString.append("${index + 1}. $artist - $name ($duration)\n")
+    }
+    return sharingString.toString()
 }

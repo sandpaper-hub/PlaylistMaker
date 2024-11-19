@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
 import com.practicum.playlistmaker.playlist.domain.db.PlaylistInteractor
 import com.practicum.playlistmaker.playlist.presentation.model.PlaylistState
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -19,16 +20,20 @@ class PlaylistViewModel(private val playlistInteractor: PlaylistInteractor) : Vi
         return stateLiveData
     }
 
+    private lateinit var tracksList: List<Track>
+    private lateinit var currentPlaylist: Playlist
+
     fun initialize(playlistId: Int) {
         viewModelScope.launch {
             val listType = object : TypeToken<List<String>>() {}.type
             playlistInteractor.getPlaylistById(playlistId).collect { playlist ->
                 playlistInteractor.getAllTracks(Gson().fromJson(playlist.tracksId, listType))
                     .collect { tracks ->
+                        tracksList = tracks
                         renderState(
                             PlaylistState.Initialized(
                                 playlist,
-                                calculateTotalTime(tracks), tracks
+                                calculateTotalTime(), tracks
                             )
                         )
                     }
@@ -38,15 +43,21 @@ class PlaylistViewModel(private val playlistInteractor: PlaylistInteractor) : Vi
 
     fun deleteTrack(trackId: String) {
         viewModelScope.launch {
-            playlistInteractor.deleteTrackFromPlaylist(trackId).collect { tracks ->
-                renderState(PlaylistState.Updated(tracks, calculateTotalTime(tracks)))
+            playlistInteractor.deleteTrackFromPlaylist(trackId).collect { (playlist, tracks) ->
+                tracksList = tracks
+                currentPlaylist = playlist
+                renderState(PlaylistState.Updated(tracks, playlist, calculateTotalTime()))
             }
         }
     }
 
-    private fun calculateTotalTime(tracks: List<Track>): String {
+    fun shareIntent() {
+        renderState(PlaylistState.ShareIntent(tracksList, currentPlaylist))
+    }
+
+    private fun calculateTotalTime(): String {
         var totalTime = 0L
-        for (track in tracks) {
+        for (track in tracksList) {
             totalTime += track.trackDuration!!
         }
         return totalTime.reformatTimeMinutes()

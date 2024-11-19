@@ -11,7 +11,9 @@ import com.practicum.playlistmaker.util.deleteId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -52,7 +54,7 @@ class PlaylistRepositoryImpl(
         return playlistFlow
     }
 
-    override suspend fun deleteTrackFromPlaylist(trackId: String): Flow<List<Track>> {
+    override suspend fun deleteTrackFromPlaylist(trackId: String): Flow<Pair<Playlist, List<Track>>> {
         currentPlaylist.tracksId = currentPlaylist.tracksId.deleteId(trackId)
         currentPlaylist.tracksCount -= 1
         appDatabase.playlistDao().updateTracksId(playlistDbConverter.map(currentPlaylist))
@@ -63,6 +65,11 @@ class PlaylistRepositoryImpl(
             }
         }.launchIn(CoroutineScope(Dispatchers.IO))
 
-        return getAllTracks(currentPlaylist.tracksId!!.createPlaylistIdsArrayListFromJson())
+        return combine(
+            flowOf(currentPlaylist),
+            getAllTracks(currentPlaylist.tracksId!!.createPlaylistIdsArrayListFromJson())
+        ) { playlists, tracks ->
+            playlists to tracks
+        }
     }
 }
