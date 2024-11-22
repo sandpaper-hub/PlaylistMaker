@@ -7,6 +7,7 @@ import com.practicum.playlistmaker.player.presentation.MediaPlayerViewModel
 import com.practicum.playlistmaker.playlist.presentation.PlaylistViewModel
 import com.practicum.playlistmaker.search.presentation.TracksSearchViewModel
 import com.practicum.playlistmaker.settings.presentation.SettingsViewModel
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -38,6 +39,6 @@ val viewModelModule = module {
     }
 
     viewModel<PlaylistViewModel>{
-        PlaylistViewModel(get())
+        PlaylistViewModel(get(), androidContext().resources)
     }
 }

@@ -10,5 +10,8 @@ sealed interface PlaylistState {
     data class Updated(val tracks: List<Track>, val playlist: Playlist, val totalTime: String) :
         PlaylistState
 
-    data class ShareIntent(val tracks: List<Track>, val playlist: Playlist): PlaylistState
+    data class ShareIntent(val tracks: List<Track>, val playlist: Playlist) : PlaylistState
+    data class DialogPlaylistDelete(val message: String, val objectId: Int) : PlaylistState
+    data class DialogTrackDelete(val message: String, val objectId: String): PlaylistState
+    data object PlaylistDeleted: PlaylistState
 }

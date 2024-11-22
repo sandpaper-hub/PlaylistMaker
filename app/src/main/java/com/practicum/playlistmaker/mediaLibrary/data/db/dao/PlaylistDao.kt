@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.mediaLibrary.data.db.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -14,8 +13,8 @@ interface PlaylistDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertPlaylist(album: PlaylistEntity)
 
-    @Delete(entity = PlaylistEntity::class)
-    suspend fun deletePlaylist(album: PlaylistEntity)
+    @Query("DELETE FROM album_table WHERE id = :id")
+    suspend fun deletePlaylist(id: Int)
 
     @Query("SELECT * FROM album_table")
     fun getPlaylists(): Flow<List<PlaylistEntity>>

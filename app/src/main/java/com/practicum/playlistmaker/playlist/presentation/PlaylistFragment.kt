@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +43,6 @@ class PlaylistFragment : Fragment() {
     private lateinit var trackListAdapter: TrackListAdapter
     private lateinit var playlistBottomSheet: BottomSheetBehavior<ConstraintLayout>
     private lateinit var menuBottomSheet: BottomSheetBehavior<ConstraintLayout>
-    private lateinit var confirmDialog: MaterialAlertDialogBuilder
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,8 +60,6 @@ class PlaylistFragment : Fragment() {
         }
         menuBottomSheet = BottomSheetBehavior.from(binding.menuBottomSheetContainer)
         menuBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
-        confirmDialog =
-            MaterialAlertDialogBuilder(requireContext()).setNegativeButton(resources.getString(R.string.no)) { _, _ -> }
         trackListAdapter = TrackListAdapter(object : TrackListAdapter.OnTrackClickListener {
             override fun onItemClick(track: Track) {
                 if (clickDebounce({ isClickAllowed }, { newValue -> isClickAllowed = newValue })) {
@@ -75,10 +71,7 @@ class PlaylistFragment : Fragment() {
             }
         }, object : TrackListAdapter.OnTrackLongClickListener {
             override fun onItemLongClick(track: Track): Boolean {
-                confirmDialog.setMessage(resources.getString(R.string.deleteTrack))
-                    .setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
-                        viewModel.deleteTrack(track.trackId.toString())
-                    }.show()
+                viewModel.showDeleteTrackDialog(track.trackId.toString())
                 return true
             }
 
@@ -97,6 +90,15 @@ class PlaylistFragment : Fragment() {
 
             is PlaylistState.Updated -> updatePlaylist(state.tracks, state.totalTime)
             is PlaylistState.ShareIntent -> startShareIntent(state.tracks, state.playlist)
+            is PlaylistState.DialogTrackDelete -> createDialog(state.message) {
+                viewModel.deleteTrack(state.objectId)
+            }.show()
+
+            is PlaylistState.DialogPlaylistDelete -> showDeletePlaylistDialog(
+                state.message
+            )
+
+            is PlaylistState.PlaylistDeleted -> findNavController().navigateUp()
         }
     }
 
@@ -174,11 +176,30 @@ class PlaylistFragment : Fragment() {
         }
 
         deleteTextView.setOnClickListener {
-//            confirmDialog.setMessage(
-////                "${resources.getString(R.string.deletePlaylist)} «${playlist.playlistName}»"
-//            ) TODO
-//            confirmDialog.show()
+            viewModel.showDeletePlaylistDialog()
         }
+    }
+
+    private fun showDeletePlaylistDialog(
+        message: String
+    ) {
+        menuBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
+        binding.dimView.visibility = View.VISIBLE
+        createDialog(message) {
+            viewModel.deletePlaylist()
+        }.show()
+    }
+
+    private fun createDialog(
+        message: String,
+        action: () -> Unit
+    ): MaterialAlertDialogBuilder {
+        return MaterialAlertDialogBuilder(requireContext())
+            .setMessage(message)
+            .setNegativeButton(resources.getString(R.string.no)) { _, _ -> }
+            .setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
+                action()
+            }
     }
 
     @SuppressLint("NotifyDataSetChanged")

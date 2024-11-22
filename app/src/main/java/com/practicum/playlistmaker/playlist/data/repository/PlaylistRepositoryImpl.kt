@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import java.io.File
 
 class PlaylistRepositoryImpl(
     private val trackDbConverter: TrackDbConverter,
@@ -70,6 +71,14 @@ class PlaylistRepositoryImpl(
             getAllTracks(currentPlaylist.tracksId!!.createPlaylistIdsArrayListFromJson())
         ) { playlists, tracks ->
             playlists to tracks
+        }
+    }
+
+    override suspend fun deletePlaylist(playlist: Playlist) {
+        appDatabase.playlistDao().deletePlaylist(playlist.id)
+        val file = File(playlist.playlistCover.toString())
+        if (file.exists()) {
+            file.delete()
         }
     }
 }

@@ -97,7 +97,7 @@ class CreatePlaylistFragment : Fragment() {
         binding.createButton.setOnClickListener {
             viewModel.savePlaylist(
                 coverUriString,
-                "${binding.albumNameEditText.text.toString()}.jpg",
+                "${binding.albumNameEditText.text.toString()}_${System.currentTimeMillis()}.jpg",
                 Playlist(
                     0,
                     binding.albumNameEditText.text.toString(),

@@ -19,4 +19,10 @@ class PlaylistInteractorImpl(private val playlistRepository: PlaylistRepository)
     override suspend fun deleteTrackFromPlaylist(trackId: String): Flow<Pair<Playlist, List<Track>>> {
         return playlistRepository.deleteTrackFromPlaylist(trackId)
     }
+
+    override suspend fun deletePlaylist(playlist: Playlist) {
+        playlistRepository.deletePlaylist(playlist)
+    }
+
+
 }
