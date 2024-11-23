@@ -81,4 +81,8 @@ class PlaylistRepositoryImpl(
             file.delete()
         }
     }
+
+    override suspend fun updateAllTracks(trackId: String) {
+        appDatabase.inPlaylistsDao().removeTrackEntity(trackId.toInt())
+    }
 }

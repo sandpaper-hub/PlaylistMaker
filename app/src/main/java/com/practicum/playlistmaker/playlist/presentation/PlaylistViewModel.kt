@@ -8,15 +8,18 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.mediaLibrary.domain.db.PlaylistsInteractor
 import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
 import com.practicum.playlistmaker.playlist.domain.db.PlaylistInteractor
 import com.practicum.playlistmaker.playlist.presentation.model.PlaylistState
 import com.practicum.playlistmaker.search.domain.models.Track
+import com.practicum.playlistmaker.util.createPlaylistIdsArrayListFromJson
 import com.practicum.playlistmaker.util.reformatTimeMinutes
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor,
+    private val playlistsInteractor: PlaylistsInteractor,
     private val resources: Resources
 ) : ViewModel() {
     private val stateLiveData = MutableLiveData<PlaylistState>()
@@ -63,7 +66,15 @@ class PlaylistViewModel(
     fun deletePlaylist() {
         viewModelScope.launch {
             playlistInteractor.deletePlaylist(currentPlaylist)
-            renderState(PlaylistState.PlaylistDeleted)
+            playlistsInteractor.getPlaylists().collect{ playlist ->
+                val ids = currentPlaylist.tracksId!!.createPlaylistIdsArrayListFromJson()
+                ids.forEach { trackId ->
+                    if (playlist.none { it.tracksId?.contains(trackId) == true }) {
+                        playlistInteractor.updateAllTracks(trackId)
+                    }
+                }
+                renderState(PlaylistState.PlaylistDeleted)
+            }
         }
     }
 

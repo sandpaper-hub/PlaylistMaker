@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,6 +78,7 @@ class PlaylistFragment : Fragment() {
 
         })
         binding.playlistRecyclerView.adapter = trackListAdapter
+        Log.d("EXAMPLE_TEST", "init")
         viewModel.initialize(requireArguments().getInt(PLAYLIST))
     }
 
@@ -98,7 +100,7 @@ class PlaylistFragment : Fragment() {
                 state.message
             )
 
-            is PlaylistState.PlaylistDeleted -> findNavController().navigateUp()
+            is PlaylistState.PlaylistDeleted -> findNavController().popBackStack()
         }
     }
 
