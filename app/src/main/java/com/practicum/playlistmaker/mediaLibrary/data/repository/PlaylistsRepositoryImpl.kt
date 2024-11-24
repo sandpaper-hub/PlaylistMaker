@@ -36,7 +36,7 @@ class PlaylistsRepositoryImpl(
         val playlistEntity = playlistDbConverter.map(playlist)
         val idsArrayList = playlistEntity.tracksId?.createPlaylistIdsArrayListFromJson()
         val trackInPlaylistsEntity = trackDbConverter.mapToTrackInPlaylistsEntity(track)
-        idsArrayList?.add(trackInPlaylistsEntity.id)
+        idsArrayList?.add(0,trackInPlaylistsEntity.id)
         playlistEntity.tracksId = Gson().toJson(idsArrayList)
         playlistEntity.tracksCount++
         appDatabase.inPlaylistsDao().addTrack(trackInPlaylistsEntity)

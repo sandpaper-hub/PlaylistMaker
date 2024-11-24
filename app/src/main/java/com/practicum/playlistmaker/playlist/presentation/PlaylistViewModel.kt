@@ -41,7 +41,7 @@ class PlaylistViewModel(
                         renderState(
                             PlaylistState.Initialized(
                                 currentPlaylist,
-                                calculateTotalTime(), tracksList
+                                calculateTotalTime(), tracksList.reversed()
                             )
                         )
                     }

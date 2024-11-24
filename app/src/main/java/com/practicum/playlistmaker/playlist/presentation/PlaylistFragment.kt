@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -103,7 +102,6 @@ class PlaylistFragment : Fragment() {
 
         })
         binding.playlistRecyclerView.adapter = trackListAdapter
-        Log.d("EXAMPLE_TEST", "init")
         viewModel.initialize(requireArguments().getInt(PLAYLIST))
     }
 
@@ -140,6 +138,7 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun startShareIntent(tracksList: List<Track>, playlist: Playlist) {
+        menuBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
         if (tracksList.isEmpty()) {
             showToast(resources.getString(R.string.emptyPlaylist))
         } else {
@@ -260,7 +259,7 @@ fun List<Track>.formatToStringSharing(playlist: Playlist): String {
         StringBuilder().append(
             "${playlist.playlistName}\n" +
                     "${playlist.playlistDescription}\n" +
-                    this.size.reformatCount("трек", "трека", "треков")
+                    this.size.reformatCount("трек", "трека", "треков") + "\n"
         )
     this.forEachIndexed { index, track ->
         val artist = track.artistName ?: "Неизвестный исполнитель"
