@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
@@ -23,7 +22,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class EditPlaylistFragment : CreatePlaylistFragment() {
 
     override val viewModel by viewModel<EditPlaylistViewModel>()
-    private lateinit var playlist: Playlist
 
     companion object {
         private const val PLAYLIST = "PLAYLIST"
@@ -44,8 +42,7 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
-        playlist = requireArguments().getSerializableData<Playlist>(PLAYLIST)!!
-        viewModel.initialize(playlist)
+        viewModel.initialize(requireArguments().getSerializableData<Playlist>(PLAYLIST)!!)
     }
 
     override fun render(state: CreatePlaylistState) {
@@ -56,6 +53,11 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
     }
 
     private fun initialize(playlist: Playlist) {
+        setPlaylistInfo(playlist)
+        setListeners(playlist)
+    }
+
+    private fun setPlaylistInfo(playlist: Playlist) {
         binding.panelHeader.text = resources.getString(R.string.editPlaylist)
         binding.createButton.text = resources.getString(R.string.save)
         binding.albumNameEditText.setText(playlist.playlistName)
@@ -66,10 +68,25 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
             .transform(CenterCrop(), RoundedCorners(8f.dpToPx(requireContext())))
             .into(binding.albumCoverImageView)
         binding.albumCoverImageView.background = null
+    }
+
+    private fun setListeners(playlist: Playlist) {
         binding.createButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Save", Toast.LENGTH_SHORT)
-                .show()//TODO сохранение плейлиста
+            viewModel.savePlaylist(
+                coverUriString,
+                "${binding.albumNameEditText.text.toString()}_${System.currentTimeMillis()}.jpg",
+                Playlist(
+                    playlist.id,
+                    binding.albumNameEditText.text.toString(),
+                    binding.albumDescriptionEditText.text.toString(),
+                    playlist.playlistCover,
+                    playlist.tracksId,
+                    playlist.tracksCount
+                )
+            )
+            findNavController().navigateUp()
         }
+
         binding.backButtonFragmentCreate.setOnClickListener {
             findNavController().navigateUp()
         }

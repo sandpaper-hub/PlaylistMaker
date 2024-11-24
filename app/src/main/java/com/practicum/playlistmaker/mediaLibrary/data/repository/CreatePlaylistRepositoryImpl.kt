@@ -37,4 +37,8 @@ class CreatePlaylistRepositoryImpl(
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
         return file.path
     }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        appDatabase.playlistDao().updatePlaylist(playlistDbConverter.map(playlist))
+    }
 }

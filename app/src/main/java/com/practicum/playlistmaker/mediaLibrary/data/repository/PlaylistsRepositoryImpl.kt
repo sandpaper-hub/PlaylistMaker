@@ -40,6 +40,6 @@ class PlaylistsRepositoryImpl(
         playlistEntity.tracksId = Gson().toJson(idsArrayList)
         playlistEntity.tracksCount++
         appDatabase.inPlaylistsDao().addTrack(trackInPlaylistsEntity)
-        appDatabase.playlistDao().updateTracksId(playlistEntity)
+        appDatabase.playlistDao().updatePlaylist(playlistEntity)
     }
 }

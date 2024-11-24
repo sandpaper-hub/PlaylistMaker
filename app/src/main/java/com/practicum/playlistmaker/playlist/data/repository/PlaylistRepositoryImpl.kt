@@ -58,7 +58,7 @@ class PlaylistRepositoryImpl(
     override suspend fun deleteTrackFromPlaylist(trackId: String): Flow<Pair<Playlist, List<Track>>> {
         currentPlaylist.tracksId = currentPlaylist.tracksId.deleteId(trackId)
         currentPlaylist.tracksCount -= 1
-        appDatabase.playlistDao().updateTracksId(playlistDbConverter.map(currentPlaylist))
+        appDatabase.playlistDao().updatePlaylist(playlistDbConverter.map(currentPlaylist))
 
         appDatabase.playlistDao().getPlaylists().onEach { playlists ->
             if (playlists.none { it.tracksId?.contains(trackId) == true }) {

@@ -3,7 +3,6 @@ package com.practicum.playlistmaker.mediaLibrary.presentation.createPlaylist
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,7 +34,6 @@ open class CreatePlaylistFragment : Fragment() {
         }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            Log.d("EXAMPLE_TEST", "ParentTextWatcher")
             viewModel.checkCreateButton(s.toString().isNotEmpty())
         }
 
@@ -43,7 +41,18 @@ open class CreatePlaylistFragment : Fragment() {
 
         }
     }
-    lateinit var imagePicker: ActivityResultLauncher<PickVisualMediaRequest>
+    var imagePicker: ActivityResultLauncher<PickVisualMediaRequest> = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            coverUriString = uri.toString()
+            Glide.with(requireContext())
+                .load(uri)
+                .placeholder(R.drawable.placeholder)
+                .transform(CenterCrop(), RoundedCorners(8f.dpToPx(requireContext())))
+                .into(binding.albumCoverImageView)
+            binding.albumCoverImageView.background = null
+        }
+    }
+
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
     var coverUriString: String? = null
 
@@ -73,18 +82,6 @@ open class CreatePlaylistFragment : Fragment() {
             .setPositiveButton(R.string.complete) { _, _ ->
                 findNavController().navigateUp()
             }
-
-        imagePicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) {
-                coverUriString = uri.toString()
-                Glide.with(requireContext())
-                    .load(uri)
-                    .placeholder(R.drawable.placeholder)
-                    .transform(CenterCrop(), RoundedCorners(8f.dpToPx(requireContext())))
-                    .into(binding.albumCoverImageView)
-                binding.albumCoverImageView.background = null
-            }
-        }
 
         binding.albumCoverImageView.setOnClickListener {
             imagePicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))

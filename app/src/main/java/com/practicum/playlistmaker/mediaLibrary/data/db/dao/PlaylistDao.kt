@@ -23,5 +23,5 @@ interface PlaylistDao {
     fun getPlaylistById(playlistId: Int): Flow<PlaylistEntity>
 
     @Update(entity = PlaylistEntity::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateTracksId(playlistEntity: PlaylistEntity)
+    suspend fun updatePlaylist(playlistEntity: PlaylistEntity)
 }

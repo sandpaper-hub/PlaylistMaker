@@ -207,7 +207,10 @@ class PlaylistFragment : Fragment() {
         }
 
         editInfoTextView.setOnClickListener {
-            findNavController().navigate(R.id.action_playlistFragment_to_editPlaylistFragment, EditPlaylistFragment.createArgs(playlist))
+            findNavController().navigate(
+                R.id.action_playlistFragment_to_editPlaylistFragment,
+                EditPlaylistFragment.createArgs(playlist)
+            )
         }
     }
 

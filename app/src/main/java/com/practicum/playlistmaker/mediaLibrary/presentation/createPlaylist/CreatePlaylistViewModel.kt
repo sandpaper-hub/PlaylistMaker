@@ -35,11 +35,11 @@ open class CreatePlaylistViewModel(private val createPlaylistInteractor: CreateP
         renderState(CreatePlaylistState.Dialog)
     }
 
-   fun renderState(state: CreatePlaylistState) {
+    fun renderState(state: CreatePlaylistState) {
         stateLiveData.postValue(state)
     }
 
-    fun savePlaylist(uriCoverString: String?, fileCoverName: String, playlist: Playlist) {
+    open fun savePlaylist(uriCoverString: String?, fileCoverName: String, playlist: Playlist) {
         if (uriCoverString != null) {
             playlist.playlistCover =
                 createPlaylistInteractor.saveCover(uriCoverString, fileCoverName)
