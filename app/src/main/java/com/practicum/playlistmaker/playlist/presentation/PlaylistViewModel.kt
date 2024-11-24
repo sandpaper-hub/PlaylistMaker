@@ -40,8 +40,8 @@ class PlaylistViewModel(
                         tracksList = tracks
                         renderState(
                             PlaylistState.Initialized(
-                                playlist,
-                                calculateTotalTime(), tracks
+                                currentPlaylist,
+                                calculateTotalTime(), tracksList
                             )
                         )
                     }

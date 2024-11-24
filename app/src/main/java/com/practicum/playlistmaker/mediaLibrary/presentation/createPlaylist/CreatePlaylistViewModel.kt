@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
 import com.practicum.playlistmaker.mediaLibrary.presentation.model.CreatePlaylistState
 import kotlinx.coroutines.launch
 
-class CreatePlaylistViewModel(private val createPlaylistInteractor: CreatePlaylistInteractor) :
+open class CreatePlaylistViewModel(private val createPlaylistInteractor: CreatePlaylistInteractor) :
     ViewModel() {
 
     companion object {
@@ -17,7 +17,7 @@ class CreatePlaylistViewModel(private val createPlaylistInteractor: CreatePlayli
         private const val CREATE_BUTTON_DISABLED = false
     }
 
-    private val stateLiveData = MutableLiveData<CreatePlaylistState>()
+    val stateLiveData = MutableLiveData<CreatePlaylistState>()
 
     fun observeState(): LiveData<CreatePlaylistState> {
         return stateLiveData
@@ -35,7 +35,7 @@ class CreatePlaylistViewModel(private val createPlaylistInteractor: CreatePlayli
         renderState(CreatePlaylistState.Dialog)
     }
 
-    private fun renderState(state: CreatePlaylistState) {
+   fun renderState(state: CreatePlaylistState) {
         stateLiveData.postValue(state)
     }
 

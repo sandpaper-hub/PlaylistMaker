@@ -57,6 +57,8 @@
     <string name="oneTrack">трек</string>
     <string name="someTracks">трека</string>
     <string name="manyTracks">треков</string>
+    <string name="editPlaylist">Редактировать</string>
+    <string name="save">Сохранить</string>
 
     <string name="sampleEmail">electro.passion92@gmail.com</string>
     <string name="sampleSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>

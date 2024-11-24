@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.playerFragment -> hideBottomNavigation()
                 R.id.createPlaylistFragment -> hideBottomNavigation()
                 R.id.playlistFragment -> hideBottomNavigation()
+                R.id.editPlaylistFragment -> hideBottomNavigation()
                 else -> {
                     binding.bottomNavigationView.visibility = View.VISIBLE
                     binding.bottomNavigationSeparator.visibility = View.VISIBLE

@@ -18,6 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
+import com.practicum.playlistmaker.editPlaylist.presentation.EditPlaylistFragment
 import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
 import com.practicum.playlistmaker.player.presentation.PlayerFragment
 import com.practicum.playlistmaker.playlist.presentation.model.PlaylistState
@@ -61,6 +62,30 @@ class PlaylistFragment : Fragment() {
         }
         menuBottomSheet = BottomSheetBehavior.from(binding.menuBottomSheetContainer)
         menuBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
+        menuBottomSheet.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            @SuppressLint("SwitchIntDef")
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_EXPANDED, BottomSheetBehavior.STATE_DRAGGING, BottomSheetBehavior.STATE_COLLAPSED -> {
+                        binding.dimView.visibility = View.VISIBLE
+                        if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                            binding.dimView.alpha = 1f
+                        }
+                    }
+
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.dimView.visibility = View.GONE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                if (slideOffset >= 0.0f) {
+                    binding.dimView.alpha = slideOffset + 1f
+                }
+            }
+        })
         trackListAdapter = TrackListAdapter(object : TrackListAdapter.OnTrackClickListener {
             override fun onItemClick(track: Track) {
                 if (clickDebounce({ isClickAllowed }, { newValue -> isClickAllowed = newValue })) {
@@ -100,7 +125,7 @@ class PlaylistFragment : Fragment() {
                 state.message
             )
 
-            is PlaylistState.PlaylistDeleted -> findNavController().popBackStack()
+            is PlaylistState.PlaylistDeleted -> findNavController().navigateUp()
         }
     }
 
@@ -108,7 +133,7 @@ class PlaylistFragment : Fragment() {
         setPlaylistInfo(playlist, totalTime)
         setBottomSheet()
         setRecyclerViewData(tracks)
-        setListeners()
+        setListeners(playlist)
         if (tracks.isEmpty()) {
             showToast(resources.getString(R.string.noTracksForSharing))
         }
@@ -151,7 +176,7 @@ class PlaylistFragment : Fragment() {
         }
     }
 
-    private fun setListeners() = with(binding) {
+    private fun setListeners(playlist: Playlist) = with(binding) {
         panelHeader.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
@@ -180,13 +205,16 @@ class PlaylistFragment : Fragment() {
         deleteTextView.setOnClickListener {
             viewModel.showDeletePlaylistDialog()
         }
+
+        editInfoTextView.setOnClickListener {
+            findNavController().navigate(R.id.action_playlistFragment_to_editPlaylistFragment, EditPlaylistFragment.createArgs(playlist))
+        }
     }
 
     private fun showDeletePlaylistDialog(
         message: String
     ) {
         menuBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
-        binding.dimView.visibility = View.VISIBLE
         createDialog(message) {
             viewModel.deletePlaylist()
         }.show()
