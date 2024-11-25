@@ -133,14 +133,14 @@ class PlaylistFragment : Fragment() {
         setRecyclerViewData(tracks)
         setListeners(playlist)
         if (tracks.isEmpty()) {
-            showToast(resources.getString(R.string.noTracksForSharing))
+            showToast(resources.getString(R.string.emptyPlaylist))
         }
     }
 
     private fun startShareIntent(tracksList: List<Track>, playlist: Playlist) {
         menuBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
         if (tracksList.isEmpty()) {
-            showToast(resources.getString(R.string.emptyPlaylist))
+            showToast(resources.getString(R.string.noTracksForSharing))
         } else {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.putExtra(
