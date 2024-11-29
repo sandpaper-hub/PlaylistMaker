@@ -14,6 +14,8 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.practicum.playlistmaker.mediaLibrary.domain.model.Playlist
 import com.practicum.playlistmaker.mediaLibrary.presentation.model.PlaylistsState
+import com.practicum.playlistmaker.playlist.presentation.PlaylistFragment
+import com.practicum.playlistmaker.util.clickDebounce
 import com.practicum.playlistmaker.util.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -25,6 +27,7 @@ class PlaylistsFragment : Fragment() {
     private lateinit var binding: FragmentPlaylistsBinding
     private val viewModel by viewModel<PlaylistsViewModel>()
     private lateinit var playlistsAdapter: PlaylistsAdapter
+    private var isClickAllowed = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,8 +42,18 @@ class PlaylistsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val itemDecoration = object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-                outRect.set(4f.dpToPx(requireContext()), 8f.dpToPx(requireContext()), 4f.dpToPx(requireContext()), 8f.dpToPx(requireContext()   )) // Задаем отступы в пикселях (left, top, right, bottom)
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: RecyclerView.State
+            ) {
+                outRect.set(
+                    4f.dpToPx(requireContext()),
+                    8f.dpToPx(requireContext()),
+                    4f.dpToPx(requireContext()),
+                    8f.dpToPx(requireContext())
+                ) // Задаем отступы в пикселях (left, top, right, bottom)
             }
         }
         viewModel.observeState().observe(viewLifecycleOwner) {
@@ -52,7 +65,15 @@ class PlaylistsFragment : Fragment() {
 
         binding.playlistsRecyclerView.addItemDecoration(itemDecoration)
         binding.playlistsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        playlistsAdapter = PlaylistsAdapter()
+        playlistsAdapter = PlaylistsAdapter(object : PlaylistsAdapter.OnPlaylistListener {
+            override fun onItemClick(playlist: Playlist) {
+                if (clickDebounce(isClickAllowedProvider = { isClickAllowed },
+                        onUpdateClickAllowed = { newValue -> isClickAllowed = newValue })
+                ) {
+                    findNavController().navigate(R.id.action_mediaLibraryFragment_to_playlistFragment, PlaylistFragment.createArgs(playlist.id))
+                }
+            }
+        })
         binding.playlistsRecyclerView.adapter = playlistsAdapter
         viewModel.fillData()
     }

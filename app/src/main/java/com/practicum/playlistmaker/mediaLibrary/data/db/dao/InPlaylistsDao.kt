@@ -14,4 +14,7 @@ interface InPlaylistsDao {
 
     @Query("SELECT * FROM in_playlists_table")
     fun getAllTracks(): Flow<List<TrackInPlaylistsEntity>>
+
+   @Query("DELETE FROM in_playlists_table WHERE id = :trackId")
+    suspend fun removeTrackEntity(trackId: Int)
 }

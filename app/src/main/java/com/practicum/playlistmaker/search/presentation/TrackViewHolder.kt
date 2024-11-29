@@ -26,6 +26,6 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .into(coverImageView)
         trackNameTextView.text = track.trackName
         artistNameTextView.text = track.artistName
-        trackDurationTextView.text = track.trackDuration!!.convertLongToTimeMillis()
+        trackDurationTextView.text = track.trackDuration!!.convertLongToTimeMillis("mm:ss")
     }
 }

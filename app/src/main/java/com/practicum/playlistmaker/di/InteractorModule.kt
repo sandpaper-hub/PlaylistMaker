@@ -11,6 +11,8 @@ import com.practicum.playlistmaker.mediaLibrary.domain.impl.PlaylistsInteractorI
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerListener
+import com.practicum.playlistmaker.playlist.domain.db.PlaylistInteractor
+import com.practicum.playlistmaker.playlist.domain.impl.PlaylistInteractorImpl
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.interactor.TracksInteractorImpl
 import org.koin.dsl.binds
@@ -41,5 +43,9 @@ val interactorModule = module {
 
     single<PlaylistsInteractor> {
         PlaylistsInteractorImpl(get())
+    }
+
+    single<PlaylistInteractor> {
+        PlaylistInteractorImpl(get())
     }
 }

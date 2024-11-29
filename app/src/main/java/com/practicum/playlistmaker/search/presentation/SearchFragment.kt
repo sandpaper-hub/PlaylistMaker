@@ -12,22 +12,17 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.presentation.PlayerFragment
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.presentation.model.TracksState
+import com.practicum.playlistmaker.util.clickDebounce
 import com.practicum.playlistmaker.util.hasNullableData
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
 
     private lateinit var binding: FragmentSearchBinding
 
@@ -77,7 +72,10 @@ class SearchFragment : Fragment() {
         historyAdapter =
             TrackListAdapter(object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
-                    if (clickDebounce()) {
+                    if (clickDebounce(
+                            isClickAllowedProvider = { isClickAllowed },
+                            onUpdateClickAllowed = { newValue -> isClickAllowed = newValue })
+                    ) {
                         findNavController().navigate(
                             R.id.action_searchFragment_to_playerFragment,
                             PlayerFragment.createArgs(track)
@@ -96,7 +94,9 @@ class SearchFragment : Fragment() {
             TrackListAdapter(object : TrackListAdapter.OnTrackClickListener {
                 override fun onItemClick(track: Track) {
                     if (!track.hasNullableData()) {
-                        if (clickDebounce()) {
+                        if (clickDebounce(isClickAllowedProvider = { isClickAllowed },
+                                onUpdateClickAllowed = { newValue -> isClickAllowed = newValue })
+                        ) {
                             viewModel.addTrackToHistory(track)
                             findNavController().navigate(
                                 R.id.action_searchFragment_to_playerFragment,
@@ -215,17 +215,5 @@ class SearchFragment : Fragment() {
         historyAdapter.trackList.clear()
         historyAdapter.trackList.addAll(historyTrackList)
         historyAdapter.notifyDataSetChanged()
-    }
-
-    fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            lifecycleScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY)
-                isClickAllowed = true
-            }
-        }
-        return current
     }
 }

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".playlist.presentation.PlaylistFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/YP_Light_Gray">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/coverBigImageView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="w, 1:1"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/placeholder" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/panelHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/back_icon" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/leftBorder16dp"
+            style="@style/invisibleViewStyle"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/indent_16dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/rightBorder16dp"
+            style="@style/invisibleViewStyle"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/indent_16dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/albumNameTextView"
+            style="@style/track_text_style_songName"
+            android:layout_marginTop="@dimen/indent_24dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:textColor="@color/YP_Black"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@id/rightBorder16dp"
+            app:layout_constraintStart_toStartOf="@id/leftBorder16dp"
+            app:layout_constraintTop_toBottomOf="@+id/coverBigImageView"
+            tools:text="@tools:sample/lorem/random" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/albumDescriptionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/indent_8dp"
+            android:fontFamily="@font/ys_text_regular"
+            android:maxLines="1"
+            android:textColor="@color/YP_Black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@id/leftBorder16dp"
+            app:layout_constraintTop_toBottomOf="@+id/albumNameTextView"
+            tools:text="2022" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/albumTotalTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/indent_8dp"
+            android:fontFamily="@font/ys_text_regular"
+            android:maxLines="1"
+            android:textColor="@color/YP_Black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@id/leftBorder16dp"
+            app:layout_constraintTop_toBottomOf="@+id/albumDescriptionTextView"
+            tools:text="300minutes" />
+
+        <ImageView
+            android:id="@+id/dot_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/dot_separator"
+            android:src="@drawable/dot_ic_black"
+            app:layout_constraintBottom_toBottomOf="@+id/albumTotalTimeTextView"
+            app:layout_constraintStart_toEndOf="@+id/albumTotalTimeTextView"
+            app:layout_constraintTop_toTopOf="@+id/albumTotalTimeTextView" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tracksCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ys_text_regular"
+            android:textColor="@color/YP_Black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/albumTotalTimeTextView"
+            app:layout_constraintStart_toEndOf="@+id/dot_point"
+            app:layout_constraintTop_toTopOf="@+id/albumTotalTimeTextView"
+            tools:text="100 треков" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/shareImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/indent_16dp"
+            android:src="@drawable/share_ic_black"
+            app:layout_constraintStart_toStartOf="@id/leftBorder16dp"
+            app:layout_constraintTop_toBottomOf="@+id/albumTotalTimeTextView" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/contextMenuImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/indent_16dp"
+            android:src="@drawable/triple_dot_ic_black"
+            app:layout_constraintBottom_toBottomOf="@+id/shareImageView"
+            app:layout_constraintStart_toEndOf="@+id/shareImageView"
+            app:layout_constraintTop_toTopOf="@id/shareImageView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/dim_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tracksBottomSheetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bottom_sheet_background"
+        app:behavior_hideable="false"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:id="@+id/rectangle"
+            android:layout_width="@dimen/viewWidth"
+            android:layout_height="@dimen/indent_4dp"
+            android:layout_marginTop="@dimen/indent_8dp"
+            android:background="@drawable/view_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/playlistRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/indent_24dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/menuBottomSheetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bottom_sheet_background"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="383dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:id="@+id/rectangle_view"
+            android:layout_width="@dimen/viewWidth"
+            android:layout_height="@dimen/indent_4dp"
+            android:layout_marginTop="@dimen/indent_8dp"
+            android:background="@drawable/view_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/coverSmallImageView"
+            android:layout_width="@dimen/coverSize_dp"
+            android:layout_height="@dimen/coverSize_dp"
+            android:layout_marginStart="@dimen/indent_13dp"
+            android:layout_marginTop="@dimen/indent_20dp"
+            android:src="@drawable/placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rectangle_view" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/albumNameBottomSheetTextView"
+            style="@style/track_text_style_songName"
+            android:layout_marginTop="@dimen/indent_26dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/coverSmallImageView"
+            app:layout_constraintTop_toBottomOf="@+id/rectangle_view"
+            tools:text="Best songs 2024" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tracksCountBottomSheetTextView"
+            style="@style/track_text_style_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/indent_1dp"
+            app:layout_constraintStart_toEndOf="@+id/coverSmallImageView"
+            app:layout_constraintTop_toBottomOf="@+id/albumNameBottomSheetTextView"
+            tools:text="123 трека" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/shareTextView"
+            style="@style/settings_text_style"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/indent_16dp"
+            android:paddingVertical="21dp"
+            android:text="@string/share"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coverSmallImageView" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/editInfoTextView"
+            style="@style/settings_text_style"
+            android:layout_width="match_parent"
+            android:paddingVertical="21dp"
+            android:text="@string/editInfo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shareTextView" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/deleteTextView"
+            style="@style/settings_text_style"
+            android:layout_width="match_parent"
+            android:paddingVertical="21dp"
+            android:text="@string/deletePlaylist"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editInfoTextView" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

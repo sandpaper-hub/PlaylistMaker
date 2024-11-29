@@ -12,6 +12,8 @@ import com.practicum.playlistmaker.mediaLibrary.domain.db.FavoriteTracksReposito
 import com.practicum.playlistmaker.mediaLibrary.domain.db.PlaylistsRepository
 import com.practicum.playlistmaker.player.data.repository.PlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.repository.MediaPlayerRepository
+import com.practicum.playlistmaker.playlist.data.repository.PlaylistRepositoryImpl
+import com.practicum.playlistmaker.playlist.domain.db.PlaylistRepository
 import com.practicum.playlistmaker.search.data.repository.SharedPreferencesRepositoryImpl
 import com.practicum.playlistmaker.search.data.repository.TracksRepositoryImpl
 import com.practicum.playlistmaker.search.domain.api.SharedPreferencesRepository
@@ -21,7 +23,7 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     /* создание AppThemeRepository */
-    single <AppThemeRepository> {
+    single<AppThemeRepository> {
         AppThemeRepositoryImpl(get(themeQualifier))
     }
 
@@ -55,5 +57,9 @@ val repositoryModule = module {
 
     single<PlaylistsRepository> {
         PlaylistsRepositoryImpl(get(), get(), get())
+    }
+
+    single<PlaylistRepository> {
+        PlaylistRepositoryImpl(get(), get(), get())
     }
 }

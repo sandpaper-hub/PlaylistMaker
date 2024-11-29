@@ -5,6 +5,6 @@ import com.practicum.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
 interface PlaylistsInteractor {
-    fun getPlaylists(): Flow<List<Playlist>>
+    suspend fun getPlaylists(): Flow<List<Playlist>>
     suspend fun updatePlaylistIds(playlist: Playlist, track: Track)
 }

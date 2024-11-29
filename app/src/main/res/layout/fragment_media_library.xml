@@ -17,6 +17,7 @@
         android:id="@+id/mediaLibraryTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabTextAppearance="@style/non_caps_text_style"
         android:background="@color/text_color"
         app:layout_constraintTop_toBottomOf="@+id/panelHeader"
         app:tabTextColor="@color/element_color" />

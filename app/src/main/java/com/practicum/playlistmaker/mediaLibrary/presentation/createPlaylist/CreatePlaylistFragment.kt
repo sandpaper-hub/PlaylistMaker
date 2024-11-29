@@ -25,13 +25,36 @@ import com.practicum.playlistmaker.mediaLibrary.presentation.model.CreatePlaylis
 import com.practicum.playlistmaker.util.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CreatePlaylistFragment : Fragment() {
-    private lateinit var binding: FragmentCreatePlaylistBinding
-    private val viewModel by viewModel<CreatePlaylistViewModel>()
-    private lateinit var textWatcher: TextWatcher
-    private lateinit var imagePicker: ActivityResultLauncher<PickVisualMediaRequest>
+open class CreatePlaylistFragment : Fragment() {
+    lateinit var binding: FragmentCreatePlaylistBinding
+    open val viewModel by viewModel<CreatePlaylistViewModel>()
+    val textWatcher: TextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            viewModel.checkCreateButton(s.toString().isNotEmpty())
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+
+        }
+    }
+    var imagePicker: ActivityResultLauncher<PickVisualMediaRequest> = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            coverUriString = uri.toString()
+            Glide.with(requireContext())
+                .load(uri)
+                .placeholder(R.drawable.placeholder)
+                .transform(CenterCrop(), RoundedCorners(8f.dpToPx(requireContext())))
+                .into(binding.albumCoverImageView)
+            binding.albumCoverImageView.background = null
+        }
+    }
+
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
-    private var coverUriString: String? = null
+    var coverUriString: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,44 +71,17 @@ class CreatePlaylistFragment : Fragment() {
             render(it)
         }
 
-        textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.checkCreateButton(s.toString().isNotEmpty())
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-        }
-
         textWatcher.let { binding.albumNameEditText.addTextChangedListener(it) }
 
         confirmDialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Завершить создание плейлиста?")
-            .setMessage("Все несохраненные данные будут потеряны")
-            .setNegativeButton("Отмена") { _, _ ->
+            .setTitle(R.string.completePlaylistCreation)
+            .setMessage(R.string.dataWillLost)
+            .setNegativeButton(R.string.cancel) { _, _ ->
 
             }
-            .setPositiveButton("Завершить") { _, _ ->
+            .setPositiveButton(R.string.complete) { _, _ ->
                 findNavController().navigateUp()
             }
-
-        imagePicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) {
-                coverUriString = uri.toString()
-                Glide.with(requireContext())
-                    .load(uri)
-                    .placeholder(R.drawable.placeholder)
-                    .transform(CenterCrop(), RoundedCorners(8f.dpToPx(requireContext())))
-                    .into(binding.albumCoverImageView)
-                binding.albumCoverImageView.background = null
-                binding.addPhotoIconImageView.visibility = View.GONE
-            }
-        }
 
         binding.albumCoverImageView.setOnClickListener {
             imagePicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -98,7 +94,7 @@ class CreatePlaylistFragment : Fragment() {
         binding.createButton.setOnClickListener {
             viewModel.savePlaylist(
                 coverUriString,
-                "${binding.albumNameEditText.text.toString()}.jpg",
+                "${binding.albumNameEditText.text.toString()}_${System.currentTimeMillis()}.jpg",
                 Playlist(
                     0,
                     binding.albumNameEditText.text.toString(),
@@ -120,7 +116,7 @@ class CreatePlaylistFragment : Fragment() {
         }
     }
 
-    private fun render(state: CreatePlaylistState) {
+    open fun render(state: CreatePlaylistState) {
         when (state) {
             is CreatePlaylistState.EnableCreateButton -> {
                 enableCreateButton(state.isEnable)
@@ -132,7 +128,7 @@ class CreatePlaylistFragment : Fragment() {
         }
     }
 
-    private fun enableCreateButton(enable: Boolean) {
+    fun enableCreateButton(enable: Boolean) {
         binding.createButton.isEnabled = enable
     }
 

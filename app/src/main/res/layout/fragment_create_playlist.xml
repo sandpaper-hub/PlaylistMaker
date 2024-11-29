@@ -29,24 +29,13 @@
         android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/indent_24dp"
         android:layout_marginTop="@dimen/indent_26dp"
-        android:background="@drawable/stroke_rectangle"
+        android:background="@drawable/image_picker_shape"
         android:contentDescription="@string/albumCover"
         android:scaleType="center"
         app:layout_constraintDimensionRatio="w, 1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/panelHeader" />
-
-    <ImageView
-        android:id="@+id/addPhotoIconImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/photoPickerIcon"
-        android:src="@drawable/add_photo"
-        app:layout_constraintBottom_toBottomOf="@id/albumCoverImageView"
-        app:layout_constraintEnd_toEndOf="@id/albumCoverImageView"
-        app:layout_constraintStart_toStartOf="@id/albumCoverImageView"
-        app:layout_constraintTop_toTopOf="@id/albumCoverImageView" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/albumNameTextInputLayout"
