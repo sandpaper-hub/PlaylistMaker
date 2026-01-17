@@ -7,13 +7,13 @@
 <p align="center">
     <img src="screenshots/search_screenshot.png" width="200">
     <img src="screenshots/media_library_screenshot.png" width="200">
-    <img src="screenshots/player_screenshot.png">
+    <img src="screenshots/player_screenshot.png" width="200">
 </p>
 
 <p align="center">
-    <img src="screenshots/media_library_screenshot_2.png">
-    <img src="screenshots/playlist_screenshot.png">
-    <img src="screenshots/settings_screenshot.png">
+    <img src="screenshots/media_library_screenshot_2.png" width="200">
+    <img src="screenshots/playlist_screenshot.png" width="200">
+    <img src="screenshots/settings_screenshot.png" width="200">
 </p>
   
 ---  
